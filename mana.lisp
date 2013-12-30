@@ -31,12 +31,12 @@
   "Return T if WIN is mana window."
   (string= "manaplus" (window-class win)))
 
-(defun mana-send-keys (keys-list &key (sleep 0.5) loopp msg)
+(defun mana-send-keys (keys-list &key (sleep 0.5) loop msg)
   "Send keys to the current mana window.
 
 Each object of KEYS-LIST should be suitable for KEYS argument of
 `al-send-keys'.
-If LOOPP is t, send the last keys of KEYS-LIST in a loop.
+If LOOP is t, send the last keys of KEYS-LIST in a loop.
 Show a message MSG if it is specified.
 For SLEEP meaning see `al-send-keys'."
   (let ((win (current-window)))
@@ -51,7 +51,7 @@ For SLEEP meaning see `al-send-keys'."
                    (lambda ()
                      (mapc (lambda (obj)
                              (al-send-keys obj :win win :sleep sleep
-                                           :loopp (if (eq obj last) loopp)
+                                           :loop (if (eq obj last) loop)
                                            :loop-quit-var '*mana-quit-sending-p*))
                            keys-list))
                    :name "sending-keys-to-mana"))))
@@ -68,7 +68,7 @@ For SLEEP meaning see `al-send-keys'."
                                 ("o" . 0.05)
                                 ("u" . 0.05)))))
    :sleep (lambda () (al-random-float 0.3 1.5))
-   :loopp t
+   :loop t
    :msg "Mana attack begins..."))
 
 (defcommand mana-quick-attack () ()
@@ -76,7 +76,7 @@ For SLEEP meaning see `al-send-keys'."
   (mana-send-keys
    '("a")
    :sleep (lambda () (al-random-float 0.2 0.8))
-   :loopp t
+   :loop t
    :msg "Mana quick attack begins..."))
 
 (defvar *mana-bat-quest-start-keys*
@@ -97,7 +97,7 @@ For SLEEP meaning see `al-send-keys'."
   "Send keys for continuing a talk with Arkim."
   (mana-send-keys (list *mana-bat-quest-cont-keys*)
                   :sleep (lambda () (al-random-float 0.7 1.2))
-                  :loopp t
+                  :loop t
                   :msg "Bat quest (continuation) begins..."))
 
 (defcommand mana-bat-quest-full () ()
@@ -105,7 +105,7 @@ For SLEEP meaning see `al-send-keys'."
   (mana-send-keys (list *mana-bat-quest-start-keys*
                         *mana-bat-quest-cont-keys*)
                   :sleep (lambda () (al-random-float 0.7 1.2))
-                  :loopp t
+                  :loop t
                   :msg "Bat quest begins..."))
 
 (defun mana-thread-alive-p (&optional alive-msg-p dead-msg-p)

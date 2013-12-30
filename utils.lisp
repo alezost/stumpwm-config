@@ -104,7 +104,7 @@
       (xlib:display-finish-output *display*))))
 
 (defun al-send-keys (keys &key (win (current-window))
-                            (sleep 0) loopp loop-quit-var)
+                            (sleep 0) loop loop-quit-var)
   "Send keys to the window WIN.
 
 KEYS is a string for `kbd', a list of such strings or functions or a
@@ -113,7 +113,7 @@ function returning a string or a list.
 SLEEP is a time between sending keys or a function for defining
 this time.
 
-If LOOPP is t, send keys in a loop (the whole combination of strings,
+If LOOP is t, send keys in a loop (the whole combination of strings,
 lists and functions in KEYS will be repeated).  It will be broken when
 a variable which name is passed to LOOP-QUIT-VAR returns t.  Be aware,
 infinite loop is not a joke."
@@ -123,7 +123,7 @@ infinite loop is not a joke."
              (sleep (if (numberp sleep)
                         sleep
                         (funcall sleep))))
-           (send-keys (key-def &optional loopp)
+           (send-keys (key-def &optional loop)
              (loop
                 do (cond
                      ((stringp key-def)
@@ -133,9 +133,9 @@ infinite loop is not a joke."
                      ((functionp key-def)
                       (send-keys (funcall key-def)))
                      (t (error "Keys should be a string, a list or a function")))
-                while (and loopp
+                while (and loop
                            (null (and loop-quit-var (eval loop-quit-var)))))))
-    (send-keys keys loopp)
+    (send-keys keys loop)
     (echo "Quitting sending keys.")))
 
 
