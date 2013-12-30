@@ -3,6 +3,10 @@
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 Jun 2013
 
+;;; Commentary:
+
+;; This file should be symlinked by "~/.stumpwmrc".
+
 ;;; Code:
 
 (in-package :stumpwm)
