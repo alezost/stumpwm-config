@@ -19,14 +19,17 @@
 
 ;;; Loading additional rc files
 
-(defvar *al-load-path*
+(defvar *al-load-directory*
   (merge-pathnames "progs/lisp/stumpwm/" (user-homedir-pathname))
   "A directory with initially loaded files.")
 
 (defun al-load (filename)
-  "Load a file FILENAME from `*al-load-path*'."
-  (load (merge-pathnames (concat filename ".lisp")
-                         *al-load-path*)))
+  "Load a file FILENAME (without extension) from `*al-load-directory*'."
+  (let ((file (merge-pathnames (concat filename ".lisp")
+                               *al-load-directory*)))
+    (if (probe-file file)
+        (load file)
+        (format *error-output* "File '~a' doesn't exist." file))))
 
 (al-load "keys")
 (al-load "utils")
