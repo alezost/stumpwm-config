@@ -20,7 +20,9 @@
 ;;; Loading additional rc files
 
 (defvar *al-load-directory*
-  (merge-pathnames "progs/lisp/stumpwm/" (user-homedir-pathname))
+  (directory-namestring
+   (truename (merge-pathnames (user-homedir-pathname)
+                              ".stumpwmrc")))
   "A directory with initially loaded files.")
 
 (defun al-load (filename)
