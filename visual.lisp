@@ -50,28 +50,6 @@
 ;; (set-font "-misc-ubuntu mono-bold-r-normal--0-0-0-0-m-0-ascii-0")
 
 
-;;; Additional window resizing using <s-[M-]-AudioKeys>
-
-(defvar *al-resize-increment* 10
-  "Number of pixels to increment by when interactively resizing frames.")
-
-(defun al-update-resize-map ()
-  (labels ((dk (key-str cmd)
-             (define-key *top-map* (kbd key-str)
-               (format nil cmd *al-resize-increment*))))
-    (dk "s-XF86AudioRaiseVolume" "resize 0 ~D")
-    (dk "s-XF86AudioLowerVolume" "resize 0 -~D")
-    (dk "M-s-XF86AudioRaiseVolume" "resize ~D 0")
-    (dk "M-s-XF86AudioLowerVolume" "resize -~D 0")))
-
-(defun al-set-resize-increment (val)
-  (setf *al-resize-increment* val)
-  (al-update-resize-map))
-
-(al-set-resize-increment 10)
-(set-resize-increment 1)
-
-
 ;;; Message after a part of key sequence
 
 ;; idea from <https://github.com/sabetts/stumpwm/wiki/FAQ>

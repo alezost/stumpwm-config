@@ -43,6 +43,18 @@
 (define-key *top-map* (kbd "C-s-Down"  ) "move-window-to-bottom-edge")
 
 
+;;; Resizing frames
+
+(define-key *top-map* (kbd "s-XF86AudioRaiseVolume") "resize 0 10")
+(define-key *top-map* (kbd "s-XF86AudioLowerVolume") "resize 0 -10")
+(define-key *top-map* (kbd "C-s-XF86AudioRaiseVolume") "resize 0 1")
+(define-key *top-map* (kbd "C-s-XF86AudioLowerVolume") "resize 0 -1")
+(define-key *top-map* (kbd "M-s-XF86AudioRaiseVolume") "resize 10 0")
+(define-key *top-map* (kbd "M-s-XF86AudioLowerVolume") "resize -10 0")
+(define-key *top-map* (kbd "C-M-s-XF86AudioRaiseVolume") "resize 1 0")
+(define-key *top-map* (kbd "C-M-s-XF86AudioLowerVolume") "resize -1 0")
+
+
 ;;; Controlling sound
 
 (define-key *top-map* (kbd "XF86AudioMute"            ) "setaudio toggle")
