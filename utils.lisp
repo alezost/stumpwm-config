@@ -58,7 +58,7 @@
 
 (defcommand (float-window-gravity float-group)
     (gravity) ((:gravity "Gravity: "))
-  "Move a floating window to a particular place of the screen.
+  "Move current floating window to a particular place of the screen.
 GRAVITY controls where the window will appear.  Possible values are:
 :center, :top, :right, :bottom, :left, :top, :top-left, :bottom-right,
 :bottom-left."
@@ -76,13 +76,13 @@ GRAVITY controls where the window will appear.  Possible values are:
          (coords (ccase gravity
                    (:center       (cons x-center y-center))
                    (:top-left     (cons 0 0))
-                   (:top          (cons x-center 0))
+                   (:top          (cons nil 0))
                    (:top-right    (cons x-right 0))
-                   (:right        (cons x-right y-center))
+                   (:right        (cons x-right nil))
                    (:bottom-right (cons x-right y-bottom))
-                   (:bottom       (cons x-center y-bottom))
+                   (:bottom       (cons nil y-bottom))
                    (:bottom-left  (cons 0 y-bottom))
-                   (:left         (cons 0 y-center)))))
+                   (:left         (cons 0 nil)))))
     (float-window-move-resize (current-window)
                               :x (car coords) :y (cdr coords))))
 
