@@ -46,15 +46,13 @@
 
 ;;; Moving floating windows
 
-(defcommand move-window-right (val) (:number)
-  "Move current floating window right by VAL."
-  (float-window-move-resize (current-window)
-                            :x (+ (window-x (current-window)) val)))
-
-(defcommand move-window-down (val) (:number)
-  "Move current floating window down by VAL."
-  (float-window-move-resize (current-window)
-                            :y (+ (window-y (current-window)) val)))
+(defcommand (move-float-window float-group)
+    (x y) ((:number "+ X: ") (:number "+ Y: "))
+  "Move current floating window by X and Y pixels."
+  (float-window-move-resize
+   (current-window)
+   :x (+ (window-x (current-window)) x)
+   :y (+ (window-y (current-window)) y)))
 
 (defcommand (resize-float-window float-group)
     (width height) ((:number "+ Width: ") (:number "+ Height: "))
