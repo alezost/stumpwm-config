@@ -46,6 +46,20 @@
 
 ;;; Moving floating windows
 
+(defcommand (center-window float-group) () ()
+  "Move current floating window to the center of the screen."
+  (let ((screen-width (screen-width (current-screen)))
+        (screen-height (screen-height (current-screen)))
+        (window-width (+ (window-width (current-window))
+                         (* 2 *float-window-border*)))
+        (window-height (+ (window-height (current-window))
+                          *float-window-border*
+                          *float-window-title-height*)))
+    (float-window-move-resize
+     (current-window)
+     :x (round (/ (- screen-width window-width) 2))
+     :y (round (/ (- screen-height window-height) 2)))))
+
 (defcommand move-window-right (val) (:number)
   "Move current floating window right by VAL."
   (float-window-move-resize (current-window)
