@@ -56,6 +56,14 @@
   (float-window-move-resize (current-window)
                             :y (+ (window-y (current-window)) val)))
 
+(defcommand (resize-float-window float-group)
+    (width height) ((:number "+ Width: ") (:number "+ Height: "))
+  "Resize current floating window by WIDTH and HEIGHT pixels."
+  (float-window-move-resize
+   (current-window)
+   :width (+ (window-width (current-window)) width)
+   :height (+ (window-height (current-window)) height)))
+
 (defcommand (float-window-gravity float-group)
     (gravity) ((:gravity "Gravity: "))
   "Move current floating window to a particular place of the screen.
