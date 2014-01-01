@@ -46,20 +46,6 @@
 
 ;;; Moving floating windows
 
-(defcommand (center-window float-group) () ()
-  "Move current floating window to the center of the screen."
-  (let ((screen-width (screen-width (current-screen)))
-        (screen-height (screen-height (current-screen)))
-        (window-width (+ (window-width (current-window))
-                         (* 2 *float-window-border*)))
-        (window-height (+ (window-height (current-window))
-                          *float-window-border*
-                          *float-window-title-height*)))
-    (float-window-move-resize
-     (current-window)
-     :x (round (/ (- screen-width window-width) 2))
-     :y (round (/ (- screen-height window-height) 2)))))
-
 (defcommand move-window-right (val) (:number)
   "Move current floating window right by VAL."
   (float-window-move-resize (current-window)
@@ -70,28 +56,35 @@
   (float-window-move-resize (current-window)
                             :y (+ (window-y (current-window)) val)))
 
-(defcommand move-window-to-left-edge () ()
-  "Move current floating window to the left edge."
-  (float-window-move-resize (current-window) :x 0))
-
-(defcommand move-window-to-right-edge () ()
-  "Move current floating window to the right edge."
-  (float-window-move-resize (current-window)
-                            :x (- (screen-width (current-screen))
-                                  (window-width (current-window))
-                                  (* 2 *float-window-border*))))
-
-(defcommand move-window-to-top-edge () ()
-  "Move current floating window to the top edge."
-  (float-window-move-resize (current-window) :y 0))
-
-(defcommand move-window-to-bottom-edge () ()
-  "Move current floating window to the bottom edge."
-  (float-window-move-resize (current-window)
-                            :y (- (screen-height (current-screen))
-                                  (window-height (current-window))
-                                  *float-window-border*
-                                  *float-window-title-height*)))
+(defcommand (float-window-gravity float-group)
+    (gravity) ((:gravity "Gravity: "))
+  "Move a floating window to a particular place of the screen.
+GRAVITY controls where the window will appear.  Possible values are:
+:center, :top, :right, :bottom, :left, :top, :top-left, :bottom-right,
+:bottom-left."
+  (let* ((screen-width  (screen-width (current-screen)))
+         (screen-height (screen-height (current-screen)))
+         (window-width  (+ (window-width (current-window))
+                           (* 2 *float-window-border*)))
+         (window-height (+ (window-height (current-window))
+                           *float-window-border*
+                           *float-window-title-height*))
+         (x-right  (- screen-width window-width))
+         (x-center (round (/ x-right 2)))
+         (y-bottom (- screen-height window-height))
+         (y-center (round (/ y-bottom 2)))
+         (coords (ccase gravity
+                   (:center       (cons x-center y-center))
+                   (:top-left     (cons 0 0))
+                   (:top          (cons x-center 0))
+                   (:top-right    (cons x-right 0))
+                   (:right        (cons x-right y-center))
+                   (:bottom-right (cons x-right y-bottom))
+                   (:bottom       (cons x-center y-bottom))
+                   (:bottom-left  (cons 0 y-bottom))
+                   (:left         (cons 0 y-center)))))
+    (float-window-move-resize (current-window)
+                              :x (car coords) :y (cdr coords))))
 
 
 ;;; Sending keys to windows
