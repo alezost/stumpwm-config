@@ -13,24 +13,32 @@
 
 ;;; Managing windows, frames & groups
 
-(define-key *top-map* (kbd "s-r"       ) "al-toggle-root")
-(define-key *top-map* (kbd "s-f"       ) "fullscreen")
-(define-key *top-map* (kbd "s-w"       ) "windowlist")
-(define-key *top-map* (kbd "M-s-w"     ) "vgroups")
-(define-key *top-map* (kbd "s-b"       ) "pull-hidden-other")
-(define-key *top-map* (kbd "s-s"       ) "pull-hidden-next")
-(define-key *top-map* (kbd "M-s-s"     ) "pull-hidden-previous")
-(define-key *top-map* (kbd "s-TAB"     ) "pull-hidden-next")
-(define-key *top-map* (kbd "H-o"       ) "al-fnext H-o")
-(define-key *top-map* (kbd "s-H-o"     ) "al-fnext-emacs-toggle")
-(define-key *top-map* (kbd "s-n"       ) "gother")
-(define-key *top-map* (kbd "M-s-n"     ) "al-gmove-to-other-group")
-(define-key *top-map* (kbd "s-v"       ) "vsplit")
-(define-key *top-map* (kbd "M-s-z"     ) "hsplit")
-(define-key *top-map* (kbd "s--"       ) "iresize")
-(define-key *top-map* (kbd "s-x"       ) "only")
+(define-key *top-map* (kbd "s-r"   ) "al-toggle-root")
+(define-key *top-map* (kbd "s-w"   ) "windowlist")
+(define-key *top-map* (kbd "M-s-w" ) "vgroups")
+(define-key *top-map* (kbd "H-o"   ) "al-fnext H-o")
+(define-key *top-map* (kbd "s-H-o" ) "al-fnext-emacs-toggle")
+(define-key *top-map* (kbd "s-n"   ) "gother")
+(define-key *top-map* (kbd "M-s-n" ) "al-gmove-to-other-group")
 
-
+(define-key *tile-group-top-map* (kbd "s-f"   ) "fullscreen")
+(define-key *tile-group-top-map* (kbd "s-v"   ) "vsplit")
+(define-key *tile-group-top-map* (kbd "M-s-z" ) "hsplit")
+(define-key *tile-group-top-map* (kbd "s-x"   ) "only")
+
+;;; Focusing windows
+
+(define-key *tile-group-top-map*  (kbd "s-b"            ) "pull-hidden-other")
+(define-key *tile-group-top-map*  (kbd "s-s"            ) "pull-hidden-next")
+(define-key *tile-group-top-map*  (kbd "M-s-s"          ) "pull-hidden-previous")
+(define-key *tile-group-top-map*  (kbd "s-TAB"          ) "pull-hidden-next")
+(define-key *tile-group-top-map*  (kbd "s-ISO_Left_Tab" ) "pull-hidden-previous")
+(define-key *float-group-top-map* (kbd "s-b"            ) "float-window-other")
+(define-key *float-group-top-map* (kbd "s-s"            ) "float-window-next")
+(define-key *float-group-top-map* (kbd "M-s-s"          ) "float-window-previous")
+(define-key *float-group-top-map* (kbd "s-TAB"          ) "float-window-next")
+(define-key *float-group-top-map* (kbd "s-ISO_Left_Tab" ) "float-window-previous")
+
 ;;; Moving/resizing windows
 
 ;; Use numpad keys for manipulating windows:
@@ -75,7 +83,6 @@
 (define-numpad-key-gravity *tile-group-top-map*  "C-" "gravity")
 (define-numpad-key-gravity *float-group-top-map* "C-" "float-window-gravity")
 
-
 ;;; Resizing frames
 
 (define-key *top-map* (kbd "s-XF86AudioRaiseVolume") "resize 0 10")
