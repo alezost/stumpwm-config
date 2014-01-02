@@ -31,16 +31,49 @@
 (define-key *top-map* (kbd "s-x"       ) "only")
 
 
-;;; Moving floating windows
+;;; Moving/resizing windows
 
-(define-key *top-map* (kbd "s-Left"    ) "move-window-right -10")
-(define-key *top-map* (kbd "s-Right"   ) "move-window-right 10")
-(define-key *top-map* (kbd "s-Up"      ) "move-window-down -10")
-(define-key *top-map* (kbd "s-Down"    ) "move-window-down 10")
-(define-key *top-map* (kbd "C-s-Left"  ) "move-window-to-left-edge")
-(define-key *top-map* (kbd "C-s-Right" ) "move-window-to-right-edge")
-(define-key *top-map* (kbd "C-s-Up"    ) "move-window-to-top-edge")
-(define-key *top-map* (kbd "C-s-Down"  ) "move-window-to-bottom-edge")
+;; Use numpad keys for manipulating windows:
+;;   [C-]M-<key> for resizing
+;;   [C-]s-<key> for moving
+;;   C-<key> for moving to the screen edges
+
+(define-key *float-group-top-map* (kbd "s-KP_Begin") "float-window-gravity center")
+
+(defun define-numpad-key-xy (map modifier cmd val)
+  (flet ((dk (key x y)
+           (define-key map (kbd (concat modifier key))
+             (format nil "~a ~D ~D" cmd x y))))
+    (dk "KP_Home"      (- val) (- val))
+    (dk "KP_Up"        0       (- val))
+    (dk "KP_Page_Up"   val     (- val))
+    (dk "KP_Right"     val     0)
+    (dk "KP_Page_Down" val     val)
+    (dk "KP_Down"      0       val)
+    (dk "KP_End"       (- val) val)
+    (dk "KP_Left"      (- val) 0)))
+
+(define-numpad-key-xy *float-group-top-map* "s-"   "move-float-window" 10)
+(define-numpad-key-xy *float-group-top-map* "C-s-" "move-float-window" 1)
+(define-numpad-key-xy *float-group-top-map* "M-"   "resize-float-window" 10)
+(define-numpad-key-xy *float-group-top-map* "C-M-" "resize-float-window" 1)
+
+(defun define-numpad-key-gravity (map modifier cmd)
+  (flet ((dk (key gravity)
+           (define-key map (kbd (concat modifier key))
+             (format nil "~a ~a" cmd gravity))))
+    (dk "KP_Begin"     "center")
+    (dk "KP_Home"      "top-left")
+    (dk "KP_Up"        "top")
+    (dk "KP_Page_Up"   "top-right")
+    (dk "KP_Right"     "right")
+    (dk "KP_Page_Down" "bottom-right")
+    (dk "KP_Down"      "bottom")
+    (dk "KP_End"       "bottom-left")
+    (dk "KP_Left"      "left")))
+
+(define-numpad-key-gravity *tile-group-top-map*  "C-" "gravity")
+(define-numpad-key-gravity *float-group-top-map* "C-" "float-window-gravity")
 
 
 ;;; Resizing frames
