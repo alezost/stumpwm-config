@@ -1,7 +1,7 @@
 ;;; settings.lisp --- general settings: variables, hooks, ...
 
 ;; Author: Alex Kost <alezost@gmail.com>
-;; Created: 28 Jun 2013
+;; Created: 28 Dec 2013
 
 ;;; Code:
 
