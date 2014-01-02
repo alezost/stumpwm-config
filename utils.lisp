@@ -44,6 +44,32 @@
         (restore-group (current-group) *al-window-configuration*)
         (echo "There is no saved window configuration yet."))))
 
+;;; Focusing floating windows
+
+(defun float-window-focus-forward (window-list
+                                   &optional (window (group-current-window
+                                                      (current-group))))
+  "Focus the next window in WINDOW-LIST from the window WINDOW."
+  (let* ((wins (cdr (member window window-list)))
+         (nw (if wins
+                 (car wins)
+                 ;; If the last window in the list is focused, then
+                 ;; focus the first one.
+                 (car window-list))))
+    (and nw (focus-window nw))))
+
+(defcommand (float-window-other float-group) () ()
+  "Focus previously focused floating window."
+  (focus-window (cadr (group-windows (current-group)))))
+
+(defcommand (float-window-next float-group) () ()
+  "Focus next floating window."
+  (float-window-focus-forward (sort-windows (current-group))))
+
+(defcommand (float-window-previous float-group) () ()
+  "Focus previous floating window."
+  (float-window-focus-forward (nreverse (sort-windows (current-group)))))
+
 ;;; Moving floating windows
 
 (defcommand (move-float-window float-group)
