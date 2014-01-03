@@ -63,30 +63,14 @@ If a window does not have a layout property, return DEFAULT."
   (remove-hook *focus-window-hook* 'layout-window-changed)
   (remove-hook *focus-group-hook*  'layout-group-changed))
 
-(defvar *layout-emacs-key-alist*
-  '((0 . "s-7")
-    (1 . "s-8")
-    (2 . "s-9"))
-  "Associations list of layout numbers and key bindings for emacs.
-Key bindings are strings accepted by `kbd'.")
-
-(defun layout-get-emacs-key (num)
-  "Return a key value by a layout (group) number.
-Key binding is taken from `*layout-emacs-key-alist*'.
-Return nil, if there is no association."
-  (kbd (cdr (assoc num *layout-emacs-key-alist*))))
-
-(defcommand layout-set (num) ((:number "Layout number: "))
-  "Set keyboard layout to a specified layout (xkb group) number.
-If current window is emacs, send an appropriate key to it.
-The key is defined by `layout-get-emacs-key'."
-  (if (utl-emacs-window-p)
-      (let ((key (layout-get-emacs-key num)))
-        (when key
-          ;; (or (eq 0 (layout-get-current-layout *display*))
-          ;;     (xlib:lock-group *display* :group 0))
-          (setq num 0)
-          (utl-send-key key))))
+(defcommand layout-set (num &optional key)
+    ((:number "Layout number: ") :key)
+  "Set keyboard layout to a specified layout (xkb group) number NUM.
+If current window is emacs, send a key sequence KEY to it (if specified)."
+  (and (utl-emacs-window-p)
+       key
+       (setq num 0)
+       (utl-send-key key))
   (xlib:lock-group *display* :group num)
   (xlib:display-finish-output *display*))
 
