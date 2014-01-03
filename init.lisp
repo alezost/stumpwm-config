@@ -33,9 +33,9 @@
 
 (utl-load "keys")
 (utl-load "utils")
-(utl-load "settings")
-(utl-load "visual")
 (utl-load "layouts")
 (utl-load "mana")
+(utl-load "settings")
+(utl-load "visual")
 
 ;;; init.lisp ends here
