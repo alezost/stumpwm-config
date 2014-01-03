@@ -21,7 +21,7 @@
 
 ;; original `send-fake-key' sends only press event
 (setf (symbol-function 'send-fake-key)
-      (lambda (win key) (al-send-key key win)))
+      (lambda (win key) (utl-send-key key win)))
 
 (push '(:class "Conkeror") *deny-raise-request*)
 (push '(:class "libreoffice-writer") *deny-raise-request*)

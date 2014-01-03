@@ -17,25 +17,25 @@
 
 ;;; Loading additional rc files
 
-(defvar *al-load-directory*
+(defvar *utl-load-directory*
   (directory-namestring
    (truename (merge-pathnames (user-homedir-pathname)
                               ".stumpwmrc")))
   "A directory with initially loaded files.")
 
-(defun al-load (filename)
-  "Load a file FILENAME (without extension) from `*al-load-directory*'."
+(defun utl-load (filename)
+  "Load a file FILENAME (without extension) from `*utl-load-directory*'."
   (let ((file (merge-pathnames (concat filename ".lisp")
-                               *al-load-directory*)))
+                               *utl-load-directory*)))
     (if (probe-file file)
         (load file)
         (format *error-output* "File '~a' doesn't exist." file))))
 
-(al-load "keys")
-(al-load "utils")
-(al-load "settings")
-(al-load "visual")
-(al-load "layouts")
-(al-load "mana")
+(utl-load "keys")
+(utl-load "utils")
+(utl-load "settings")
+(utl-load "visual")
+(utl-load "layouts")
+(utl-load "mana")
 
 ;;; init.lisp ends here

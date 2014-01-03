@@ -15,17 +15,17 @@
       '("black" "red" "green" "magenta" "blue" "yellow" "cyan" "white"))
 (update-color-map (current-screen))
 
-(defmacro al-set-color (val color)
+(defmacro utl-set-color (val color)
   "Similar to `set-any-color', but without updating colors."
   `(dolist (s *screen-list*)
      (setf (,val s) (alloc-color s ,color))))
 
-(al-set-color screen-fg-color (xlib:make-color :red 0.9 :green 0.91 :blue 0.94))
-(al-set-color screen-bg-color "gray15")
-(al-set-color screen-focus-color "DeepSkyBlue")
-(al-set-color screen-border-color "ForestGreen")
-(al-set-color screen-float-focus-color "DeepSkyBlue")
-(al-set-color screen-float-unfocus-color "gray15")
+(utl-set-color screen-fg-color (xlib:make-color :red 0.9 :green 0.91 :blue 0.94))
+(utl-set-color screen-bg-color "gray15")
+(utl-set-color screen-focus-color "DeepSkyBlue")
+(utl-set-color screen-border-color "ForestGreen")
+(utl-set-color screen-float-focus-color "DeepSkyBlue")
+(utl-set-color screen-float-unfocus-color "gray15")
 (update-colors-all-screens)
 
 
@@ -44,7 +44,7 @@
  *screen-mode-line-format* '("^5*" (:eval (time-format "%k:%M")) " ^2*%n ")
  ;; *screen-mode-line-format* '((:eval (format nil " ^2*foo~%bar")))  ; multiline mode-line
  )
-(al-mode-line-on)
+(utl-mode-line-on)
 
 ;; (setf *startup-message* (machine-instance))
 ;; (set-font "-misc-ubuntu mono-bold-r-normal--0-0-0-0-m-0-ascii-0")

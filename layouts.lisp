@@ -80,13 +80,13 @@ Return nil, if there is no association."
   "Set keyboard layout to a specified layout (xkb group) number.
 If current window is emacs, send an appropriate key to it.
 The key is defined by `get-emacs-layout-key'."
-  (if (emacs-window-p)
+  (if (utl-emacs-window-p)
       (let ((key (get-emacs-layout-key num)))
         (when key
           ;; (or (eq 0 (get-current-layout *display*))
           ;;     (xlib:lock-group *display* :group 0))
           (setq num 0)
-          (al-send-key key))))
+          (utl-send-key key))))
   (xlib:lock-group *display* :group num)
   (xlib:display-finish-output *display*))
 
