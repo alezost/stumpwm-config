@@ -8,10 +8,14 @@
 (in-package :stumpwm)
 
 (set-prefix-key (kbd "s-t"))
-(define-key *top-map* (kbd "s-h") '*help-map*)
 
 
 ;;; Managing windows, frames & groups
+
+(define-key *root-map* (kbd "F"   ) "fselect")
+(define-key *root-map* (kbd "="   ) "balance-frames")
+(define-key *root-map* (kbd "s-c" ) "delete-window")
+(define-key *root-map* (kbd "C"   ) "kill-window")
 
 (define-key *top-map* (kbd "s-r"   ) "al-toggle-root")
 (define-key *top-map* (kbd "s-w"   ) "windowlist")
@@ -125,10 +129,11 @@
 
 (define-key *resize-map* (kbd "s-g") "abort-iresize")
 (define-key *top-map* (kbd "s-g"   ) "abort")
+(define-key *top-map* (kbd "s-h"   ) '*help-map*)
 (define-key *top-map* (kbd "s-u"   ) "time")
 (define-key *top-map* (kbd "s-i"   ) "info")
 (define-key *top-map* (kbd "s-l"   ) "lastmsg")
-(define-key *top-map* (kbd "s-z"   ) "banish")
+(define-key *top-map* (kbd "s-z"   ) "emacs-eval-show (eshell)")
 (define-key *top-map* (kbd "s-d"               ) "send-key-to-emacs XF86Spell")
 (define-key *top-map* (kbd "XF86HomePage"      ) "firefox")
 (define-key *top-map* (kbd "XF86Documents"     ) "emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
@@ -149,14 +154,11 @@
 (define-key *top-map* (kbd "C-M-s-XF86LogOff"  ) "exec sudo shutdown now")
 
 ;; root map
-(define-key *root-map* (kbd "F"   ) "fselect")
-(define-key *root-map* (kbd "="   ) "balance-frames")
-(define-key *root-map* (kbd "s-c" ) "delete-window")
-(define-key *root-map* (kbd "C"   ) "kill-window")
 (define-key *root-map* (kbd "V"   ) "version")
 (define-key *root-map* (kbd "c"   ) "colon")
 (define-key *root-map* (kbd "v"   ) "eval")
 (define-key *root-map* (kbd "i"   ) "list-window-properties")
+(define-key *root-map* (kbd "s-b" ) "banish")
 
 ;; menu map
 (define-key *menu-map* (kbd "s-c") 'menu-up)
