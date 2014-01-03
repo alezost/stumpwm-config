@@ -74,7 +74,4 @@ If current window is emacs, send a key sequence KEY to it (if specified)."
   (xlib:lock-group *display* :group num)
   (xlib:display-finish-output *display*))
 
-(layout-set 0)
-(layout-enable-per-window)
-
 ;;; layouts.lisp ends here

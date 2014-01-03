@@ -15,6 +15,12 @@
 (gnewbg-float "float")
 
 
+;;; Layouts
+
+(layout-set 0)
+(layout-enable-per-window)
+
+
 ;;; Misc
 
 (setf *top-level-error-action* :message)
