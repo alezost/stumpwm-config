@@ -6,15 +6,13 @@
 ;;; Commentary:
 
 ;; This file should be symlinked by "~/.stumpwmrc".
+;; I compile stumpwm with swank, so i don't need to load it.
 
 ;;; Code:
 
 (in-package :stumpwm)
 
 (swank:create-server :dont-close t)
-
-;; tip to check what happened:
-;; (screen-last-msg (current-screen))
 
 
 ;;; Loading additional rc files
