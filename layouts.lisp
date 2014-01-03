@@ -12,11 +12,11 @@
 
 ;; This file provides some functions and commands for working with
 ;; layouts.  I use it for:
-;; - different key bindings for switching to different layouts,
-;; - ability to have different layouts for different windows,
-;; - if current window is emacs, send a specified key sequence to it
-;;   (for internal setting input method) instead of the global layout
-;;   switching.
+;; - different key bindings for different layouts,
+;; - different layouts for different windows,
+;; - setting internal input method in emacs if it is the current window
+;;   (by sending a specified key sequence to it) instead of the global
+;;   layout switching
 
 ;;; Code:
 
