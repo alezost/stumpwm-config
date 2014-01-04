@@ -35,6 +35,7 @@
 (utl-load "utils")
 (utl-load "layouts")
 (utl-load "mana")
+(utl-load "setaudio")
 (utl-load "settings")
 (utl-load "visual")
 

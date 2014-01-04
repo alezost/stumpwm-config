@@ -101,14 +101,14 @@
 
 ;;; Controlling sound
 
-(define-key *top-map* (kbd "XF86AudioMute"            ) "utl-setaudio toggle")
-(define-key *top-map* (kbd "M-XF86AudioMute"          ) "utl-next-scontrol")
-(define-key *top-map* (kbd "XF86AudioRaiseVolume"     ) "utl-setaudio 1+")
-(define-key *top-map* (kbd "XF86AudioLowerVolume"     ) "utl-setaudio 1-")
-(define-key *top-map* (kbd "M-XF86AudioRaiseVolume"   ) "utl-setaudio 3+")
-(define-key *top-map* (kbd "M-XF86AudioLowerVolume"   ) "utl-setaudio 3-")
-(define-key *top-map* (kbd "C-M-XF86AudioRaiseVolume" ) "utl-setaudio 60%")
-(define-key *top-map* (kbd "C-M-XF86AudioLowerVolume" ) "utl-setaudio 20%")
+(define-key *top-map* (kbd "XF86AudioMute"            ) "audio-set-current-scontrol toggle")
+(define-key *top-map* (kbd "M-XF86AudioMute"          ) "audio-next-scontrol")
+(define-key *top-map* (kbd "XF86AudioRaiseVolume"     ) "audio-set-current-scontrol 1+")
+(define-key *top-map* (kbd "XF86AudioLowerVolume"     ) "audio-set-current-scontrol 1-")
+(define-key *top-map* (kbd "M-XF86AudioRaiseVolume"   ) "audio-set-current-scontrol 3+")
+(define-key *top-map* (kbd "M-XF86AudioLowerVolume"   ) "audio-set-current-scontrol 3-")
+(define-key *top-map* (kbd "C-M-XF86AudioRaiseVolume" ) "audio-set-current-scontrol 60%")
+(define-key *top-map* (kbd "C-M-XF86AudioLowerVolume" ) "audio-set-current-scontrol 20%")
 
 
 ;;; Controlling EMMS

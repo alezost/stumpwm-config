@@ -293,18 +293,6 @@ window in a single frame or if `*utl-fnext-emacs-p*' is non-nil."
   (utl-mode-line-pos :top))
 
 
-;;; Controlling sound
-
-(load (merge-pathnames "progs/lisp/setaudio.lisp"
-                       (user-homedir-pathname)))
-(defcommand utl-setaudio (&optional &rest args) (:rest)
-  "Set (or show without args) audio."
-  (audio-set args))
-(defcommand utl-next-scontrol () ()
-  "Switch simple control."
-  (audio-set nil (audio-set-next-scontrol)))
-
-
 ;;; Misc
 
 (defun utl-random-float (bot top &optional (state *random-state*))
