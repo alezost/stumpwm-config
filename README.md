@@ -8,19 +8,24 @@ I hope you find something useful here.
 
 ## Files
 
-- `init.lisp` – main file for loading the other ones (`~/.stumpwmrc` is a
-  symlink to this file)
-- `keys.lisp` – all keybindings (i use dvorak layout, so some of them
-  may look weird)
-- `utils.lisp` – additional functions and commands i use (many of them
-  are prefixed with "al-", which is ugly I know)
-- `visual.lisp` – visual settings: colors, mode-line and other visual
-  appearance
-- `settings.lisp` – some miscellaneous settings
-- `layouts.lisp` – configuration for
-  [clx-xkeyboard extension](https://github.com/filonenko-mikhail/clx-xkeyboard)
-- `mana.lisp` – some commands for convenient playing
-  [The Mana World](https://themanaworld.org/)
+- `init.lisp` – The main file for loading the other ones (`~/.stumpwmrc` is a
+  symlink to this file).
+- `keys.lisp` – All my keybindings (I use dvorak layout, so some of them
+  may look weird).
+- `layouts.lisp` – Configuration for
+  [clx-xkeyboard extension](https://github.com/filonenko-mikhail/clx-xkeyboard).
+- `mana.lisp` – Some commands for convenient playing
+  [The Mana World](https://themanaworld.org/).
+- `setaudio.lisp` – An interface to `setaudio` program.  This file is
+  probably of no interest: `setaudio` is a simplified version of
+  `amixer` I wrote (and have not published yet), the main difference is
+  that it shows OSD with volume parameters.
+- `settings.lisp` – Some miscellaneous settings.
+- `utils.lisp` – Additional functions and commands I use.  It is safe to
+  load this file as all symbols there have `utl-` prefix, so you can
+  clone the repo, load this file and try some commands.
+- `visual.lisp` – Visual settings: colors, mode-line and other visual
+  appearance.
 
 ## Feedback
 
