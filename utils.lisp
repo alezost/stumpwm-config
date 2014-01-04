@@ -122,25 +122,20 @@ GRAVITY controls where the window will appear.  Possible values are:
 ;;; Sending keys to windows
 
 (defun utl-send-key (key &optional (win (current-window)))
-  "Send a fake key press and key release events to win."
+  "Send key press and key release events for KEY to window WIN."
   (let ((xwin (window-xwin win)))
     (multiple-value-bind (code state) (key-to-keycode+state key)
-      ;; TODO duplicating code is not good
-      (xlib:send-event xwin :key-press (xlib:make-event-mask :key-press)
-                       :display *display*
-                       :root (screen-root (window-screen win))
-                       :x 0 :y 0 :root-x 0 :root-y 0
-                       :window xwin :event-window xwin
-                       :code code
-                       :state state)
-      (xlib:send-event xwin :key-release (xlib:make-event-mask :key-release)
-                       :display *display*
-                       :root (screen-root (window-screen win))
-                       :x 0 :y 0 :root-x 0 :root-y 0
-                       :window xwin :event-window xwin
-                       :code code
-                       :state state)
-      (xlib:display-finish-output *display*))))
+      (flet ((send (event)
+               (xlib:send-event xwin event (xlib:make-event-mask event)
+                                :display *display*
+                                :root (screen-root (window-screen win))
+                                :x 0 :y 0 :root-x 0 :root-y 0
+                                :window xwin :event-window xwin
+                                :code code
+                                :state state)))
+        (send :key-press)
+        (send :key-release)
+        (xlib:display-finish-output *display*)))))
 
 (defun utl-send-keys (keys &key (win (current-window))
                             (sleep 0) loop loop-quit-var)
