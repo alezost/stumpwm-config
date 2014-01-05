@@ -10,6 +10,23 @@
 
 ;;; Windows, frames and groups
 
+(defun utl-class-window-p (class &optional (win (current-window)))
+  "Return T if a window WIN is of class CLASS."
+  (and win (string= class (window-class win))))
+
+(defcommand utl-focus-window-by-class (class) ((:string "Window class: "))
+  "Focus window class CLASS.
+Return the window or nil if there is no such."
+  (if (utl-class-window-p class)
+      (current-window)
+      (let ((win (car (or ;; priority to the window from the current group
+                       (find-matching-windows (list :class class) nil nil)
+                       (find-matching-windows (list :class class) t t)))))
+        (if win
+            (focus-all win)
+            (message "No ~a window." class))
+        win)))
+
 (defcommand utl-gmove-to-other-group () ()
   "Move the current window to the other group and go to that group."
   (let ((group (car (remove-if (lambda (g) (eq g (current-group)))
@@ -177,18 +194,12 @@ infinite loop is not a joke."
 
 (defun utl-emacs-window-p (&optional (win (current-window)))
   "Return T if WIN is emacs window."
-  (and win (string= "Emacs" (window-class win))))
+  (utl-class-window-p "Emacs"))
 
-(defcommand utl-send-key-to-emacs (key) (:key)
-  "Raise emacs window and send a key to it."
-  (let ((win (if (window-matches-properties-p (current-window) :class "Emacs")
-                 (current-window)
-                 (car (find-matching-windows '(:class "Emacs") 'all-groups 'all-screens)))))
-    (if win
-        (progn
-          (frame-raise-window (window-group win) (window-frame win) win)
-          (utl-send-key key win))
-        (echo "No emacs window."))))
+(defcommand utl-send-key-to-emacs (key) ((:key "Key: "))
+  "Focus emacs window and send KEY to it."
+  (let ((win (utl-focus-window-by-class "Emacs")))
+    (and win (utl-send-key key win))))
 
 (defvar *utl-fnext-emacs-p* t
   "If non-nil, always send a key to emacs with `utl-fnext'.")
