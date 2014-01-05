@@ -20,8 +20,8 @@
 (define-key *top-map* (kbd "s-r"   ) "utl-toggle-root")
 (define-key *top-map* (kbd "s-w"   ) "windowlist")
 (define-key *top-map* (kbd "M-s-w" ) "vgroups")
-(define-key *top-map* (kbd "H-o"   ) "utl-fnext H-o")
-(define-key *top-map* (kbd "s-H-o" ) "utl-fnext-emacs-toggle")
+(define-key *top-map* (kbd "H-o"   ) "utl-next H-o")
+(define-key *top-map* (kbd "s-H-o" ) "utl-toggle-ignore-emacs")
 (define-key *top-map* (kbd "s-n"   ) "gother")
 (define-key *top-map* (kbd "M-s-n" ) "utl-gmove-to-other-group")
 

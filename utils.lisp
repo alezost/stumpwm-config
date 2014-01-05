@@ -27,6 +27,42 @@ Return the window or nil if there is no such."
             (message "No ~a window." class))
         win)))
 
+(defvar *utl-ignore-emacs* nil
+  "If non-nil, do not treat emacs specially in `utl-next-window'.")
+
+(defcommand utl-next (&optional key) (:key)
+  "Select next frame or window or emacs window.
+If current window is emacs and `*utl-ignore-emacs*' is nil, send key
+sequence KEY to it.
+If current group is tiling, select next frame.
+If current group is floating, select next window."
+  (if (and key
+           (utl-emacs-window-p)
+           (null *utl-ignore-emacs*)
+           ;; Ignore emacs anyway, if it has a single window.
+           ;; The following code checks WINDOWS_NUM window property.
+           ;; You can "teach" emacs to update this property by adding
+           ;; this to your .emacs:
+           ;;   (add-hook 'window-configuration-change-hook
+           ;;             (lambda () (x-change-window-property
+           ;;                         "WINDOWS_NUM"
+           ;;                         (string (length (window-list)))
+           ;;                         nil nil nil t)))
+           (let ((windows-num (car (window-property (current-window)
+                                                    :WINDOWS_NUM))))
+             (or (null windows-num)
+                 (/= 1 windows-num))))
+      (utl-send-key-to-emacs key)
+      (if (eq (type-of (current-group)) 'tile-group)
+          (fnext)
+          (utl-float-window-next))))
+
+(defcommand utl-toggle-ignore-emacs () ()
+  "Toggle `*utl-ignore-emacs*'."
+  (setf *utl-ignore-emacs* (not *utl-ignore-emacs*))
+  (message "^b^7*Switching between emacs windows ~a^b^7*."
+            (if *utl-ignore-emacs* "^B^1*disabled" "^2*enabled")))
+
 (defcommand utl-gmove-to-other-group () ()
   "Move the current window to the other group and go to that group."
   (let ((group (car (remove-if (lambda (g) (eq g (current-group)))
@@ -200,25 +236,6 @@ infinite loop is not a joke."
   "Focus emacs window and send KEY to it."
   (let ((win (utl-focus-window-by-class "Emacs")))
     (and win (utl-send-key key win))))
-
-(defvar *utl-fnext-emacs-p* t
-  "If non-nil, always send a key to emacs with `utl-fnext'.")
-
-(defcommand utl-fnext (key) (:key)
-  "Similar to `fnext', but send a KEY to emacs if it's the current
-window in a single frame or if `*utl-fnext-emacs-p*' is non-nil."
-  (if (and (utl-emacs-window-p)
-           (or *utl-fnext-emacs-p*
-               (null (cdr (group-frames (current-group))))))
-       (utl-send-key-to-emacs key)
-       (fnext)))
-
-(defcommand utl-fnext-emacs-toggle () ()
-  "Toggle `*utl-fnext-emacs-p*'."
-  (setf *utl-fnext-emacs-p* (not *utl-fnext-emacs-p*))
-  (if *utl-fnext-emacs-p*
-      (echo "Switching between emacs windows.")
-      (echo "Switching between frames.")))
 
 (defcommand utl-emacs () ()
   "Start emacs unless it is already running, in which case focus it."
