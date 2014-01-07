@@ -28,7 +28,7 @@ Return the window or nil if there is no such."
         win)))
 
 (defvar *utl-ignore-emacs* nil
-  "If non-nil, do not treat emacs specially in `utl-next-window'.")
+  "If non-nil, do not treat emacs specially in `utl-next'.")
 
 (defcommand utl-next (&optional key) (:key)
   "Select next frame or window or emacs window.
