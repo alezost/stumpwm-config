@@ -286,6 +286,10 @@ infinite loop is not a joke."
   "Start firefox unless it is already running, in which case focus it."
   (run-or-raise "systemctl --user start firefox@0" '(:class "Firefox")))
 
+(defcommand utl-gcolor2 () ()
+  "Start gcolor2 unless it is already running, in which case focus it."
+  (run-or-raise "gcolor2" '(:class "Gcolor2")))
+
 (defcommand utl-gtypist (&optional file) (:string)
   "Start gtypist loading a .typ-file, if it is specified."
   (run-shell-command (concat "xterm -e 'gtypist --color=0,7 " file "'")))
