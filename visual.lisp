@@ -29,6 +29,15 @@
 (update-colors-all-screens)
 
 
+;;; Grabbed pointer
+
+(setq
+ *grab-pointer-character* 40
+ *grab-pointer-character-mask* 41
+ *grab-pointer-foreground* (xlib:make-color :red 0.24 :green 0.70 :blue 0.44)
+ *grab-pointer-background* (xlib:make-color :red 0.173 :green 0.325 :blue 0.792))
+
+
 ;;; Visual appearance and the mode-line
 
 (set-normal-gravity :bottom)
