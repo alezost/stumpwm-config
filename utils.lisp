@@ -303,13 +303,11 @@ infinite loop is not a joke."
         (head (current-head)))
     (enable-mode-line screen head nil)
     (setf *mode-line-position* pos)
-    (enable-mode-line screen head t
-                      '*screen-mode-line-format*)))
+    (enable-mode-line screen head t)))
 
 (defcommand utl-mode-line-on () ()
   "Turn the mode line on unconditionally."
-  (enable-mode-line (current-screen) (current-head) t
-                    '*screen-mode-line-format*))
+  (enable-mode-line (current-screen) (current-head) t))
 
 (defcommand utl-mode-line-bottom () ()
   "Put the mode line on the bottom of the screen."
