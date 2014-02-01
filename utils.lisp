@@ -44,10 +44,11 @@ If current group is floating, select next window."
            ;; You can "teach" emacs to update this property by adding
            ;; this to your .emacs:
            ;;   (add-hook 'window-configuration-change-hook
-           ;;             (lambda () (x-change-window-property
-           ;;                         "WINDOWS_NUM"
-           ;;                         (string (length (window-list)))
-           ;;                         nil nil nil t)))
+           ;;             (lambda () (when (display-graphic-p)
+           ;;                          (x-change-window-property
+           ;;                           "WINDOWS_NUM"
+           ;;                           (string (length (window-list)))
+           ;;                           nil nil nil t))))
            (let ((windows-num (car (window-property (current-window)
                                                     :WINDOWS_NUM))))
              (or (null windows-num)
