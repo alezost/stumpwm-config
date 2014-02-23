@@ -152,6 +152,7 @@
 (define-key *top-map* (kbd "M-SunPrint_Screen" ) "exec scrot -s \"/home/alexx/temp/screenshots/%Y-%m-%d_%H%M%S.png\"")
 (define-key *top-map* (kbd "s-XF86LogOff"      ) "exec systemctl --user start lxde@0")
 (define-key *top-map* (kbd "C-M-s-XF86LogOff"  ) "exec sudo shutdown now")
+(define-key *top-map* (kbd "XF86TouchpadToggle") "exec touchpad-toggle")
 
 ;; root map
 (define-key *root-map* (kbd "V"   ) "version")
