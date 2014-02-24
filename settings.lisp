@@ -11,7 +11,8 @@
 ;;; Groups
 
 ;; name the default group
-(setf (group-name (car (screen-groups (current-screen)))) "main")
+(setf (group-name (car (screen-groups (current-screen)))) "tile1")
+(gnewbg "tile2")
 (gnewbg-float "float")
 
 
