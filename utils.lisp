@@ -227,6 +227,26 @@ infinite loop is not a joke."
     (echo "Quitting sending keys.")))
 
 
+;;; Interacting with systemd user services
+
+;; The following makes sense only for my systemd user units, which can be
+;; started in different X instances/displays/VTs:
+;; <https://github.com/alezost/systemd-user-units>
+
+(defun utl-get-systemctl-user-cmd
+    (service &optional (cmd "start") (display (getenv "DISPLAY")))
+  "Return 'systemctl --user' command for SERVICE.
+SERVICE is a service name (string).
+CMD is a systemctl command.
+DISPLAY is a display number (can be a number or string optionally
+beginning with ':') where a service is started."
+  (format nil "systemctl --user ~a ~a@~a"
+          cmd service
+          (if (numberp display)
+              display
+              (string-left-trim ":" display))))
+
+
 ;;; Interacting with emacs
 
 (defun utl-emacs-window-p (&optional (win (current-window)))
@@ -240,7 +260,8 @@ infinite loop is not a joke."
 
 (defcommand utl-emacs () ()
   "Start emacs unless it is already running, in which case focus it."
-  (run-or-raise "systemctl --user start emacs@0" '(:class "Emacs")))
+  (run-or-raise (utl-get-systemctl-user-cmd "emacs")
+                '(:class "Emacs")))
 
 (defcommand utl-emacs-eval (arg) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
@@ -256,7 +277,8 @@ infinite loop is not a joke."
 
 (defcommand utl-conkeror () ()
   "Start conkeror unless it is already running, in which case focus it."
-  (run-or-raise "systemctl --user start conkeror@0" '(:class "Conkeror")))
+  (run-or-raise (utl-get-systemctl-user-cmd "conkeror")
+                '(:class "Conkeror")))
 
 (defcommand utl-conkeror-browse (url) ((:shell "Browse URL: "))
   "Browse URL with conkeror."
@@ -281,11 +303,13 @@ infinite loop is not a joke."
 
 (defcommand utl-xterm () ()
   "Start xterm unless it is already running, in which case focus it."
-  (run-or-raise "systemctl --user start xterm@0" '(:class "XTerm")))
+  (run-or-raise (utl-get-systemctl-user-cmd "xterm")
+                '(:class "XTerm")))
 
 (defcommand utl-firefox () ()
   "Start firefox unless it is already running, in which case focus it."
-  (run-or-raise "systemctl --user start firefox@0" '(:class "Firefox")))
+  (run-or-raise (utl-get-systemctl-user-cmd "firefox")
+                '(:class "Firefox")))
 
 (defcommand utl-gcolor2 () ()
   "Start gcolor2 unless it is already running, in which case focus it."
