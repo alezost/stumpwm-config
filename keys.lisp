@@ -244,7 +244,7 @@
 (define-key *top-map*     (kbd "s-m") '*utl-exec-map*)
 (define-key *utl-exec-map* (kbd "s-m") "exec")
 (define-key *utl-exec-map* (kbd "e"  ) "utl-emacs")
-(define-key *utl-exec-map* (kbd "E"  ) "exec emacs")
+(define-key *utl-exec-map* (kbd "E"  ) "utl-emacs-trunk")
 (define-key *utl-exec-map* (kbd "t"  ) "utl-xterm")
 (define-key *utl-exec-map* (kbd "T"  ) "exec xterm")
 (define-key *utl-exec-map* (kbd "c"  ) "utl-conkeror")

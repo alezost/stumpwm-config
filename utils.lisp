@@ -263,6 +263,10 @@ beginning with ':') where a service is started."
   (run-or-raise (utl-get-systemctl-user-cmd "emacs")
                 '(:class "Emacs")))
 
+(defcommand utl-emacs-trunk () ()
+  "Start emacs-trunk unless it is already running."
+  (run-shell-command (utl-get-systemctl-user-cmd "emacs-trunk")))
+
 (defcommand utl-emacs-eval (arg) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
   (run-prog "emacsclient" :args (list "--eval" arg) :wait nil :search t))
