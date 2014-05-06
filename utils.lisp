@@ -175,7 +175,7 @@ GRAVITY controls where the window will appear.  Possible values are:
 
 ;;; Sending keys to windows
 
-(defun utl-send-key (key &optional (win (current-window)))
+(defcommand utl-send-key (key &optional (win (current-window))) (:key)
   "Send key press and key release events for KEY to window WIN."
   (let ((xwin (window-xwin win)))
     (multiple-value-bind (code state) (key-to-keycode+state key)
