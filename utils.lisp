@@ -267,13 +267,26 @@ beginning with ':') where a service is started."
   "Start emacs-trunk unless it is already running."
   (run-shell-command (utl-get-systemctl-user-cmd "emacs-trunk")))
 
-(defcommand utl-emacs-eval (arg) ((:shell "emacs-eval: "))
+(defcommand utl-emacs-eval (arg &optional server-name) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
-  (run-prog "emacsclient" :args (list "--eval" arg) :wait nil :search t))
+  (let ((args (list "--eval" arg)))
+    (when server-name
+      (setq args (append (list "--socket-name" server-name) args)))
+    (run-prog "emacsclient" :args args :wait nil :search t)))
 
 (defcommand utl-emacs-eval-show (arg) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient and raise emacs."
   (utl-emacs-eval arg)
+  (or (utl-emacs-window-p) (utl-emacs)))
+
+(defcommand utl-emms-eval (arg &optional (server-name "server-emms"))
+    ((:shell "emms-eval: "))
+  "Evaluate ARG with emacsclient."
+  (utl-emacs-eval arg server-name))
+
+(defcommand utl-emms-eval-show (arg) ((:shell "emms-eval: "))
+  "Evaluate ARG with emacsclient and raise emacs."
+  (utl-emms-eval arg)
   (or (utl-emacs-window-p) (utl-emacs)))
 
 
