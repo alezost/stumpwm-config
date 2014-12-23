@@ -67,19 +67,17 @@ additional key."
 
 (utl-define-key *tile-group-top-map* "s-f"   "fullscreen")
 (utl-define-key *tile-group-top-map* "s-v"   "vsplit")
-(utl-define-key *tile-group-top-map* "M-s-z" "hsplit")
+(utl-define-key *tile-group-top-map* "s-z"   "hsplit")
 (utl-define-key *tile-group-top-map* "s-x"   "only")
 
 ;;; Focusing windows
 
 (utl-define-key *tile-group-top-map*  "s-b"            "pull-hidden-other")
-(utl-define-key *tile-group-top-map*  "s-s"            "pull-hidden-next")
-(utl-define-key *tile-group-top-map*  "M-s-s"          "pull-hidden-previous")
+(utl-define-key *tile-group-top-map*  "M-s-b"          "pull-hidden-next")
 (utl-define-key *tile-group-top-map*  "s-TAB"          "pull-hidden-next")
 (utl-define-key *tile-group-top-map*  "s-ISO_Left_Tab" "pull-hidden-previous")
 (utl-define-key *float-group-top-map* "s-b"            "utl-float-window-other")
-(utl-define-key *float-group-top-map* "s-s"            "utl-float-window-next")
-(utl-define-key *float-group-top-map* "M-s-s"          "utl-float-window-previous")
+(utl-define-key *float-group-top-map* "M-s-b"          "utl-float-window-next")
 (utl-define-key *float-group-top-map* "s-TAB"          "utl-float-window-next")
 (utl-define-key *float-group-top-map* "s-ISO_Left_Tab" "utl-float-window-previous")
 
@@ -153,16 +151,24 @@ additional key."
 
 ;;; Controlling EMMS
 
-(utl-define-key *top-map* "C-XF86AudioPlay" "utl-emms-eval (emms-play-file \"~/docs/audio/grass.wav\")")
-(utl-define-key *top-map* "XF86AudioPlay"   "utl-emms-eval (emms-pause)")
-(utl-define-key *top-map* "XF86AudioStop"   "utl-emms-eval (emms-stop)")
-(utl-define-key *top-map* "XF86AudioPrev"   "utl-emms-eval (emms-previous)")
-(utl-define-key *top-map* "XF86AudioNext"   "utl-emms-eval (emms-next)")
-(utl-define-key *top-map* "C-XF86AudioPrev" "utl-emms-eval (emms-seek-backward)")
-(utl-define-key *top-map* "C-XF86AudioNext" "utl-emms-eval (emms-seek-forward)")
-(utl-define-key *top-map* "M-XF86AudioPrev" "utl-emms-eval (utl-emms-seek-backward)")
-(utl-define-key *top-map* "M-XF86AudioNext" "utl-emms-eval (utl-emms-seek-forward)")
-(utl-define-key *top-map* "XF86AudioMedia"  "utl-emms-eval (emms-smart-browse)")
+(utl-define-key *top-map* "C-XF86AudioPlay"   "utl-emms-eval (emms-play-file \"~/docs/audio/grass.wav\")")
+(utl-define-key *top-map* "XF86AudioPlay"     "utl-emms-eval (emms-pause)")
+(utl-define-key *top-map* "XF86AudioStop"     "utl-emms-eval (emms-pause)")
+(utl-define-key *top-map* "H-XF86AudioStop"   "utl-emms-eval (emms-stop)")
+(utl-define-key *top-map* "s-XF86AudioStop"   "utl-emms-eval (emms-stop)")
+(utl-define-key *top-map* "H-XF86AudioPrev"   "utl-emms-eval (emms-previous)")
+(utl-define-key *top-map* "s-XF86AudioPrev"   "utl-emms-eval (emms-previous)")
+(utl-define-key *top-map* "H-XF86AudioNext"   "utl-emms-eval (emms-next)")
+(utl-define-key *top-map* "s-XF86AudioNext"   "utl-emms-eval (emms-next)")
+(utl-define-key *top-map* "XF86AudioPrev"     "utl-emms-eval (utl-emms-seek-backward 10)")
+(utl-define-key *top-map* "XF86AudioNext"     "utl-emms-eval (utl-emms-seek-forward  10)")
+(utl-define-key *top-map* "C-XF86AudioPrev"   "utl-emms-eval (utl-emms-seek-backward 3)")
+(utl-define-key *top-map* "C-XF86AudioNext"   "utl-emms-eval (utl-emms-seek-forward  3)")
+(utl-define-key *top-map* "M-XF86AudioPrev"   "utl-emms-eval (utl-emms-seek-backward 60)")
+(utl-define-key *top-map* "M-XF86AudioNext"   "utl-emms-eval (utl-emms-seek-forward  60)")
+(utl-define-key *top-map* "C-M-XF86AudioPrev" "utl-emms-eval (utl-emms-seek-backward 180)")
+(utl-define-key *top-map* "C-M-XF86AudioNext" "utl-emms-eval (utl-emms-seek-forward  180)")
+(utl-define-key *top-map* "XF86AudioMedia"    "utl-emms-eval (emms-smart-browse)")
 
 
 ;;; Miscellaneous bindings
@@ -173,7 +179,6 @@ additional key."
 (utl-define-key *top-map* "s-u" "time")
 (utl-define-key *top-map* "s-i" "info")
 (utl-define-key *top-map* "s-l" "lastmsg")
-(utl-define-key *top-map* "s-z" "utl-emacs-eval-show (eshell)")
 (utl-define-key *top-map* "s-d" "utl-send-key-to-emacs XF86Spell")
 (utl-define-key *top-map* "XF86Documents"    "utl-emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
 (utl-define-key *top-map* "C-XF86Documents"  "utl-emacs-eval-show (org-capture 1 \"n\")")
@@ -186,20 +191,25 @@ additional key."
 (utl-define-key *top-map* "s-8" "layout-set 1 s-8")
 (utl-define-key *top-map* "s-9" "layout-set 2 s-9")
 (utl-define-key *top-map* "H-y" "utl-yank-primary")
-(utl-define-key *top-map* "F12"               "exec scrot \"/home/alexx/temp/screenshots/%Y-%m-%d_%H%M%S.png\"")
-(utl-define-key *top-map* "M-F12"             "exec scrot -s \"/home/alexx/temp/screenshots/%Y-%m-%d_%H%M%S.png\"")
-(utl-define-key *top-map* "M-SunPrint_Screen" "exec scrot -s \"/home/alexx/temp/screenshots/%Y-%m-%d_%H%M%S.png\"")
-(utl-define-key *top-map* "s-F12"             "exec clock")
-(utl-define-key *top-map* "s-SunPrint_Screen" "exec clock")
-(utl-define-key *top-map* "C-M-s-XF86LogOff" "exec sudo shutdown now")
-(utl-define-key *top-map* "XF86TouchpadToggle" "exec touchpad-toggle")
+(utl-define-key *top-map* "F12"                 "exec capture desktop")
+(utl-define-key *top-map* "M-F12"               "exec capture image")
+(utl-define-key *top-map* "M-SunPrint_Screen"   "exec capture image")
+(utl-define-key *top-map* "C-S-F12"             "exec capture video")
+(utl-define-key *top-map* "C-S-SunPrint_Screen" "exec capture video")
+(utl-define-key *top-map* "s-F12"               "exec clock")
+(utl-define-key *top-map* "s-SunPrint_Screen"   "exec clock")
+(utl-define-key *top-map* "C-M-s-XF86LogOff"    "exec sudo shutdown now")
+(utl-define-key *top-map* "XF86TouchpadToggle"  "exec touchpad-toggle")
+(utl-define-key *top-map* "XF86Sleep"           "exec monitor blank")
+(utl-define-key *top-map* "C-XF86Sleep"         "exec monitor suspend")
+(utl-define-key *top-map* "M-XF86Sleep"         "exec monitor off")
 
 ;; root map
 (utl-define-key *root-map* "V"   "version")
 (utl-define-key *root-map* "c"   "colon")
 (utl-define-key *root-map* "v"   "eval")
 (utl-define-key *root-map* "i"   "list-window-properties")
-(utl-define-key *root-map* "s-b" "banish")
+(utl-define-key *root-map* "s-b" "ratwarp 800 0")
 
 ;; menu map
 (utl-define-key *menu-map* "s-c" 'menu-up)
@@ -250,10 +260,8 @@ additional key."
 (utl-define-key *utl-web-map* "p"  "utl-conkeror-eval-show internet-search-python3-prompted")
 (utl-define-key *utl-web-map* "z"  "utl-conkeror-browse-show zeus")
 (utl-define-key *utl-web-map* "s"  "utl-conkeror-browse-show http://news.sportbox.ru/video?channel=all")
-(utl-define-key *utl-web-map* "S"  "utl-conkeror-browse-show http://www.stopstream.com")
 (utl-define-key *utl-web-map* "t"  "utl-conkeror-browse-show http://tv.yandex.ru/4/?period=all-day")
 (utl-define-key *utl-web-map* "T"  "utl-conkeror-browse-show http://www.programma.tv")
-(utl-define-key *utl-web-map* "k"  "utl-conkeror-browse-show http://www.keyhero.com/typing-tests-wpm/")
 (utl-define-key *utl-web-map* "M"  "utl-conkeror-browse-show https://maps.google.com/maps?hl=ru")
 (utl-define-key *utl-web-map* "W"  "utl-conkeror-browse-show http://www.gismeteo.ru/city/hourly/5039/")
 (utl-define-key *utl-web-map* "w" '*utl-web-wiki-map*)
@@ -263,16 +271,10 @@ additional key."
 ;; tv and radio jumps
 (defvar *utl-tv-radio-map* (make-sparse-keymap)
   "Keymap for quick access to tv and radio resources.")
-(defvar *utl-echo-map* (make-sparse-keymap)
-  "Keymap for quick access to 'Эхо Москвы' resources.")
 (utl-define-key *top-map* "F6" '*utl-tv-radio-map*)
 (utl-define-key *utl-tv-radio-map* "v" "utl-emms-eval (emms-play-url \"mms://live.rfn.ru/vesti_fm\")")
 (utl-define-key *utl-tv-radio-map* "o" "utl-conkeror-browse-show http://www.onlinetv.ru/")
-(utl-define-key *utl-tv-radio-map* "e" '*utl-echo-map*)
-(utl-define-key *utl-echo-map* "a" "utl-conkeror-browse-show http://www.echo.msk.ru/sounds/stream.html")
-(utl-define-key *utl-echo-map* "v" "utl-conkeror-browse-show http://echomsk.onlinetv.ru/player")
-(utl-define-key *utl-echo-map* "s" "utl-emms-eval-show (call-interactively 'echo-schedule)")
-(utl-define-key *utl-echo-map* "p" "utl-emms-eval-show (call-interactively 'echo-program-task)")
+(utl-define-key *utl-tv-radio-map* "e" "utl-send-key-to-emacs C-M-s-e")
 
 
 ;;; Executing progs
@@ -290,12 +292,10 @@ additional key."
 (utl-define-key *utl-exec-map* "v" "exec slimevolley")
 (utl-define-key *utl-exec-map* "g" "utl-gcolor2")
 (utl-define-key *utl-exec-map* "G" "exec gcolor2")
-(utl-define-key *utl-exec-map* "M" "exec manaplus")
-(utl-define-key *utl-exec-map* "m" "mana-exec")
+(utl-define-key *utl-exec-map* "m" "utl-emacs-eval (mana-start)")
 (utl-define-key *utl-exec-map* "7" "utl-gtypist d.typ")
 (utl-define-key *utl-exec-map* "8" "utl-gtypist ru.typ")
 (utl-define-key *utl-exec-map* "9" "utl-gtypist")
-(utl-define-key *utl-exec-map* "s-9" "utl-emacs-eval-show (call-interactively 'gtypist-exec-prompt)")
 
 
 ;;; Mode line
