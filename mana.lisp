@@ -133,19 +133,4 @@ ALIVE-MSG-P and DEAD-MSG-P "
     (sb-thread:terminate-thread *mana-thread*)
     (echo "^b^7*Mana thread was ^B^1*killed^b^7*.")))
 
-;; I don't like to write password and to choose a server and a character
-;; each time i start mana client, so i wrote a little emacs function
-;; `mana-get-shell-string' for returning a full mana shell command
-;; (password is taken from "~/.authinfo.gpg")
-(defcommand mana-exec () ()
-  "Start manaplus client."
-  (let ((mana-cmd (make-array '(0) :element-type 'base-char
-                              :fill-pointer 0 :adjustable t)))
-    (with-output-to-string (out mana-cmd)
-      (if (= 0 (sb-ext::process-exit-code
-                (run-prog "emacsclient" :args '("-e" "(mana-get-shell-string)")
-                          :output out :wait t :search t)))
-          (run-shell-command (string-trim '(#\" #\NewLine) mana-cmd))
-          (echo "Emacsclient has ^B^1*failed")))))
-
 ;;; mana.lisp ends here
