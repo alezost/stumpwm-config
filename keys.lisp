@@ -160,6 +160,8 @@ additional key."
 (utl-define-key *top-map* "s-XF86AudioPrev"   "utl-emms-eval (emms-previous)")
 (utl-define-key *top-map* "H-XF86AudioNext"   "utl-emms-eval (emms-next)")
 (utl-define-key *top-map* "s-XF86AudioNext"   "utl-emms-eval (emms-next)")
+(utl-define-key *top-map* "H-XF86AudioPlay"   "utl-emms-eval (utl-emms-first)")
+(utl-define-key *top-map* "s-XF86AudioPlay"   "utl-emms-eval (utl-emms-first)")
 (utl-define-key *top-map* "XF86AudioPrev"     "utl-emms-eval (utl-emms-seek-backward 10)")
 (utl-define-key *top-map* "XF86AudioNext"     "utl-emms-eval (utl-emms-seek-forward  10)")
 (utl-define-key *top-map* "C-XF86AudioPrev"   "utl-emms-eval (utl-emms-seek-backward 3)")
@@ -169,6 +171,7 @@ additional key."
 (utl-define-key *top-map* "C-M-XF86AudioPrev" "utl-emms-eval (utl-emms-seek-backward 180)")
 (utl-define-key *top-map* "C-M-XF86AudioNext" "utl-emms-eval (utl-emms-seek-forward  180)")
 (utl-define-key *top-map* "XF86AudioMedia"    "utl-emms-eval (emms-smart-browse)")
+(utl-define-key *top-map* "XF86Music"         "utl-emms-eval (utl-emms-notify)")
 
 
 ;;; Miscellaneous bindings
