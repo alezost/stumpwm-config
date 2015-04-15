@@ -76,10 +76,14 @@ additional key."
 (utl-define-key *tile-group-top-map*  "M-s-b"          "pull-hidden-next")
 (utl-define-key *tile-group-top-map*  "s-TAB"          "pull-hidden-next")
 (utl-define-key *tile-group-top-map*  "s-ISO_Left_Tab" "pull-hidden-previous")
-(utl-define-key *float-group-top-map* "s-b"            "utl-float-window-other")
-(utl-define-key *float-group-top-map* "M-s-b"          "utl-float-window-next")
-(utl-define-key *float-group-top-map* "s-TAB"          "utl-float-window-next")
-(utl-define-key *float-group-top-map* "s-ISO_Left_Tab" "utl-float-window-previous")
+(utl-define-key stumpwm.floating-group::*float-group-top-map*
+                "s-b"            "utl-float-window-other")
+(utl-define-key stumpwm.floating-group::*float-group-top-map*
+                "M-s-b"          "utl-float-window-next")
+(utl-define-key stumpwm.floating-group::*float-group-top-map*
+                "s-TAB"          "utl-float-window-next")
+(utl-define-key stumpwm.floating-group::*float-group-top-map*
+                "s-ISO_Left_Tab" "utl-float-window-previous")
 
 ;;; Moving/resizing windows
 
@@ -88,7 +92,8 @@ additional key."
 ;;   [C-]s-<key> for moving
 ;;   C-<key> for moving to the screen edges
 
-(utl-define-key *float-group-top-map* "s-KP_Begin" "utl-float-window-gravity center")
+(utl-define-key stumpwm.floating-group::*float-group-top-map*
+                "s-KP_Begin" "utl-float-window-gravity center")
 
 (defun utl-define-numpad-key-xy (map modifier cmd val)
   (flet ((dk (key x y)
@@ -103,10 +108,14 @@ additional key."
     (dk "KP_End"       (- val) val)
     (dk "KP_Left"      (- val) 0)))
 
-(utl-define-numpad-key-xy *float-group-top-map* "s-"   "utl-move-float-window" 10)
-(utl-define-numpad-key-xy *float-group-top-map* "C-s-" "utl-move-float-window" 1)
-(utl-define-numpad-key-xy *float-group-top-map* "M-"   "utl-resize-float-window" 10)
-(utl-define-numpad-key-xy *float-group-top-map* "C-M-" "utl-resize-float-window" 1)
+(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "s-"   "utl-move-float-window" 10)
+(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "C-s-" "utl-move-float-window" 1)
+(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "M-"   "utl-resize-float-window" 10)
+(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "C-M-" "utl-resize-float-window" 1)
 
 (defun utl-define-numpad-key-gravity (map modifier cmd)
   (flet ((dk (key gravity)
@@ -123,7 +132,8 @@ additional key."
     (dk "KP_Left"      "left")))
 
 (utl-define-numpad-key-gravity *tile-group-top-map*  "C-" "gravity")
-(utl-define-numpad-key-gravity *float-group-top-map* "C-" "utl-float-window-gravity")
+(utl-define-numpad-key-gravity stumpwm.floating-group::*float-group-top-map*
+                               "C-" "utl-float-window-gravity")
 
 ;;; Resizing frames
 

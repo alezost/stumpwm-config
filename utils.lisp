@@ -5,104 +5,14 @@
 
 ;;; Code:
 
-(in-package :stumpwm)
-
 
-;;; Windows, frames and groups
+;;; Floating windows
 
-(defun utl-class-window-p (class &optional (win (current-window)))
-  "Return T if a window WIN is of class CLASS."
-  (and win (string= class (window-class win))))
+(in-package :stumpwm.floating-group)
 
-(defcommand utl-focus-window-by-class (class) ((:string "Window class: "))
-  "Focus window class CLASS.
-Return the window or nil if there is no such."
-  (if (utl-class-window-p class)
-      (current-window)
-      (let ((win (car (or ;; priority to the window from the current group
-                       (find-matching-windows (list :class class) nil nil)
-                       (find-matching-windows (list :class class) t t)))))
-        (if win
-            (focus-all win)
-            (message "No ~a window." class))
-        win)))
-
-(defvar *utl-ignore-emacs* nil
-  "If non-nil, do not treat emacs specially in `utl-next'.")
-
-(defcommand utl-next (&optional key) (:key)
-  "Select next frame or window or emacs window.
-If current window is emacs and `*utl-ignore-emacs*' is nil, send key
-sequence KEY to it.
-If current group is tiling, select next frame.
-If current group is floating, select next window."
-  (if (and key
-           (utl-emacs-window-p)
-           (null *utl-ignore-emacs*)
-           ;; Ignore emacs anyway, if it has a single window.
-           ;; The following code checks WINDOWS_NUM window property.
-           ;; You can "teach" emacs to update this property by adding
-           ;; this to your .emacs:
-           ;;   (add-hook 'window-configuration-change-hook
-           ;;             (lambda () (when (display-graphic-p)
-           ;;                          (x-change-window-property
-           ;;                           "WINDOWS_NUM"
-           ;;                           (string (length (window-list)))
-           ;;                           nil nil nil t))))
-           (let ((windows-num (car (window-property (current-window)
-                                                    :WINDOWS_NUM))))
-             (or (null windows-num)
-                 (/= 1 windows-num))))
-      (utl-send-key-to-emacs key)
-      (if (eq (type-of (current-group)) 'tile-group)
-          (fnext)
-          (utl-float-window-next))))
-
-(defcommand utl-toggle-ignore-emacs () ()
-  "Toggle `*utl-ignore-emacs*'."
-  (setf *utl-ignore-emacs* (not *utl-ignore-emacs*))
-  (message "^b^7*Switching between emacs windows ~a^b^7*."
-            (if *utl-ignore-emacs* "^B^1*disabled" "^2*enabled")))
-
-(defcommand utl-gmove-to-other-group () ()
-  "Move the current window to the other group and go to that group."
-  (let ((group (car (remove-if (lambda (g) (eq g (current-group)))
-                         (screen-groups (current-screen))))))
-    (if group
-        (progn (gmove group)
-               (switch-to-group group))
-        (echo "There is only one group."))))
-
-;;; Showing and toggling the root window
-
-(defvar *utl-window-configuration* nil
-  "Last saved window configuration.")
-
-(defcommand utl-show-root () ()
-  "Show root window."
-  ;; make one frame if necessary
-  ;; (let ((*executing-stumpwm-command* t)) ; suppress message
-  ;;   (only))
-  (if (cdr (group-frames (current-group)))
-       (only))
-  (fclear))
-
-(defcommand utl-toggle-root () ()
-  "Toggle between root window and last window configuration."
-  (if (current-window)
-      (progn
-        (setf *utl-window-configuration* (dump-group (current-group)))
-        (utl-show-root))
-      ;; current window is root
-      (if *utl-window-configuration*
-        (restore-group (current-group) *utl-window-configuration*)
-        (echo "There is no saved window configuration yet."))))
-
-;;; Focusing floating windows
-
-(defun utl-float-window-focus-forward (window-list
-                                   &optional (window (group-current-window
-                                                      (current-group))))
+(defun utl-float-window-focus-forward
+    (window-list &optional (window (group-current-window
+                                    (current-group))))
   "Focus the next window in WINDOW-LIST from the window WINDOW."
   (let* ((wins (cdr (member window window-list)))
          (nw (if wins
@@ -118,13 +28,13 @@ If current group is floating, select next window."
 
 (defcommand (utl-float-window-next float-group) () ()
   "Focus next floating window."
-  (utl-float-window-focus-forward (sort-windows (current-group))))
+  (utl-float-window-focus-forward
+   (stumpwm::sort-windows (current-group))))
 
 (defcommand (utl-float-window-previous float-group) () ()
   "Focus previous floating window."
-  (utl-float-window-focus-forward (nreverse (sort-windows (current-group)))))
-
-;;; Moving floating windows
+  (utl-float-window-focus-forward
+   (nreverse (stumpwm::sort-windows (current-group)))))
 
 (defcommand (utl-move-float-window float-group)
     (x y) ((:number "+ X: ") (:number "+ Y: "))
@@ -169,8 +79,63 @@ GRAVITY controls where the window will appear.  Possible values are:
                    (:bottom       (cons nil y-bottom))
                    (:bottom-left  (cons 0 y-bottom))
                    (:left         (cons 0 nil)))))
-    (float-window-move-resize (current-window)
-                              :x (car coords) :y (cdr coords))))
+    (float-window-move-resize
+     (current-window)
+     :x (car coords) :y (cdr coords))))
+
+
+;;; Windows, frames and groups
+
+(in-package :stumpwm)
+
+(defun utl-class-window-p (class &optional (win (current-window)))
+  "Return T if a window WIN is of class CLASS."
+  (and win (string= class (window-class win))))
+
+(defcommand utl-focus-window-by-class (class) ((:string "Window class: "))
+  "Focus window class CLASS.
+Return the window or nil if there is no such."
+  (if (utl-class-window-p class)
+      (current-window)
+      (let ((win (car (or ;; priority to the window from the current group
+                       (find-matching-windows (list :class class) nil nil)
+                       (find-matching-windows (list :class class) t t)))))
+        (if win
+            (focus-all win)
+            (message "No ~a window." class))
+        win)))
+
+(defcommand utl-gmove-to-other-group () ()
+  "Move the current window to the other group and go to that group."
+  (let ((group (car (remove-if (lambda (g) (eq g (current-group)))
+                               (screen-groups (current-screen))))))
+    (if group
+        (progn (gmove group)
+               (switch-to-group group))
+        (echo "There is only one group."))))
+
+;;; Showing and toggling the root window
+
+(defvar *utl-window-configuration* nil
+  "Last saved window configuration.")
+
+(defcommand utl-show-root () ()
+  "Show root window."
+  (when (cdr (group-frames (current-group)))
+    ;; Make one frame if necessary.
+    (only))
+  (fclear))
+
+(defcommand utl-toggle-root () ()
+  "Toggle between root window and last window configuration."
+  (if (current-window)
+      (progn
+        (setf *utl-window-configuration* (dump-group (current-group)))
+        (utl-show-root))
+      ;; Current window is root.
+      (if *utl-window-configuration*
+        (restore-group (current-group) *utl-window-configuration*)
+        (echo "There is no saved window configuration yet."))))
 
 
 ;;; Sending keys to windows
@@ -251,7 +216,7 @@ beginning with ':') where a service is started."
 
 (defun utl-emacs-window-p (&optional (win (current-window)))
   "Return T if WIN is emacs window."
-  (utl-class-window-p "Emacs"))
+  (utl-class-window-p "Emacs" win))
 
 (defcommand utl-send-key-to-emacs (key) ((:key "Key: "))
   "Focus emacs window and send KEY to it."
@@ -383,5 +348,42 @@ get nil."
 (defcommand utl-yank-primary () ()
   "Insert X primary selection into the current window."
   (window-send-string (get-x-selection)))
+
+(defvar *utl-ignore-emacs* nil
+  "If non-nil, do not treat emacs specially in `utl-next'.")
+
+(defcommand utl-next (&optional key) (:key)
+  "Select next frame or window or emacs window.
+If current window is emacs and `*utl-ignore-emacs*' is nil, send key
+sequence KEY to it.
+If current group is tiling, select next frame.
+If current group is floating, select next window."
+  (if (and key
+           (utl-emacs-window-p)
+           (null *utl-ignore-emacs*)
+           ;; Ignore emacs anyway, if it has a single window.
+           ;; The following code checks WINDOWS_NUM window property.
+           ;; You can "teach" emacs to update this property by adding
+           ;; this to your .emacs:
+           ;;   (add-hook 'window-configuration-change-hook
+           ;;             (lambda () (when (display-graphic-p)
+           ;;                          (x-change-window-property
+           ;;                           "WINDOWS_NUM"
+           ;;                           (string (length (window-list)))
+           ;;                           nil nil nil t))))
+           (let ((windows-num (car (window-property (current-window)
+                                                    :WINDOWS_NUM))))
+             (or (null windows-num)
+                 (/= 1 windows-num))))
+      (utl-send-key-to-emacs key)
+      (if (eq (type-of (current-group)) 'tile-group)
+          (fnext)
+          (stumpwm.floating-group:utl-float-window-next))))
+
+(defcommand utl-toggle-ignore-emacs () ()
+  "Toggle `*utl-ignore-emacs*'."
+  (setf *utl-ignore-emacs* (not *utl-ignore-emacs*))
+  (message "^b^7*Switching between emacs windows ~a^b^7*."
+            (if *utl-ignore-emacs* "^B^1*disabled" "^2*enabled")))
 
 ;;; utils.lisp ends here
