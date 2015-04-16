@@ -1,6 +1,6 @@
 ## About
 
-My configuration of [StumpWM](https://github.com/sabetts/stumpwm).  I
+My configuration of [StumpWM](https://github.com/stumpwm/stumpwm).  I
 separated my settings into several files instead of using a single
 `.stumpwmrc`.
 
