@@ -20,7 +20,7 @@
   `(dolist (s *screen-list*)
      (setf (,val s) (alloc-color s ,color))))
 
-(utl-set-color screen-fg-color (xlib:make-color :red 0.9 :green 0.91 :blue 0.94))
+(utl-set-color screen-fg-color (hex-to-xlib-color "#e5e8ef"))
 (utl-set-color screen-bg-color "gray15")
 (utl-set-color screen-focus-color "DeepSkyBlue")
 (utl-set-color screen-border-color "ForestGreen")
@@ -34,8 +34,8 @@
 (setq
  *grab-pointer-character* 40
  *grab-pointer-character-mask* 41
- *grab-pointer-foreground* (xlib:make-color :red 0.24 :green 0.70 :blue 0.44)
- *grab-pointer-background* (xlib:make-color :red 0.173 :green 0.325 :blue 0.792))
+ *grab-pointer-foreground* (hex-to-xlib-color "#3db270")
+ *grab-pointer-background* (hex-to-xlib-color "#2c53ca"))
 
 
 ;;; Visual appearance and the mode-line
