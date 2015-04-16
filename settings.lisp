@@ -1,4 +1,4 @@
-;;; settings.lisp --- general settings: variables, hooks, ...
+;;; settings.lisp --- General settings: variables, hooks, ...
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 Dec 2013
@@ -10,8 +10,9 @@
 
 ;;; Groups
 
-;; name the default group
-(setf (group-name (car (screen-groups (current-screen)))) "tile1")
+;; Name the default group.
+(setf (group-name (car (screen-groups (current-screen))))
+      "tile1")
 (gnewbg "tile2")
 (gnewbg-float "float")
 
@@ -26,7 +27,7 @@
 
 (setf *top-level-error-action* :message)
 
-;; original `send-fake-key' sends only press event
+;; Original `send-fake-key' sends only "press" event.
 (setf (symbol-function 'send-fake-key)
       (lambda (win key) (utl-send-key key win)))
 

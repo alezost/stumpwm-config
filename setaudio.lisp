@@ -1,4 +1,4 @@
-;;; setaudio.lisp --- control audio parameters through "setaudio"
+;;; setaudio.lisp --- Control audio parameters through "setaudio"
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 May 2013

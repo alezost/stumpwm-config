@@ -1,4 +1,4 @@
-;;; init.lisp --- vital settings and loading other files
+;;; init.lisp --- Vital settings and loading other files
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 Jun 2013

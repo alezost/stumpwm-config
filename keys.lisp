@@ -1,4 +1,4 @@
-;;; keys.lisp --- key bindings (Dvorak layout)
+;;; keys.lisp --- Key bindings (Dvorak layout)
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 Jun 2013

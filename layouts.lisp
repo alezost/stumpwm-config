@@ -1,4 +1,4 @@
-;;; layouts.lisp --- switching keyboard layouts
+;;; layouts.lisp --- Switching keyboard layouts
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 Jun 2013
@@ -12,18 +12,18 @@
 
 ;; This file provides some functions and commands for working with
 ;; layouts.  I use it for:
+;;
 ;; - different key bindings for different layouts,
 ;; - different layouts for different windows,
 ;; - setting internal input method in emacs if it is the current window
 ;;   (by sending a specified key sequence to it) instead of the global
-;;   layout switching
+;;   layout switching.
 
 ;;; Code:
 
 (in-package :stumpwm)
 
-;; we need it because
-;; stumpwm opens display before extension definition
+;; We need it because stumpwm opens display before extension definition.
 (xlib::initialize-extensions *display*)
 (xlib:enable-xkeyboard *display*)
 

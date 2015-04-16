@@ -1,4 +1,4 @@
-;;; visual.lisp --- visual appearance: colors, fonts, mode line, resizing,...
+;;; visual.lisp --- Visual appearance: colors, fonts, mode line, resizing, ...
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 Jun 2013
@@ -10,7 +10,7 @@
 
 ;;; Colors
 
-;; yellow and magenta are swapped to show keys in yellow
+;; Yellow and magenta are swapped to show keys in yellow.
 (setf *colors*
       '("black" "red" "green" "magenta" "blue" "yellow" "cyan" "white"))
 (update-color-map (current-screen))
@@ -48,11 +48,8 @@
 (setf *mouse-focus-policy* :click)
 
 (setf
- ;; *mode-line-position* :bottom
  *mode-line-timeout* 3
- *screen-mode-line-format* '("^5*" (:eval (time-format "%k:%M")) " ^2*%n ")
- ;; *screen-mode-line-format* '((:eval (format nil " ^2*foo~%bar")))  ; multiline mode-line
- )
+ *screen-mode-line-format* '("^5*" (:eval (time-format "%k:%M")) " ^2*%n "))
 (utl-mode-line-on)
 
 ;; (set-font "-*-dejavu sans mono-medium-r-normal-*-*-115-*-*-*-*-*-1")
@@ -61,7 +58,7 @@
 
 ;;; Message after a part of key sequence
 
-;; idea from <https://github.com/sabetts/stumpwm/wiki/FAQ>
+;; Idea from <https://github.com/stumpwm/stumpwm/wiki/FAQ>.
 (defun key-seq-msg (key key-seq cmd)
   "Show a message with current incomplete key sequence."
   (declare (ignore key))

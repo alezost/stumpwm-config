@@ -1,4 +1,4 @@
-;;; mana.lisp --- interacting with Mana
+;;; mana.lisp --- Interacting with Mana
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 25 Aug 2013

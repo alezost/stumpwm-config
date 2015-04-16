@@ -1,4 +1,4 @@
-;;; utils.lisp --- additional variables, functions and commands
+;;; utils.lisp --- Additional variables, functions and commands
 
 ;; Author: Alex Kost <alezost@gmail.com>
 ;; Created: 28 Jun 2013
