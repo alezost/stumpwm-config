@@ -55,8 +55,8 @@
  )
 (utl-mode-line-on)
 
-;; (setf *startup-message* (machine-instance))
-;; (set-font "-misc-ubuntu mono-bold-r-normal--0-0-0-0-m-0-ascii-0")
+;; (set-font "-*-dejavu sans mono-medium-r-normal-*-*-115-*-*-*-*-*-1")
+(set-font "9x15bold")
 
 
 ;;; Message after a part of key sequence
