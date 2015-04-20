@@ -31,6 +31,9 @@
         (load file)
         (format *error-output* "File '~a' doesn't exist." file))))
 
+(set-module-dir
+ (pathname-as-directory (concat (getenv "HOME")
+                                "/src/stumpwm-contrib")))
 (utl-load "keys")
 (utl-load "utils")
 (utl-load "layouts")

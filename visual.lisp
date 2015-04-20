@@ -40,6 +40,9 @@
 
 ;;; Visual appearance and the mode-line
 
+(load-module "cpu")
+(load-module "net")
+
 (set-normal-gravity :bottom)
 (setf *message-window-gravity* :bottom-right)
 (setf *input-window-gravity*   :center)
@@ -48,8 +51,9 @@
 (setf *mouse-focus-policy* :click)
 
 (setf
- *mode-line-timeout* 3
- *screen-mode-line-format* '("^5*" (:eval (time-format "%k:%M")) " ^2*%n "))
+ *mode-line-timeout* 5
+ *screen-mode-line-format* '("^5*" (:eval (time-format "%k:%M"))
+                             " ^2*%n" " ^7*%c %l"))
 (utl-mode-line-on)
 
 ;; (set-font "-*-dejavu sans mono-medium-r-normal-*-*-115-*-*-*-*-*-1")
