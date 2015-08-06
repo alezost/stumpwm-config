@@ -65,17 +65,17 @@ additional key."
 (utl-define-key *top-map* "s-n"   "gother")
 (utl-define-key *top-map* "M-s-n" "utl-gmove-to-other-group")
 
-(utl-define-key *tile-group-top-map* "s-f"   "fullscreen")
-(utl-define-key *tile-group-top-map* "s-v"   "vsplit")
-(utl-define-key *tile-group-top-map* "s-z"   "hsplit")
-(utl-define-key *tile-group-top-map* "s-x"   "only")
+(utl-define-key *tile-group-root-map* "s-f" "fullscreen")
+(utl-define-key *tile-group-top-map* "s-v" "vsplit")
+(utl-define-key *tile-group-top-map* "s-z" "hsplit")
+(utl-define-key *tile-group-top-map* "s-x" "only")
 
 ;;; Focusing windows
 
-(utl-define-key *tile-group-top-map*  "s-b"            "pull-hidden-other")
-(utl-define-key *tile-group-top-map*  "M-s-b"          "pull-hidden-next")
-(utl-define-key *tile-group-top-map*  "s-TAB"          "pull-hidden-next")
-(utl-define-key *tile-group-top-map*  "s-ISO_Left_Tab" "pull-hidden-previous")
+(utl-define-key *tile-group-top-map* "s-b"            "pull-hidden-other")
+(utl-define-key *tile-group-top-map* "M-s-b"          "pull-hidden-next")
+(utl-define-key *tile-group-top-map* "s-TAB"          "pull-hidden-next")
+(utl-define-key *tile-group-top-map* "s-ISO_Left_Tab" "pull-hidden-previous")
 (utl-define-key stumpwm.floating-group::*float-group-top-map*
                 "s-b"            "utl-float-window-other")
 (utl-define-key stumpwm.floating-group::*float-group-top-map*
@@ -185,6 +185,16 @@ additional key."
 
 
 ;;; Miscellaneous bindings
+
+(defvar *utl-emacs-map* (make-sparse-keymap)
+  "Keymap for finding files (and doing other things) in emacs.")
+
+(utl-define-key *top-map* "s-f" '*utl-emacs-map*)
+(utl-define-key *utl-emacs-map* "b" "utl-emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
+(utl-define-key *utl-emacs-map* "n" "utl-emacs-eval-show (org-capture 1 \"n\")")
+(utl-define-key *utl-emacs-map* "t" "utl-emacs-eval-show (find-file \"~/notes/tasks.org\")")
+(utl-define-key *utl-emacs-map* "i" "utl-emacs-eval-show (find-file \"~/notes/info.org\")")
+(utl-define-key *utl-emacs-map* "m" "utl-emms-eval (utl-emms-notify)")
 
 (utl-define-key *resize-map* "s-g" "abort-iresize")
 (utl-define-key *top-map* "s-g" "abort")
