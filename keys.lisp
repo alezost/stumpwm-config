@@ -211,11 +211,11 @@ additional key."
 (utl-define-key *top-map* "C-S-SunPrint_Screen" "exec capture video")
 (utl-define-key *top-map* "s-F12"               "exec clock")
 (utl-define-key *top-map* "s-SunPrint_Screen"   "exec clock")
-(utl-define-key *top-map* "C-M-s-XF86LogOff"    "exec sudo shutdown now")
 (utl-define-key *top-map* "XF86TouchpadToggle"  "exec touchpad-toggle")
 (utl-define-key *top-map* "XF86Sleep"           "exec monitor blank")
 (utl-define-key *top-map* "C-XF86Sleep"         "exec monitor suspend")
 (utl-define-key *top-map* "M-XF86Sleep"         "exec monitor off")
+(utl-define-key *top-map* "C-M-H-XF86Sleep"     "exec sudo shutdown now")
 
 ;; root map
 (utl-define-key *root-map* "V"   "version")
