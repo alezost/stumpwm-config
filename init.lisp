@@ -12,7 +12,17 @@
 
 (in-package :stumpwm)
 
-(swank:create-server :dont-close t)
+(defvar al/display-number
+  (multiple-value-bind (_ array)
+      (cl-ppcre:scan-to-strings ":([0-9]+)" (getenv "DISPLAY"))
+    (if (vectorp array)
+        (parse-integer (aref array 0))
+        0))
+  "The number of the current DISPLAY.")
+
+(swank:create-server
+ :dont-close t
+ :port (+ swank::default-server-port al/display-number))
 
 
 ;;; Loading additional rc files
