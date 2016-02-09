@@ -194,19 +194,17 @@ infinite loop is not a joke."
 
 ;;; Interacting with systemd user services
 
-;; The following makes sense only for my systemd user units, which can be
-;; started in different X instances/displays/VTs:
-;; <https://github.com/alezost/systemd-user-units>
+;; The following makes sense only for my shepherd user services, which
+;; can be started in different X instances/displays/VTs:
+;; <https://github.com/alezost/shepherd-config>
 
-(defun utl-get-systemctl-user-cmd
-    (service &optional (cmd "start") (display (getenv "DISPLAY")))
-  "Return 'systemctl --user' command for SERVICE.
-SERVICE is a service name (string).
-CMD is a systemctl command.
+(defun utl-herd-command (service &optional (action "start")
+                                   (display (getenv "DISPLAY")))
+  "Return 'herd ACTION SERVICE:DISPLAY' command.
 DISPLAY is a display number (can be a number or string optionally
 beginning with ':') where a service is started."
-  (format nil "systemctl --user ~a ~a@~a"
-          cmd service
+  (format nil "herd ~a ~a:~a"
+          action service
           (if (numberp display)
               display
               (string-left-trim ":" display))))
@@ -225,12 +223,12 @@ beginning with ':') where a service is started."
 
 (defcommand utl-emacs () ()
   "Start emacs unless it is already running, in which case focus it."
-  (run-or-raise (utl-get-systemctl-user-cmd "emacs")
+  (run-or-raise (utl-herd-command "emacs")
                 '(:class "Emacs")))
 
 (defcommand utl-emacs-trunk () ()
   "Start emacs-trunk unless it is already running."
-  (run-shell-command (utl-get-systemctl-user-cmd "emacs-trunk")))
+  (run-shell-command (utl-herd-command "emacs-trunk")))
 
 (defcommand utl-emacs-eval (arg &optional server-name) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
@@ -259,7 +257,7 @@ beginning with ':') where a service is started."
 
 (defcommand utl-conkeror () ()
   "Start conkeror unless it is already running, in which case focus it."
-  (run-or-raise (utl-get-systemctl-user-cmd "conkeror")
+  (run-or-raise (utl-herd-command "conkeror")
                 '(:class "Conkeror")))
 
 (defcommand utl-conkeror-browse (url) ((:shell "Browse URL: "))
@@ -285,12 +283,12 @@ beginning with ':') where a service is started."
 
 (defcommand utl-xterm () ()
   "Start xterm unless it is already running, in which case focus it."
-  (run-or-raise (utl-get-systemctl-user-cmd "xterm")
+  (run-or-raise (utl-herd-command "xterm")
                 '(:class "XTerm")))
 
 (defcommand utl-firefox () ()
   "Start firefox unless it is already running, in which case focus it."
-  (run-or-raise (utl-get-systemctl-user-cmd "firefox")
+  (run-or-raise (utl-herd-command "firefox")
                 '(:class "Firefox")))
 
 (defcommand utl-gcolor2 () ()
