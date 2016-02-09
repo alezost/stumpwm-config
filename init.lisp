@@ -17,16 +17,16 @@
 
 ;;; Loading additional rc files
 
-(defvar *al/load-directory*
+(defvar al/init-directory
   (directory-namestring
    (truename (merge-pathnames (user-homedir-pathname)
                               ".stumpwmrc")))
   "A directory with initially loaded files.")
 
 (defun al/load (filename)
-  "Load a file FILENAME (without extension) from `*al/load-directory*'."
+  "Load a file FILENAME (without extension) from `al/init-directory'."
   (let ((file (merge-pathnames (concat filename ".lisp")
-                               *al/load-directory*)))
+                               al/init-directory)))
     (if (probe-file file)
         (load file)
         (format *error-output* "File '~a' doesn't exist." file))))
