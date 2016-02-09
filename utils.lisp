@@ -10,7 +10,7 @@
 
 (in-package :stumpwm.floating-group)
 
-(defun utl-float-window-focus-forward
+(defun al/float-window-focus-forward
     (window-list &optional (window (group-current-window
                                     (current-group))))
   "Focus the next window in WINDOW-LIST from the window WINDOW."
@@ -22,21 +22,21 @@
                  (car window-list))))
     (and nw (focus-window nw))))
 
-(defcommand (utl-float-window-other float-group) () ()
+(defcommand (al/float-window-other float-group) () ()
   "Focus previously focused floating window."
   (focus-window (cadr (group-windows (current-group)))))
 
-(defcommand (utl-float-window-next float-group) () ()
+(defcommand (al/float-window-next float-group) () ()
   "Focus next floating window."
-  (utl-float-window-focus-forward
+  (al/float-window-focus-forward
    (stumpwm::sort-windows (current-group))))
 
-(defcommand (utl-float-window-previous float-group) () ()
+(defcommand (al/float-window-previous float-group) () ()
   "Focus previous floating window."
-  (utl-float-window-focus-forward
+  (al/float-window-focus-forward
    (nreverse (stumpwm::sort-windows (current-group)))))
 
-(defcommand (utl-move-float-window float-group)
+(defcommand (al/move-float-window float-group)
     (x y) ((:number "+ X: ") (:number "+ Y: "))
   "Move current floating window by X and Y pixels."
   (float-window-move-resize
@@ -44,7 +44,7 @@
    :x (+ (window-x (current-window)) x)
    :y (+ (window-y (current-window)) y)))
 
-(defcommand (utl-resize-float-window float-group)
+(defcommand (al/resize-float-window float-group)
     (width height) ((:number "+ Width: ") (:number "+ Height: "))
   "Resize current floating window by WIDTH and HEIGHT pixels."
   (float-window-move-resize
@@ -52,7 +52,7 @@
    :width (+ (window-width (current-window)) width)
    :height (+ (window-height (current-window)) height)))
 
-(defcommand (utl-float-window-gravity float-group)
+(defcommand (al/float-window-gravity float-group)
     (gravity) ((:gravity "Gravity: "))
   "Move current floating window to a particular place of the screen.
 GRAVITY controls where the window will appear.  Possible values are:
@@ -88,14 +88,14 @@ GRAVITY controls where the window will appear.  Possible values are:
 
 (in-package :stumpwm)
 
-(defun utl-class-window-p (class &optional (win (current-window)))
+(defun al/class-window-p (class &optional (win (current-window)))
   "Return T if a window WIN is of class CLASS."
   (and win (string= class (window-class win))))
 
-(defcommand utl-focus-window-by-class (class) ((:string "Window class: "))
+(defcommand al/focus-window-by-class (class) ((:string "Window class: "))
   "Focus window class CLASS.
 Return the window or nil if there is no such."
-  (if (utl-class-window-p class)
+  (if (al/class-window-p class)
       (current-window)
       (let ((win (car (or ;; priority to the window from the current group
                        (find-matching-windows (list :class class) nil nil)
@@ -105,7 +105,7 @@ Return the window or nil if there is no such."
             (message "No ~a window." class))
         win)))
 
-(defcommand utl-gmove-to-other-group () ()
+(defcommand al/gmove-to-other-group () ()
   "Move the current window to the other group and go to that group."
   (let ((group (car (remove-if (lambda (g) (eq g (current-group)))
                                (screen-groups (current-screen))))))
@@ -116,31 +116,31 @@ Return the window or nil if there is no such."
 
 ;;; Showing and toggling the root window
 
-(defvar *utl-window-configuration* nil
+(defvar *al/window-configuration* nil
   "Last saved window configuration.")
 
-(defcommand utl-show-root () ()
+(defcommand al/show-root () ()
   "Show root window."
   (when (cdr (group-frames (current-group)))
     ;; Make one frame if necessary.
     (only))
   (fclear))
 
-(defcommand utl-toggle-root () ()
+(defcommand al/toggle-root () ()
   "Toggle between root window and last window configuration."
   (if (current-window)
       (progn
-        (setf *utl-window-configuration* (dump-group (current-group)))
-        (utl-show-root))
+        (setf *al/window-configuration* (dump-group (current-group)))
+        (al/show-root))
       ;; Current window is root.
-      (if *utl-window-configuration*
-        (restore-group (current-group) *utl-window-configuration*)
+      (if *al/window-configuration*
+        (restore-group (current-group) *al/window-configuration*)
         (echo "There is no saved window configuration yet."))))
 
 
 ;;; Sending keys to windows
 
-(defcommand utl-send-key (key &optional (win (current-window))) (:key)
+(defcommand al/send-key (key &optional (win (current-window))) (:key)
   "Send key press and key release events for KEY to window WIN."
   (let ((xwin (window-xwin win)))
     (multiple-value-bind (code state) (key-to-keycode+state key)
@@ -156,7 +156,7 @@ Return the window or nil if there is no such."
         (send :key-release)
         (xlib:display-finish-output *display*)))))
 
-(defun utl-send-keys (keys &key (win (current-window))
+(defun al/send-keys (keys &key (win (current-window))
                             (sleep 0) loop loop-quit-var)
   "Send keys to the window WIN.
 
@@ -171,7 +171,7 @@ lists and functions in KEYS will be repeated).  It will be broken when
 a variable which name is passed to LOOP-QUIT-VAR returns t.  Be aware,
 infinite loop is not a joke."
   (labels ((send-key (key)
-             (utl-send-key (kbd key) win)
+             (al/send-key (kbd key) win)
              ;; (print key)
              (sleep (if (numberp sleep)
                         sleep
@@ -198,7 +198,7 @@ infinite loop is not a joke."
 ;; can be started in different X instances/displays/VTs:
 ;; <https://github.com/alezost/shepherd-config>
 
-(defun utl-herd-command (service &optional (action "start")
+(defun al/herd-command (service &optional (action "start")
                                    (display (getenv "DISPLAY")))
   "Return 'herd ACTION SERVICE:DISPLAY' command.
 DISPLAY is a display number (can be a number or string optionally
@@ -212,97 +212,97 @@ beginning with ':') where a service is started."
 
 ;;; Interacting with emacs
 
-(defun utl-emacs-window-p (&optional (win (current-window)))
+(defun al/emacs-window-p (&optional (win (current-window)))
   "Return T if WIN is emacs window."
-  (utl-class-window-p "Emacs" win))
+  (al/class-window-p "Emacs" win))
 
-(defcommand utl-send-key-to-emacs (key) ((:key "Key: "))
+(defcommand al/send-key-to-emacs (key) ((:key "Key: "))
   "Focus emacs window and send KEY to it."
-  (let ((win (utl-focus-window-by-class "Emacs")))
-    (and win (utl-send-key key win))))
+  (let ((win (al/focus-window-by-class "Emacs")))
+    (and win (al/send-key key win))))
 
-(defcommand utl-emacs () ()
+(defcommand al/emacs () ()
   "Start emacs unless it is already running, in which case focus it."
-  (run-or-raise (utl-herd-command "emacs")
+  (run-or-raise (al/herd-command "emacs")
                 '(:class "Emacs")))
 
-(defcommand utl-emacs-trunk () ()
+(defcommand al/emacs-trunk () ()
   "Start emacs-trunk unless it is already running."
-  (run-shell-command (utl-herd-command "emacs-trunk")))
+  (run-shell-command (al/herd-command "emacs-trunk")))
 
-(defcommand utl-emacs-eval (arg &optional server-name) ((:shell "emacs-eval: "))
+(defcommand al/emacs-eval (arg &optional server-name) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
   (let ((args (list "--eval" arg)))
     (when server-name
       (setq args (append (list "--socket-name" server-name) args)))
     (run-prog "emacsclient" :args args :wait nil :search t)))
 
-(defcommand utl-emacs-eval-show (arg) ((:shell "emacs-eval: "))
+(defcommand al/emacs-eval-show (arg) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient and raise emacs."
-  (utl-emacs-eval arg)
-  (or (utl-emacs-window-p) (utl-emacs)))
+  (al/emacs-eval arg)
+  (or (al/emacs-window-p) (al/emacs)))
 
-(defcommand utl-emms-eval (arg &optional (server-name "server-emms"))
+(defcommand al/emms-eval (arg &optional (server-name "server-emms"))
     ((:shell "emms-eval: "))
   "Evaluate ARG with emacsclient."
-  (utl-emacs-eval arg server-name))
+  (al/emacs-eval arg server-name))
 
-(defcommand utl-emms-eval-show (arg) ((:shell "emms-eval: "))
+(defcommand al/emms-eval-show (arg) ((:shell "emms-eval: "))
   "Evaluate ARG with emacsclient and raise emacs."
-  (utl-emms-eval arg)
-  (or (utl-emacs-window-p) (utl-emacs)))
+  (al/emms-eval arg)
+  (or (al/emacs-window-p) (al/emacs)))
 
 
 ;;; Interacting with conkeror
 
-(defcommand utl-conkeror () ()
+(defcommand al/conkeror () ()
   "Start conkeror unless it is already running, in which case focus it."
-  (run-or-raise (utl-herd-command "conkeror")
+  (run-or-raise (al/herd-command "conkeror")
                 '(:class "Conkeror")))
 
-(defcommand utl-conkeror-browse (url) ((:shell "Browse URL: "))
+(defcommand al/conkeror-browse (url) ((:shell "Browse URL: "))
   "Browse URL with conkeror."
   (run-prog "conkeror" :args (list url) :wait nil :search t))
 
-(defcommand utl-conkeror-browse-show (url) ((:shell "Browse URL: "))
+(defcommand al/conkeror-browse-show (url) ((:shell "Browse URL: "))
   "Browse URL with conkeror and raise conkeror."
-  (utl-conkeror-browse url)
-  (utl-conkeror))
+  (al/conkeror-browse url)
+  (al/conkeror))
 
-(defcommand utl-conkeror-eval (arg) ((:shell "conkeror-eval: "))
+(defcommand al/conkeror-eval (arg) ((:shell "conkeror-eval: "))
   "Evaluate ARG with 'conkeror -f'."
   (run-prog "conkeror" :args (list "-f" arg) :wait nil :search t))
 
-(defcommand utl-conkeror-eval-show (arg) ((:shell "conkeror-eval: "))
+(defcommand al/conkeror-eval-show (arg) ((:shell "conkeror-eval: "))
   "Evaluate ARG with 'conkeror -f' and raise conkeror."
-  (utl-conkeror-eval arg)
-  (utl-conkeror))
+  (al/conkeror-eval arg)
+  (al/conkeror))
 
 
 ;;; Interacting with other progs
 
-(defcommand utl-xterm () ()
+(defcommand al/xterm () ()
   "Start xterm unless it is already running, in which case focus it."
-  (run-or-raise (utl-herd-command "xterm")
+  (run-or-raise (al/herd-command "xterm")
                 '(:class "XTerm")))
 
-(defcommand utl-firefox () ()
+(defcommand al/firefox () ()
   "Start firefox unless it is already running, in which case focus it."
-  (run-or-raise (utl-herd-command "firefox")
+  (run-or-raise (al/herd-command "firefox")
                 '(:class "Firefox")))
 
-(defcommand utl-gcolor2 () ()
+(defcommand al/gcolor2 () ()
   "Start gcolor2 unless it is already running, in which case focus it."
   (run-or-raise "gcolor2" '(:class "Gcolor2")))
 
-(defcommand utl-gtypist (&optional file) (:string)
+(defcommand al/gtypist (&optional file) (:string)
   "Start gtypist loading a .typ-file, if it is specified."
   (run-shell-command (concat "xterm -e 'gtypist --color=0,7 " file "'")))
 
 
 ;;; Mode line
 
-(defun utl-mode-line-pos (pos)
+(defun al/mode-line-pos (pos)
   "Put the mode line at a position POS (can be :TOP or :BOTTOM)."
   (let ((screen (current-screen))
         (head (current-head)))
@@ -310,26 +310,26 @@ beginning with ':') where a service is started."
     (setf *mode-line-position* pos)
     (enable-mode-line screen head t)))
 
-(defcommand utl-mode-line-on () ()
+(defcommand al/mode-line-on () ()
   "Turn the mode line on unconditionally."
   (enable-mode-line (current-screen) (current-head) t))
 
-(defcommand utl-mode-line-bottom () ()
+(defcommand al/mode-line-bottom () ()
   "Put the mode line on the bottom of the screen."
-  (utl-mode-line-pos :bottom))
+  (al/mode-line-pos :bottom))
 
-(defcommand utl-mode-line-top () ()
+(defcommand al/mode-line-top () ()
   "Put the mode line on the top of the screen."
-  (utl-mode-line-pos :top))
+  (al/mode-line-pos :top))
 
 
 ;;; Misc
 
-(defun utl-random-float (bot top &optional (state *random-state*))
+(defun al/random-float (bot top &optional (state *random-state*))
   "Return a random float between BOT and TOP bounds."
   (+ bot (random (- top bot) state)))
 
-(defun utl-get-random-obj (objs)
+(defun al/get-random-obj (objs)
   "Return a random object from alist OBJS.
 
 Each association is a pair of object and its probability (from 0 to
@@ -343,22 +343,22 @@ get nil."
        if (< rnd prob)
        return (car elm))))
 
-(defcommand utl-yank-primary () ()
+(defcommand al/yank-primary () ()
   "Insert X primary selection into the current window."
   (window-send-string (get-x-selection)))
 
-(defvar *utl-ignore-emacs* nil
-  "If non-nil, do not treat emacs specially in `utl-next'.")
+(defvar *al/ignore-emacs* nil
+  "If non-nil, do not treat emacs specially in `al/next'.")
 
-(defcommand utl-next (&optional key) (:key)
+(defcommand al/next (&optional key) (:key)
   "Select next frame or window or emacs window.
-If current window is emacs and `*utl-ignore-emacs*' is nil, send key
+If current window is emacs and `*al/ignore-emacs*' is nil, send key
 sequence KEY to it.
 If current group is tiling, select next frame.
 If current group is floating, select next window."
   (if (and key
-           (utl-emacs-window-p)
-           (null *utl-ignore-emacs*)
+           (al/emacs-window-p)
+           (null *al/ignore-emacs*)
            ;; Ignore emacs anyway, if it has a single window.
            ;; The following code checks WINDOWS_NUM window property.
            ;; You can "teach" emacs to update this property by adding
@@ -373,15 +373,15 @@ If current group is floating, select next window."
                                                     :WINDOWS_NUM))))
              (or (null windows-num)
                  (/= 1 windows-num))))
-      (utl-send-key-to-emacs key)
+      (al/send-key-to-emacs key)
       (if (eq (type-of (current-group)) 'tile-group)
           (fnext)
-          (stumpwm.floating-group:utl-float-window-next))))
+          (stumpwm.floating-group:al/float-window-next))))
 
-(defcommand utl-toggle-ignore-emacs () ()
-  "Toggle `*utl-ignore-emacs*'."
-  (setf *utl-ignore-emacs* (not *utl-ignore-emacs*))
+(defcommand al/toggle-ignore-emacs () ()
+  "Toggle `*al/ignore-emacs*'."
+  (setf *al/ignore-emacs* (not *al/ignore-emacs*))
   (message "^b^7*Switching between emacs windows ~a^b^7*."
-            (if *utl-ignore-emacs* "^B^1*disabled" "^2*enabled")))
+            (if *al/ignore-emacs* "^B^1*disabled" "^2*enabled")))
 
 ;;; utils.lisp ends here

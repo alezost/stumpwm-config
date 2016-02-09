@@ -15,17 +15,17 @@
       '("black" "red" "green" "magenta" "blue" "yellow" "cyan" "white"))
 (update-color-map (current-screen))
 
-(defmacro utl-set-color (val color)
+(defmacro al/set-color (val color)
   "Similar to `set-any-color', but without updating colors."
   `(dolist (s *screen-list*)
      (setf (,val s) (alloc-color s ,color))))
 
-(utl-set-color screen-fg-color (hex-to-xlib-color "#e5e8ef"))
-(utl-set-color screen-bg-color "gray15")
-(utl-set-color screen-focus-color "DeepSkyBlue")
-(utl-set-color screen-border-color "ForestGreen")
-(utl-set-color screen-float-focus-color "DeepSkyBlue")
-(utl-set-color screen-float-unfocus-color "gray15")
+(al/set-color screen-fg-color (hex-to-xlib-color "#e5e8ef"))
+(al/set-color screen-bg-color "gray15")
+(al/set-color screen-focus-color "DeepSkyBlue")
+(al/set-color screen-border-color "ForestGreen")
+(al/set-color screen-float-focus-color "DeepSkyBlue")
+(al/set-color screen-float-unfocus-color "gray15")
 (update-colors-all-screens)
 
 
@@ -54,7 +54,7 @@
  *mode-line-timeout* 5
  *screen-mode-line-format* '("^5*" (:eval (time-format "%k:%M"))
                              " ^2*%n" " ^7*%c %l"))
-(utl-mode-line-on)
+(al/mode-line-on)
 
 ;; (set-font "-*-dejavu sans mono-medium-r-normal-*-*-115-*-*-*-*-*-1")
 (set-font "9x15bold")

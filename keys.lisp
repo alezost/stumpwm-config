@@ -12,7 +12,7 @@
 
 ;;; Functional/additional keys (placed on the same keys)
 
-(defvar utl-f-keys-alist
+(defvar al/f-keys-alist
   '(("F1"  . "Help")
     ("F2"  . "SunUndo")
     ("F3"  . "SunAgain")
@@ -27,63 +27,63 @@
     ("F12" . "SunPrint_Screen"))
   "Alist of functional and additional keys bound to the same commands.")
 
-(defun utl-define-key (map key command)
+(defun al/define-key (map key command)
   "Similar to `define-key', except KEY should be a string.
-If KEY is a functional key from `utl-f-keys-alist', bind COMMAND to the
+If KEY is a functional key from `al/f-keys-alist', bind COMMAND to the
 additional key."
   (define-key map (kbd key) command)
-  (let ((add-key (cdr (assoc key utl-f-keys-alist :test 'equal))))
+  (let ((add-key (cdr (assoc key al/f-keys-alist :test 'equal))))
     (when add-key
       (define-key map (kbd add-key) command))))
 
 ;; Bind "H-<key>" to sending <key> to the current window
-;; (<key> is a key from `utl-f-keys-alist').
-(dolist (key-assoc utl-f-keys-alist)
+;; (<key> is a key from `al/f-keys-alist').
+(dolist (key-assoc al/f-keys-alist)
   (let ((fun-key (car key-assoc))
         (add-key (cdr key-assoc)))
     (flet ((dk (bound-key sent-key)
              (define-key *top-map*
                  (kbd (concat "H-" bound-key))
-               (concat "utl-send-key " sent-key))))
+               (concat "al/send-key " sent-key))))
       (dk fun-key fun-key)
       (dk add-key fun-key))))
 
 
 ;;; Managing windows, frames & groups
 
-(utl-define-key *root-map* "F"   "fselect")
-(utl-define-key *root-map* "="   "balance-frames")
-(utl-define-key *root-map* "s-c" "delete-window")
-(utl-define-key *root-map* "C"   "kill-window")
+(al/define-key *root-map* "F"   "fselect")
+(al/define-key *root-map* "="   "balance-frames")
+(al/define-key *root-map* "s-c" "delete-window")
+(al/define-key *root-map* "C"   "kill-window")
 
-(utl-define-key *top-map* "s-r"   "utl-toggle-root")
-(utl-define-key *top-map* "s-w"   "windowlist")
-(utl-define-key *top-map* "M-s-w" "vgroups")
-(utl-define-key *top-map* "M-s-g" "grouplist")
-(utl-define-key *top-map* "H-o"   "utl-next H-o")
-(utl-define-key *top-map* "s-H-o" "utl-toggle-ignore-emacs")
-(utl-define-key *top-map* "s-n"   "gother")
-(utl-define-key *top-map* "M-s-n" "utl-gmove-to-other-group")
+(al/define-key *top-map* "s-r"   "al/toggle-root")
+(al/define-key *top-map* "s-w"   "windowlist")
+(al/define-key *top-map* "M-s-w" "vgroups")
+(al/define-key *top-map* "M-s-g" "grouplist")
+(al/define-key *top-map* "H-o"   "al/next H-o")
+(al/define-key *top-map* "s-H-o" "al/toggle-ignore-emacs")
+(al/define-key *top-map* "s-n"   "gother")
+(al/define-key *top-map* "M-s-n" "al/gmove-to-other-group")
 
-(utl-define-key *tile-group-root-map* "s-f" "fullscreen")
-(utl-define-key *tile-group-top-map* "s-v" "vsplit")
-(utl-define-key *tile-group-top-map* "s-z" "hsplit")
-(utl-define-key *tile-group-top-map* "s-x" "only")
+(al/define-key *tile-group-root-map* "s-f" "fullscreen")
+(al/define-key *tile-group-top-map* "s-v" "vsplit")
+(al/define-key *tile-group-top-map* "s-z" "hsplit")
+(al/define-key *tile-group-top-map* "s-x" "only")
 
 ;;; Focusing windows
 
-(utl-define-key *tile-group-top-map* "s-b"            "pull-hidden-other")
-(utl-define-key *tile-group-top-map* "M-s-b"          "pull-hidden-next")
-(utl-define-key *tile-group-top-map* "s-TAB"          "pull-hidden-next")
-(utl-define-key *tile-group-top-map* "s-ISO_Left_Tab" "pull-hidden-previous")
-(utl-define-key stumpwm.floating-group::*float-group-top-map*
-                "s-b"            "utl-float-window-other")
-(utl-define-key stumpwm.floating-group::*float-group-top-map*
-                "M-s-b"          "utl-float-window-next")
-(utl-define-key stumpwm.floating-group::*float-group-top-map*
-                "s-TAB"          "utl-float-window-next")
-(utl-define-key stumpwm.floating-group::*float-group-top-map*
-                "s-ISO_Left_Tab" "utl-float-window-previous")
+(al/define-key *tile-group-top-map* "s-b"            "pull-hidden-other")
+(al/define-key *tile-group-top-map* "M-s-b"          "pull-hidden-next")
+(al/define-key *tile-group-top-map* "s-TAB"          "pull-hidden-next")
+(al/define-key *tile-group-top-map* "s-ISO_Left_Tab" "pull-hidden-previous")
+(al/define-key stumpwm.floating-group::*float-group-top-map*
+                "s-b"            "al/float-window-other")
+(al/define-key stumpwm.floating-group::*float-group-top-map*
+                "M-s-b"          "al/float-window-next")
+(al/define-key stumpwm.floating-group::*float-group-top-map*
+                "s-TAB"          "al/float-window-next")
+(al/define-key stumpwm.floating-group::*float-group-top-map*
+                "s-ISO_Left_Tab" "al/float-window-previous")
 
 ;;; Moving/resizing windows
 
@@ -92,10 +92,10 @@ additional key."
 ;;   [C-]s-<key> for moving
 ;;   C-<key> for moving to the screen edges
 
-(utl-define-key stumpwm.floating-group::*float-group-top-map*
-                "s-KP_Begin" "utl-float-window-gravity center")
+(al/define-key stumpwm.floating-group::*float-group-top-map*
+                "s-KP_Begin" "al/float-window-gravity center")
 
-(defun utl-define-numpad-key-xy (map modifier cmd val)
+(defun al/define-numpad-key-xy (map modifier cmd val)
   (flet ((dk (key x y)
            (define-key map (kbd (concat modifier key))
              (format nil "~a ~D ~D" cmd x y))))
@@ -108,16 +108,16 @@ additional key."
     (dk "KP_End"       (- val) val)
     (dk "KP_Left"      (- val) 0)))
 
-(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "s-"   "utl-move-float-window" 10)
-(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "C-s-" "utl-move-float-window" 1)
-(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "M-"   "utl-resize-float-window" 10)
-(utl-define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "C-M-" "utl-resize-float-window" 1)
+(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "s-"   "al/move-float-window" 10)
+(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "C-s-" "al/move-float-window" 1)
+(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "M-"   "al/resize-float-window" 10)
+(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
+                          "C-M-" "al/resize-float-window" 1)
 
-(defun utl-define-numpad-key-gravity (map modifier cmd)
+(defun al/define-numpad-key-gravity (map modifier cmd)
   (flet ((dk (key gravity)
            (define-key map (kbd (concat modifier key))
              (format nil "~a ~a" cmd gravity))))
@@ -131,224 +131,224 @@ additional key."
     (dk "KP_End"       "bottom-left")
     (dk "KP_Left"      "left")))
 
-(utl-define-numpad-key-gravity *tile-group-top-map*  "C-" "gravity")
-(utl-define-numpad-key-gravity stumpwm.floating-group::*float-group-top-map*
-                               "C-" "utl-float-window-gravity")
+(al/define-numpad-key-gravity *tile-group-top-map*  "C-" "gravity")
+(al/define-numpad-key-gravity stumpwm.floating-group::*float-group-top-map*
+                               "C-" "al/float-window-gravity")
 
 ;;; Resizing frames
 
-(utl-define-key *top-map* "s-XF86AudioRaiseVolume"     "resize   0  10")
-(utl-define-key *top-map* "s-XF86AudioLowerVolume"     "resize   0 -10")
-(utl-define-key *top-map* "C-s-XF86AudioRaiseVolume"   "resize   0   1")
-(utl-define-key *top-map* "C-s-XF86AudioLowerVolume"   "resize   0  -1")
-(utl-define-key *top-map* "M-s-XF86AudioRaiseVolume"   "resize  10   0")
-(utl-define-key *top-map* "M-s-XF86AudioLowerVolume"   "resize -10   0")
-(utl-define-key *top-map* "C-M-s-XF86AudioRaiseVolume" "resize   1   0")
-(utl-define-key *top-map* "C-M-s-XF86AudioLowerVolume" "resize  -1   0")
+(al/define-key *top-map* "s-XF86AudioRaiseVolume"     "resize   0  10")
+(al/define-key *top-map* "s-XF86AudioLowerVolume"     "resize   0 -10")
+(al/define-key *top-map* "C-s-XF86AudioRaiseVolume"   "resize   0   1")
+(al/define-key *top-map* "C-s-XF86AudioLowerVolume"   "resize   0  -1")
+(al/define-key *top-map* "M-s-XF86AudioRaiseVolume"   "resize  10   0")
+(al/define-key *top-map* "M-s-XF86AudioLowerVolume"   "resize -10   0")
+(al/define-key *top-map* "C-M-s-XF86AudioRaiseVolume" "resize   1   0")
+(al/define-key *top-map* "C-M-s-XF86AudioLowerVolume" "resize  -1   0")
 
 
 ;;; Controlling sound
 
-(utl-define-key *top-map* "XF86AudioMute"            "audio-set-current-scontrol toggle")
-(utl-define-key *top-map* "M-XF86AudioMute"          "audio-next-scontrol")
-(utl-define-key *top-map* "XF86AudioRaiseVolume"     "audio-set-current-scontrol 1+")
-(utl-define-key *top-map* "XF86AudioLowerVolume"     "audio-set-current-scontrol 1-")
-(utl-define-key *top-map* "M-XF86AudioRaiseVolume"   "audio-set-current-scontrol 3+")
-(utl-define-key *top-map* "M-XF86AudioLowerVolume"   "audio-set-current-scontrol 3-")
-(utl-define-key *top-map* "C-M-XF86AudioRaiseVolume" "audio-set-current-scontrol 60%")
-(utl-define-key *top-map* "C-M-XF86AudioLowerVolume" "audio-set-current-scontrol 20%")
+(al/define-key *top-map* "XF86AudioMute"            "audio-set-current-scontrol toggle")
+(al/define-key *top-map* "M-XF86AudioMute"          "audio-next-scontrol")
+(al/define-key *top-map* "XF86AudioRaiseVolume"     "audio-set-current-scontrol 1+")
+(al/define-key *top-map* "XF86AudioLowerVolume"     "audio-set-current-scontrol 1-")
+(al/define-key *top-map* "M-XF86AudioRaiseVolume"   "audio-set-current-scontrol 3+")
+(al/define-key *top-map* "M-XF86AudioLowerVolume"   "audio-set-current-scontrol 3-")
+(al/define-key *top-map* "C-M-XF86AudioRaiseVolume" "audio-set-current-scontrol 60%")
+(al/define-key *top-map* "C-M-XF86AudioLowerVolume" "audio-set-current-scontrol 20%")
 
 
 ;;; Controlling EMMS
 
-(utl-define-key *top-map* "C-XF86AudioPlay"   "utl-emms-eval (emms-play-file \"~/docs/audio/grass.wav\")")
-(utl-define-key *top-map* "XF86AudioPlay"     "utl-emms-eval (emms-pause)")
-(utl-define-key *top-map* "XF86AudioStop"     "utl-emms-eval (emms-pause)")
-(utl-define-key *top-map* "H-XF86AudioStop"   "utl-emms-eval (emms-stop)")
-(utl-define-key *top-map* "s-XF86AudioStop"   "utl-emms-eval (emms-stop)")
-(utl-define-key *top-map* "H-XF86AudioPrev"   "utl-emms-eval (emms-previous)")
-(utl-define-key *top-map* "s-XF86AudioPrev"   "utl-emms-eval (emms-previous)")
-(utl-define-key *top-map* "H-XF86AudioNext"   "utl-emms-eval (emms-next)")
-(utl-define-key *top-map* "s-XF86AudioNext"   "utl-emms-eval (emms-next)")
-(utl-define-key *top-map* "H-XF86AudioPlay"   "utl-emms-eval (utl-emms-first)")
-(utl-define-key *top-map* "s-XF86AudioPlay"   "utl-emms-eval (utl-emms-first)")
-(utl-define-key *top-map* "XF86AudioPrev"     "utl-emms-eval (utl-emms-seek-backward 10)")
-(utl-define-key *top-map* "XF86AudioNext"     "utl-emms-eval (utl-emms-seek-forward  10)")
-(utl-define-key *top-map* "C-XF86AudioPrev"   "utl-emms-eval (utl-emms-seek-backward 3)")
-(utl-define-key *top-map* "C-XF86AudioNext"   "utl-emms-eval (utl-emms-seek-forward  3)")
-(utl-define-key *top-map* "M-XF86AudioPrev"   "utl-emms-eval (utl-emms-seek-backward 60)")
-(utl-define-key *top-map* "M-XF86AudioNext"   "utl-emms-eval (utl-emms-seek-forward  60)")
-(utl-define-key *top-map* "C-M-XF86AudioPrev" "utl-emms-eval (utl-emms-seek-backward 180)")
-(utl-define-key *top-map* "C-M-XF86AudioNext" "utl-emms-eval (utl-emms-seek-forward  180)")
-(utl-define-key *top-map* "XF86AudioMedia"    "utl-emms-eval (emms-smart-browse)")
-(utl-define-key *top-map* "XF86Music"         "utl-emms-eval (utl-emms-notify)")
+(al/define-key *top-map* "C-XF86AudioPlay"   "al/emms-eval (emms-play-file \"~/docs/audio/grass.wav\")")
+(al/define-key *top-map* "XF86AudioPlay"     "al/emms-eval (emms-pause)")
+(al/define-key *top-map* "XF86AudioStop"     "al/emms-eval (emms-pause)")
+(al/define-key *top-map* "H-XF86AudioStop"   "al/emms-eval (emms-stop)")
+(al/define-key *top-map* "s-XF86AudioStop"   "al/emms-eval (emms-stop)")
+(al/define-key *top-map* "H-XF86AudioPrev"   "al/emms-eval (emms-previous)")
+(al/define-key *top-map* "s-XF86AudioPrev"   "al/emms-eval (emms-previous)")
+(al/define-key *top-map* "H-XF86AudioNext"   "al/emms-eval (emms-next)")
+(al/define-key *top-map* "s-XF86AudioNext"   "al/emms-eval (emms-next)")
+(al/define-key *top-map* "H-XF86AudioPlay"   "al/emms-eval (al/emms-first)")
+(al/define-key *top-map* "s-XF86AudioPlay"   "al/emms-eval (al/emms-first)")
+(al/define-key *top-map* "XF86AudioPrev"     "al/emms-eval (al/emms-seek-backward 10)")
+(al/define-key *top-map* "XF86AudioNext"     "al/emms-eval (al/emms-seek-forward  10)")
+(al/define-key *top-map* "C-XF86AudioPrev"   "al/emms-eval (al/emms-seek-backward 3)")
+(al/define-key *top-map* "C-XF86AudioNext"   "al/emms-eval (al/emms-seek-forward  3)")
+(al/define-key *top-map* "M-XF86AudioPrev"   "al/emms-eval (al/emms-seek-backward 60)")
+(al/define-key *top-map* "M-XF86AudioNext"   "al/emms-eval (al/emms-seek-forward  60)")
+(al/define-key *top-map* "C-M-XF86AudioPrev" "al/emms-eval (al/emms-seek-backward 180)")
+(al/define-key *top-map* "C-M-XF86AudioNext" "al/emms-eval (al/emms-seek-forward  180)")
+(al/define-key *top-map* "XF86AudioMedia"    "al/emms-eval (emms-smart-browse)")
+(al/define-key *top-map* "XF86Music"         "al/emms-eval (al/emms-notify)")
 
 
 ;;; Miscellaneous bindings
 
-(defvar *utl-emacs-map* (make-sparse-keymap)
+(defvar *al/emacs-map* (make-sparse-keymap)
   "Keymap for finding files (and doing other things) in emacs.")
 
-(utl-define-key *top-map* "s-f" '*utl-emacs-map*)
-(utl-define-key *utl-emacs-map* "b" "utl-emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
-(utl-define-key *utl-emacs-map* "n" "utl-emacs-eval-show (org-capture 1 \"n\")")
-(utl-define-key *utl-emacs-map* "t" "utl-emacs-eval-show (find-file \"~/notes/tasks.org\")")
-(utl-define-key *utl-emacs-map* "i" "utl-emacs-eval-show (find-file \"~/notes/info.org\")")
-(utl-define-key *utl-emacs-map* "m" "utl-emms-eval (utl-emms-notify)")
+(al/define-key *top-map* "s-f" '*al/emacs-map*)
+(al/define-key *al/emacs-map* "b" "al/emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
+(al/define-key *al/emacs-map* "n" "al/emacs-eval-show (org-capture 1 \"n\")")
+(al/define-key *al/emacs-map* "t" "al/emacs-eval-show (find-file \"~/notes/tasks.org\")")
+(al/define-key *al/emacs-map* "i" "al/emacs-eval-show (find-file \"~/notes/info.org\")")
+(al/define-key *al/emacs-map* "m" "al/emms-eval (al/emms-notify)")
 
-(utl-define-key *resize-map* "s-g" "abort-iresize")
-(utl-define-key *top-map* "s-g" "abort")
-(utl-define-key *top-map* "s-h" '*help-map*)
-(utl-define-key *top-map* "s-u" "time")
-(utl-define-key *top-map* "s-i" "info")
-(utl-define-key *top-map* "s-l" "lastmsg")
-(utl-define-key *top-map* "s-d" "utl-send-key-to-emacs XF86Spell")
-(utl-define-key *top-map* "XF86Documents"    "utl-emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
-(utl-define-key *top-map* "C-XF86Documents"  "utl-emacs-eval-show (org-capture 1 \"n\")")
-(utl-define-key *top-map* "M-XF86Documents"  "utl-emacs-eval-show (find-file \"~/notes/tasks.org\")")
-(utl-define-key *top-map* "S-XF86Documents"  "utl-emacs-eval-show (find-file \"~/notes/info.org\")")
-(utl-define-key *top-map* "XF86Calculator"   "utl-emacs-eval-show (calc)")
-(utl-define-key *top-map* "C-XF86Calculator" "utl-emacs-eval-show (calendar)")
-(utl-define-key *top-map* "H-ESC" "exec mosdctl --hide-all")
-(utl-define-key *top-map* "s-7" "layout-set 0 s-7")
-(utl-define-key *top-map* "s-8" "layout-set 1 s-8")
-(utl-define-key *top-map* "s-9" "layout-set 2 s-9")
-(utl-define-key *top-map* "H-y" "utl-yank-primary")
-(utl-define-key *top-map* "F12"                 "exec capture desktop")
-(utl-define-key *top-map* "M-F12"               "exec capture image")
-(utl-define-key *top-map* "M-SunPrint_Screen"   "exec capture image")
-(utl-define-key *top-map* "C-S-F12"             "exec capture video")
-(utl-define-key *top-map* "C-S-SunPrint_Screen" "exec capture video")
-(utl-define-key *top-map* "s-F12"               "exec clock")
-(utl-define-key *top-map* "s-SunPrint_Screen"   "exec clock")
-(utl-define-key *top-map* "XF86TouchpadToggle"  "exec touchpad-toggle")
-(utl-define-key *top-map* "XF86Sleep"           "exec monitor blank")
-(utl-define-key *top-map* "C-XF86Sleep"         "exec monitor suspend")
-(utl-define-key *top-map* "M-XF86Sleep"         "exec monitor off")
-(utl-define-key *top-map* "C-M-H-XF86Sleep"     "exec sudo shutdown now")
+(al/define-key *resize-map* "s-g" "abort-iresize")
+(al/define-key *top-map* "s-g" "abort")
+(al/define-key *top-map* "s-h" '*help-map*)
+(al/define-key *top-map* "s-u" "time")
+(al/define-key *top-map* "s-i" "info")
+(al/define-key *top-map* "s-l" "lastmsg")
+(al/define-key *top-map* "s-d" "al/send-key-to-emacs XF86Spell")
+(al/define-key *top-map* "XF86Documents"    "al/emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
+(al/define-key *top-map* "C-XF86Documents"  "al/emacs-eval-show (org-capture 1 \"n\")")
+(al/define-key *top-map* "M-XF86Documents"  "al/emacs-eval-show (find-file \"~/notes/tasks.org\")")
+(al/define-key *top-map* "S-XF86Documents"  "al/emacs-eval-show (find-file \"~/notes/info.org\")")
+(al/define-key *top-map* "XF86Calculator"   "al/emacs-eval-show (calc)")
+(al/define-key *top-map* "C-XF86Calculator" "al/emacs-eval-show (calendar)")
+(al/define-key *top-map* "H-ESC" "exec mosdctl --hide-all")
+(al/define-key *top-map* "s-7" "layout-set 0 s-7")
+(al/define-key *top-map* "s-8" "layout-set 1 s-8")
+(al/define-key *top-map* "s-9" "layout-set 2 s-9")
+(al/define-key *top-map* "H-y" "al/yank-primary")
+(al/define-key *top-map* "F12"                 "exec capture desktop")
+(al/define-key *top-map* "M-F12"               "exec capture image")
+(al/define-key *top-map* "M-SunPrint_Screen"   "exec capture image")
+(al/define-key *top-map* "C-S-F12"             "exec capture video")
+(al/define-key *top-map* "C-S-SunPrint_Screen" "exec capture video")
+(al/define-key *top-map* "s-F12"               "exec clock")
+(al/define-key *top-map* "s-SunPrint_Screen"   "exec clock")
+(al/define-key *top-map* "XF86TouchpadToggle"  "exec touchpad-toggle")
+(al/define-key *top-map* "XF86Sleep"           "exec monitor blank")
+(al/define-key *top-map* "C-XF86Sleep"         "exec monitor suspend")
+(al/define-key *top-map* "M-XF86Sleep"         "exec monitor off")
+(al/define-key *top-map* "C-M-H-XF86Sleep"     "exec sudo shutdown now")
 
 ;; root map
-(utl-define-key *root-map* "V"   "version")
-(utl-define-key *root-map* "c"   "colon")
-(utl-define-key *root-map* "v"   "eval")
-(utl-define-key *root-map* "i"   "list-window-properties")
-(utl-define-key *root-map* "s-b" "ratwarp 800 0")
+(al/define-key *root-map* "V"   "version")
+(al/define-key *root-map* "c"   "colon")
+(al/define-key *root-map* "v"   "eval")
+(al/define-key *root-map* "i"   "list-window-properties")
+(al/define-key *root-map* "s-b" "ratwarp 800 0")
 
 ;; menu map
-(utl-define-key *menu-map* "s-c" 'menu-up)
-(utl-define-key *menu-map* "s-t" 'menu-down)
-(utl-define-key *menu-map* "C-." 'menu-up)
-(utl-define-key *menu-map* "C-e" 'menu-down)
-(utl-define-key *menu-map* "M-." 'menu-scroll-up)
-(utl-define-key *menu-map* "M-e" 'menu-scroll-down)
-(utl-define-key *menu-map* "s-m" 'menu-finish)
-(utl-define-key *menu-map* "s-g" 'menu-abort)
+(al/define-key *menu-map* "s-c" 'menu-up)
+(al/define-key *menu-map* "s-t" 'menu-down)
+(al/define-key *menu-map* "C-." 'menu-up)
+(al/define-key *menu-map* "C-e" 'menu-down)
+(al/define-key *menu-map* "M-." 'menu-scroll-up)
+(al/define-key *menu-map* "M-e" 'menu-scroll-down)
+(al/define-key *menu-map* "s-m" 'menu-finish)
+(al/define-key *menu-map* "s-g" 'menu-abort)
 
 ;; input map
-(utl-define-key *input-map* "C-p" 'input-delete-backward-char)
-(utl-define-key *input-map* "M-p" 'input-backward-kill-word)
-(utl-define-key *input-map* "C-," 'input-delete-forward-char)
-(utl-define-key *input-map* "M-," 'input-forward-kill-word)
-(utl-define-key *input-map* "C-u" 'input-forward-char)
-(utl-define-key *input-map* "M-u" 'input-forward-word)
-(utl-define-key *input-map* "C-o" 'input-backward-char)
-(utl-define-key *input-map* "M-o" 'input-backward-word)
-(utl-define-key *input-map* "C-a" 'input-move-beginning-of-line)
-(utl-define-key *input-map* "C-i" 'input-move-end-of-line)
-(utl-define-key *input-map* "M-<" 'input-kill-line)
-(utl-define-key *input-map* "M-P" 'input-kill-to-beginning)
-(utl-define-key *input-map* "M-." 'input-history-back)
-(utl-define-key *input-map* "M-e" 'input-history-forward)
-(utl-define-key *input-map* "C-m" 'input-submit)
+(al/define-key *input-map* "C-p" 'input-delete-backward-char)
+(al/define-key *input-map* "M-p" 'input-backward-kill-word)
+(al/define-key *input-map* "C-," 'input-delete-forward-char)
+(al/define-key *input-map* "M-," 'input-forward-kill-word)
+(al/define-key *input-map* "C-u" 'input-forward-char)
+(al/define-key *input-map* "M-u" 'input-forward-word)
+(al/define-key *input-map* "C-o" 'input-backward-char)
+(al/define-key *input-map* "M-o" 'input-backward-word)
+(al/define-key *input-map* "C-a" 'input-move-beginning-of-line)
+(al/define-key *input-map* "C-i" 'input-move-end-of-line)
+(al/define-key *input-map* "M-<" 'input-kill-line)
+(al/define-key *input-map* "M-P" 'input-kill-to-beginning)
+(al/define-key *input-map* "M-." 'input-history-back)
+(al/define-key *input-map* "M-e" 'input-history-forward)
+(al/define-key *input-map* "C-m" 'input-submit)
 
 
 ;;; Web jumps
 
-(defvar *utl-web-map* (make-sparse-keymap)
+(defvar *al/web-map* (make-sparse-keymap)
   "Keymap for quick browsing with conkeror.")
-(defvar *utl-web-wiki-map* (make-sparse-keymap)
+(defvar *al/web-wiki-map* (make-sparse-keymap)
   "Keymap for quick browsing wikipedia with conkeror.")
-(utl-define-key *top-map* "F5" '*utl-web-map*)
-(utl-define-key *utl-web-map* "F5" "utl-conkeror-eval-show find-url-new-buffer")
-(utl-define-key *utl-web-map* "g"  "utl-conkeror-eval-show internet-search-github-prompted")
-(utl-define-key *utl-web-map* "G"  "utl-conkeror-eval-show internet-search-google-prompted")
-(utl-define-key *utl-web-map* "d"  "utl-conkeror-eval-show internet-search-duckduckgo-prompted")
-(utl-define-key *utl-web-map* "c"  "utl-conkeror-eval-show internet-search-conkeror-prompted")
-(utl-define-key *utl-web-map* "e"  "utl-conkeror-eval-show internet-search-emacswiki-prompted")
-(utl-define-key *utl-web-map* "a"  "utl-conkeror-eval-show internet-search-archwiki-prompted")
-(utl-define-key *utl-web-map* "A"  "utl-conkeror-eval-show internet-search-arch-package-prompted")
-(utl-define-key *utl-web-map* "m"  "utl-conkeror-eval-show internet-search-multitran-prompted")
-(utl-define-key *utl-web-map* "i"  "utl-conkeror-eval-show internet-search-ip-prompted")
-(utl-define-key *utl-web-map* "y"  "utl-conkeror-eval-show internet-search-youtube-prompted")
-(utl-define-key *utl-web-map* "p"  "utl-conkeror-eval-show internet-search-python3-prompted")
-(utl-define-key *utl-web-map* "z"  "utl-conkeror-browse-show zeus")
-(utl-define-key *utl-web-map* "s"  "utl-conkeror-browse-show http://news.sportbox.ru/video?channel=all")
-(utl-define-key *utl-web-map* "t"  "utl-conkeror-browse-show http://tv.yandex.ru/4/?period=all-day")
-(utl-define-key *utl-web-map* "T"  "utl-conkeror-browse-show http://www.programma.tv")
-(utl-define-key *utl-web-map* "M"  "utl-conkeror-browse-show https://maps.google.com/maps?hl=ru")
-(utl-define-key *utl-web-map* "W"  "utl-conkeror-browse-show http://www.gismeteo.ru/city/hourly/5039/")
-(utl-define-key *utl-web-map* "w" '*utl-web-wiki-map*)
-(utl-define-key *utl-web-wiki-map* "e" "utl-conkeror-eval-show internet-search-wikipedia-en-prompted")
-(utl-define-key *utl-web-wiki-map* "r" "utl-conkeror-eval-show internet-search-wikipedia-ru-prompted")
+(al/define-key *top-map* "F5" '*al/web-map*)
+(al/define-key *al/web-map* "F5" "al/conkeror-eval-show find-url-new-buffer")
+(al/define-key *al/web-map* "g"  "al/conkeror-eval-show internet-search-github-prompted")
+(al/define-key *al/web-map* "G"  "al/conkeror-eval-show internet-search-google-prompted")
+(al/define-key *al/web-map* "d"  "al/conkeror-eval-show internet-search-duckduckgo-prompted")
+(al/define-key *al/web-map* "c"  "al/conkeror-eval-show internet-search-conkeror-prompted")
+(al/define-key *al/web-map* "e"  "al/conkeror-eval-show internet-search-emacswiki-prompted")
+(al/define-key *al/web-map* "a"  "al/conkeror-eval-show internet-search-archwiki-prompted")
+(al/define-key *al/web-map* "A"  "al/conkeror-eval-show internet-search-arch-package-prompted")
+(al/define-key *al/web-map* "m"  "al/conkeror-eval-show internet-search-multitran-prompted")
+(al/define-key *al/web-map* "i"  "al/conkeror-eval-show internet-search-ip-prompted")
+(al/define-key *al/web-map* "y"  "al/conkeror-eval-show internet-search-youtube-prompted")
+(al/define-key *al/web-map* "p"  "al/conkeror-eval-show internet-search-python3-prompted")
+(al/define-key *al/web-map* "z"  "al/conkeror-browse-show zeus")
+(al/define-key *al/web-map* "s"  "al/conkeror-browse-show http://news.sportbox.ru/video?channel=all")
+(al/define-key *al/web-map* "t"  "al/conkeror-browse-show http://tv.yandex.ru/4/?period=all-day")
+(al/define-key *al/web-map* "T"  "al/conkeror-browse-show http://www.programma.tv")
+(al/define-key *al/web-map* "M"  "al/conkeror-browse-show https://maps.google.com/maps?hl=ru")
+(al/define-key *al/web-map* "W"  "al/conkeror-browse-show http://www.gismeteo.ru/city/hourly/5039/")
+(al/define-key *al/web-map* "w" '*al/web-wiki-map*)
+(al/define-key *al/web-wiki-map* "e" "al/conkeror-eval-show internet-search-wikipedia-en-prompted")
+(al/define-key *al/web-wiki-map* "r" "al/conkeror-eval-show internet-search-wikipedia-ru-prompted")
 
 ;; tv and radio jumps
-(defvar *utl-tv-radio-map* (make-sparse-keymap)
+(defvar *al/tv-radio-map* (make-sparse-keymap)
   "Keymap for quick access to tv and radio resources.")
-(utl-define-key *top-map* "F6" '*utl-tv-radio-map*)
-(utl-define-key *utl-tv-radio-map* "v" "utl-emms-eval (emms-play-url \"mms://live.rfn.ru/vesti_fm\")")
-(utl-define-key *utl-tv-radio-map* "o" "utl-conkeror-browse-show http://www.onlinetv.ru/")
-(utl-define-key *utl-tv-radio-map* "e" "utl-send-key-to-emacs C-M-s-e")
+(al/define-key *top-map* "F6" '*al/tv-radio-map*)
+(al/define-key *al/tv-radio-map* "v" "al/emms-eval (emms-play-url \"mms://live.rfn.ru/vesti_fm\")")
+(al/define-key *al/tv-radio-map* "o" "al/conkeror-browse-show http://www.onlinetv.ru/")
+(al/define-key *al/tv-radio-map* "e" "al/send-key-to-emacs C-M-s-e")
 
 
 ;;; Executing progs
 
-(defvar *utl-exec-map* (make-sparse-keymap)
+(defvar *al/exec-map* (make-sparse-keymap)
   "Keymap for executing shell commands or switching to running applications.")
-(utl-define-key *top-map* "s-m" '*utl-exec-map*)
-(utl-define-key *utl-exec-map* "s-m" "exec")
-(utl-define-key *utl-exec-map* "e" "utl-emacs")
-(utl-define-key *utl-exec-map* "E" "utl-emacs-trunk")
-(utl-define-key *utl-exec-map* "t" "utl-xterm")
-(utl-define-key *utl-exec-map* "T" "exec xterm")
-(utl-define-key *utl-exec-map* "c" "utl-conkeror")
-(utl-define-key *utl-exec-map* "f" "utl-firefox")
-(utl-define-key *utl-exec-map* "v" "exec slimevolley")
-(utl-define-key *utl-exec-map* "g" "utl-gcolor2")
-(utl-define-key *utl-exec-map* "G" "exec gcolor2")
-(utl-define-key *utl-exec-map* "m" "utl-emacs-eval (mana-start)")
-(utl-define-key *utl-exec-map* "7" "utl-gtypist d.typ")
-(utl-define-key *utl-exec-map* "8" "utl-gtypist ru.typ")
-(utl-define-key *utl-exec-map* "9" "utl-gtypist")
+(al/define-key *top-map* "s-m" '*al/exec-map*)
+(al/define-key *al/exec-map* "s-m" "exec")
+(al/define-key *al/exec-map* "e" "al/emacs")
+(al/define-key *al/exec-map* "E" "al/emacs-trunk")
+(al/define-key *al/exec-map* "t" "al/xterm")
+(al/define-key *al/exec-map* "T" "exec xterm")
+(al/define-key *al/exec-map* "c" "al/conkeror")
+(al/define-key *al/exec-map* "f" "al/firefox")
+(al/define-key *al/exec-map* "v" "exec slimevolley")
+(al/define-key *al/exec-map* "g" "al/gcolor2")
+(al/define-key *al/exec-map* "G" "exec gcolor2")
+(al/define-key *al/exec-map* "m" "al/emacs-eval (mana-start)")
+(al/define-key *al/exec-map* "7" "al/gtypist d.typ")
+(al/define-key *al/exec-map* "8" "al/gtypist ru.typ")
+(al/define-key *al/exec-map* "9" "al/gtypist")
 
 
 ;;; Mode line
 
-(defvar *utl-mode-line-map* (make-sparse-keymap)
+(defvar *al/mode-line-map* (make-sparse-keymap)
   "Keymap for controlling the mode line.")
-(utl-define-key *top-map* "M-s-m" '*utl-mode-line-map*)
-(utl-define-key *utl-mode-line-map* "M-s-m" "mode-line")
-(utl-define-key *utl-mode-line-map* "t" "mode-line")
-(utl-define-key *utl-mode-line-map* "." "utl-mode-line-top")
-(utl-define-key *utl-mode-line-map* "e" "utl-mode-line-bottom")
+(al/define-key *top-map* "M-s-m" '*al/mode-line-map*)
+(al/define-key *al/mode-line-map* "M-s-m" "mode-line")
+(al/define-key *al/mode-line-map* "t" "mode-line")
+(al/define-key *al/mode-line-map* "." "al/mode-line-top")
+(al/define-key *al/mode-line-map* "e" "al/mode-line-bottom")
 
 
 ;;; Mana
 
-(defvar *utl-mana-map* (make-sparse-keymap)
+(defvar *al/mana-map* (make-sparse-keymap)
   "Keymap for sending keys to Mana.")
-(utl-define-key *top-map* "s-j" '*utl-mana-map*)
-(utl-define-key *utl-mana-map* "s-j" "mana-state")
-(utl-define-key *utl-mana-map* "a" "mana-attack")
-(utl-define-key *utl-mana-map* "A" "mana-quick-attack")
-(utl-define-key *utl-mana-map* "H" "mana-bat-quest-full")
-(utl-define-key *utl-mana-map* "h" "mana-bat-quest-cont")
-(utl-define-key *utl-mana-map* "l" "utl-emacs-eval-show (find-file \"~/.local/share/mana/logs/server.themanaworld.org/\")")
-(utl-define-key *utl-mana-map* "m" "utl-emacs-eval-show (find-file \"~/notes/tmw/monsters.org\")")
-(utl-define-key *utl-mana-map* "q" "utl-emacs-eval-show (find-file \"~/notes/tmw/quests.org\")")
-(utl-define-key *utl-mana-map* "s" "utl-emacs-eval-show (find-file \"~/notes/tmw/spells.org\")")
-(utl-define-key *utl-mana-map* "S" "utl-emacs-eval-show (find-file \"~/src/tmw/tmwa-server-data/world/map/npc\")")
-(utl-define-key *utl-mana-map* "b" "mana-break")
-(utl-define-key *utl-mana-map* "k" "mana-kill")
-(utl-define-key *utl-mana-map* "w" "utl-conkeror-eval-show internet-search-mana-prompted")
+(al/define-key *top-map* "s-j" '*al/mana-map*)
+(al/define-key *al/mana-map* "s-j" "mana-state")
+(al/define-key *al/mana-map* "a" "mana-attack")
+(al/define-key *al/mana-map* "A" "mana-quick-attack")
+(al/define-key *al/mana-map* "H" "mana-bat-quest-full")
+(al/define-key *al/mana-map* "h" "mana-bat-quest-cont")
+(al/define-key *al/mana-map* "l" "al/emacs-eval-show (find-file \"~/.local/share/mana/logs/server.themanaworld.org/\")")
+(al/define-key *al/mana-map* "m" "al/emacs-eval-show (find-file \"~/notes/tmw/monsters.org\")")
+(al/define-key *al/mana-map* "q" "al/emacs-eval-show (find-file \"~/notes/tmw/quests.org\")")
+(al/define-key *al/mana-map* "s" "al/emacs-eval-show (find-file \"~/notes/tmw/spells.org\")")
+(al/define-key *al/mana-map* "S" "al/emacs-eval-show (find-file \"~/src/tmw/tmwa-server-data/world/map/npc\")")
+(al/define-key *al/mana-map* "b" "mana-break")
+(al/define-key *al/mana-map* "k" "mana-kill")
+(al/define-key *al/mana-map* "w" "al/conkeror-eval-show internet-search-mana-prompted")
 
 ;;; keys.lisp ends here

@@ -67,10 +67,10 @@ If a window does not have a layout property, return DEFAULT."
     ((:number "Layout number: ") :key)
   "Set keyboard layout to a specified layout (xkb group) number NUM.
 If current window is emacs, send a key sequence KEY to it (if specified)."
-  (and (utl-emacs-window-p)
+  (and (al/emacs-window-p)
        key
        (setq num 0)
-       (utl-send-key key))
+       (al/send-key key))
   (xlib:lock-group *display* :group num)
   (xlib:display-finish-output *display*))
 

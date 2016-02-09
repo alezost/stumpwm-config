@@ -35,10 +35,10 @@
   "Send keys to the current mana window.
 
 Each object of KEYS-LIST should be suitable for KEYS argument of
-`utl-send-keys'.
+`al/send-keys'.
 If LOOP is t, send the last keys of KEYS-LIST in a loop.
 Show a message MSG if it is specified.
-For SLEEP meaning see `utl-send-keys'."
+For SLEEP meaning see `al/send-keys'."
   (let ((win (current-window)))
     (if (or (null *mana-check-window-p*)
             (mana-window-p win))
@@ -50,7 +50,7 @@ For SLEEP meaning see `utl-send-keys'."
                   (sb-thread:make-thread
                    (lambda ()
                      (mapc (lambda (obj)
-                             (utl-send-keys obj :win win :sleep sleep
+                             (al/send-keys obj :win win :sleep sleep
                                            :loop (if (eq obj last) loop)
                                            :loop-quit-var '*mana-quit-sending-p*))
                            keys-list))
@@ -61,13 +61,13 @@ For SLEEP meaning see `utl-send-keys'."
   "Send attack mixed with movements keys in a loop to the mana window."
   (mana-send-keys
    (list (lambda ()
-           (utl-get-random-obj '(("a" . 0.7)
+           (al/get-random-obj '(("a" . 0.7)
                                 ("p" . 0.1)
                                 ("." . 0.05)
                                 ("e" . 0.05)
                                 ("o" . 0.05)
                                 ("u" . 0.05)))))
-   :sleep (lambda () (utl-random-float 0.2 1))
+   :sleep (lambda () (al/random-float 0.2 1))
    :loop t
    :msg "Mana attack begins..."))
 
@@ -75,7 +75,7 @@ For SLEEP meaning see `utl-send-keys'."
   "Send attack key in a loop to the mana window."
   (mana-send-keys
    '("a")
-   :sleep (lambda () (utl-random-float 0.1 0.5))
+   :sleep (lambda () (al/random-float 0.1 0.5))
    :loop t
    :msg "Mana quick attack begins..."))
 
@@ -90,13 +90,13 @@ For SLEEP meaning see `utl-send-keys'."
 (defcommand mana-bat-quest-start () ()
   "Send keys for starting a talk with Arkim."
   (mana-send-keys (list *mana-bat-quest-start-keys*)
-                  :sleep (lambda () (utl-random-float 0.7 1.2))
+                  :sleep (lambda () (al/random-float 0.7 1.2))
                   :msg "Bat quest (start) begins..."))
 
 (defcommand mana-bat-quest-cont () ()
   "Send keys for continuing a talk with Arkim."
   (mana-send-keys (list *mana-bat-quest-cont-keys*)
-                  :sleep (lambda () (utl-random-float 0.7 1.2))
+                  :sleep (lambda () (al/random-float 0.7 1.2))
                   :loop t
                   :msg "Bat quest (continuation) begins..."))
 
@@ -104,7 +104,7 @@ For SLEEP meaning see `utl-send-keys'."
   "Send keys for a full talk with Arkim."
   (mana-send-keys (list *mana-bat-quest-start-keys*
                         *mana-bat-quest-cont-keys*)
-                  :sleep (lambda () (utl-random-float 0.7 1.2))
+                  :sleep (lambda () (al/random-float 0.7 1.2))
                   :loop t
                   :msg "Bat quest begins..."))
 
