@@ -67,7 +67,7 @@ For SLEEP meaning see `utl-send-keys'."
                                 ("e" . 0.05)
                                 ("o" . 0.05)
                                 ("u" . 0.05)))))
-   :sleep (lambda () (utl-random-float 0.3 1.5))
+   :sleep (lambda () (utl-random-float 0.2 1))
    :loop t
    :msg "Mana attack begins..."))
 
@@ -75,7 +75,7 @@ For SLEEP meaning see `utl-send-keys'."
   "Send attack key in a loop to the mana window."
   (mana-send-keys
    '("a")
-   :sleep (lambda () (utl-random-float 0.2 0.8))
+   :sleep (lambda () (utl-random-float 0.1 0.5))
    :loop t
    :msg "Mana quick attack begins..."))
 
