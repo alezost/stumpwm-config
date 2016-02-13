@@ -315,7 +315,7 @@ additional key."
 (al/define-key *al/exec-map* "v" "exec slimevolley")
 (al/define-key *al/exec-map* "g" "al/gcolor2")
 (al/define-key *al/exec-map* "G" "exec gcolor2")
-(al/define-key *al/exec-map* "m" "al/emacs-eval (mana-start)")
+(al/define-key *al/exec-map* "M" "al/emacs-eval (mana-start)")
 (al/define-key *al/exec-map* "7" "al/gtypist d.typ")
 (al/define-key *al/exec-map* "8" "al/gtypist ru.typ")
 (al/define-key *al/exec-map* "9" "al/gtypist")
