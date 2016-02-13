@@ -282,9 +282,7 @@ additional key."
 (al/define-key *al/web-map* "y"  "al/conkeror-eval-show internet-search-youtube-prompted")
 (al/define-key *al/web-map* "p"  "al/conkeror-eval-show internet-search-python3-prompted")
 (al/define-key *al/web-map* "z"  "al/conkeror-browse-show zeus")
-(al/define-key *al/web-map* "s"  "al/conkeror-browse-show http://news.sportbox.ru/video?channel=all")
 (al/define-key *al/web-map* "t"  "al/conkeror-browse-show http://tv.yandex.ru/4/?period=all-day")
-(al/define-key *al/web-map* "T"  "al/conkeror-browse-show http://www.programma.tv")
 (al/define-key *al/web-map* "M"  "al/conkeror-browse-show https://maps.google.com/maps?hl=ru")
 (al/define-key *al/web-map* "W"  "al/conkeror-browse-show http://www.gismeteo.ru/city/hourly/5039/")
 (al/define-key *al/web-map* "w" '*al/web-wiki-map*)
@@ -312,13 +310,7 @@ additional key."
 (al/define-key *al/exec-map* "T" "exec xterm")
 (al/define-key *al/exec-map* "c" "al/conkeror")
 (al/define-key *al/exec-map* "f" "al/firefox")
-(al/define-key *al/exec-map* "v" "exec slimevolley")
-(al/define-key *al/exec-map* "g" "al/gcolor2")
-(al/define-key *al/exec-map* "G" "exec gcolor2")
 (al/define-key *al/exec-map* "M" "al/emacs-eval (mana-start)")
-(al/define-key *al/exec-map* "7" "al/gtypist d.typ")
-(al/define-key *al/exec-map* "8" "al/gtypist ru.typ")
-(al/define-key *al/exec-map* "9" "al/gtypist")
 
 
 ;;; Mode line
