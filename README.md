@@ -1,10 +1,8 @@
 ## About
 
-My configuration of [StumpWM](https://github.com/stumpwm/stumpwm).  I
-separated my settings into several files instead of using a single
+My configuration for [StumpWM](https://github.com/stumpwm/stumpwm).  I
+separate my settings into several files instead of using a single
 `.stumpwmrc`.
-
-I hope you find something useful here.
 
 ## Files
 
@@ -21,9 +19,8 @@ I hope you find something useful here.
   `amixer` I wrote (and have not published yet), the main difference is
   that it shows OSD with volume parameters.
 - `settings.lisp` – Some miscellaneous settings.
-- `utils.lisp` – Additional functions and commands I use.  It is safe to
-  load this file as all symbols there have `utl-` prefix, so you can
-  clone the repo, load this file and try some commands.
+- `utils.lisp` – Additional functions and commands I use (all symbols
+  there have `al/` prefix).
 - `visual.lisp` – Visual settings: colors, mode-line and other visual
   appearance.
 
@@ -31,4 +28,4 @@ I hope you find something useful here.
 
 I am not an expert in Lisp, I just like StumpWM a lot, so if you find
 errors or if you see that something can be implemented better, you may
-send me a letter about that.
+send me a message about that.
