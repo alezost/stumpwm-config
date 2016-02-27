@@ -192,13 +192,13 @@ infinite loop is not a joke."
     (echo "Quitting sending keys.")))
 
 
-;;; Interacting with systemd user services
+;;; Interacting with shepherd user services
 
 ;; The following makes sense only for my shepherd user services, which
 ;; can be started in different X instances/displays/VTs:
 ;; <https://github.com/alezost/shepherd-config>
 
-(defun al/herd-command (service &optional (action "start")
+(defun al/herd-command (service &optional (action "restart")
                                    (display (getenv "DISPLAY")))
   "Return 'herd ACTION SERVICE:DISPLAY' command.
 DISPLAY is a display number (can be a number or string optionally
