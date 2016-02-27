@@ -225,7 +225,7 @@ additional key."
 (al/define-key *top-map* "XF86Sleep"           "exec monitor blank")
 (al/define-key *top-map* "C-XF86Sleep"         "exec monitor suspend")
 (al/define-key *top-map* "M-XF86Sleep"         "exec monitor off")
-(al/define-key *top-map* "C-M-H-XF86Sleep"     "exec sudo shutdown now")
+(al/define-key *top-map* "C-M-H-XF86Sleep"     "exec shutdown now")
 
 ;; root map
 (al/define-key *root-map* "V"   "version")
