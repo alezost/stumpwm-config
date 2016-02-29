@@ -305,7 +305,7 @@ additional key."
 (al/define-key *top-map* "s-m" '*al/exec-map*)
 (al/define-key *al/exec-map* "s-m" "exec")
 (al/define-key *al/exec-map* "e" "al/emacs")
-(al/define-key *al/exec-map* "E" "al/emacs-trunk")
+(al/define-key *al/exec-map* "E" "exec emacs --no-site-file --debug-init")
 (al/define-key *al/exec-map* "t" "al/xterm")
 (al/define-key *al/exec-map* "T" "exec xterm")
 (al/define-key *al/exec-map* "c" "al/conkeror")

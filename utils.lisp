@@ -226,10 +226,6 @@ beginning with ':') where a service is started."
   (run-or-raise (al/herd-command "emacs")
                 '(:class "Emacs")))
 
-(defcommand al/emacs-trunk () ()
-  "Start emacs-trunk unless it is already running."
-  (run-shell-command (al/herd-command "emacs-trunk")))
-
 (defcommand al/emacs-eval (arg &optional server-name) ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
   (let ((args (list "--eval" arg)))
