@@ -60,7 +60,7 @@
  '("^5*" (:eval (time-format "%k:%M"))
    " ^2*%n"                     ; group name
    " ^7*%c"                     ; cpu
-   " ^7*%l"                     ; net
+   " ^6*%l"                     ; net
    )
 
  *mouse-focus-policy* :click)
