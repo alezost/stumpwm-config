@@ -42,6 +42,13 @@
 
 (load-module "cpu")
 (load-module "net")
+(load-module "battery-portable")
+
+(defvar al/battery-mode-string "")
+
+(when (probe-file "/sys/class/power_supply/BAT0")
+  (setf al/battery-mode-string " ^7*%B"
+        battery-portable:*refresh-time* 30))
 
 (set-normal-gravity :bottom)
 
@@ -61,7 +68,7 @@
    " ^2*%n"                     ; group name
    " ^7*%c"                     ; cpu
    " ^6*%l"                     ; net
-   )
+   al/battery-mode-string)
 
  *mouse-focus-policy* :click)
 
