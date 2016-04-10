@@ -44,16 +44,27 @@
 (load-module "net")
 
 (set-normal-gravity :bottom)
-(setf *message-window-gravity* :bottom-right)
-(setf *input-window-gravity*   :center)
-(setf *window-info-format* (format nil "^>^B^5*%c ^b^6*%w^7*x^6*%h^7*~%%t"))
-(setf *time-format-string-default* (format nil "^5*%H:%M:%S~%^2*%A~%^7*%d %B"))
-(setf *mouse-focus-policy* :click)
 
 (setf
+ *message-window-gravity* :bottom-right
+ *input-window-gravity*   :center
+
+ *window-info-format*
+ (format nil "^>^B^5*%c ^b^6*%w^7*x^6*%h^7*~%%t")
+
+ *time-format-string-default*
+ (format nil "^5*%H:%M:%S~%^2*%A~%^7*%d %B")
+
  *mode-line-timeout* 5
- *screen-mode-line-format* '("^5*" (:eval (time-format "%k:%M"))
-                             " ^2*%n" " ^7*%c %l"))
+ *screen-mode-line-format*
+ '("^5*" (:eval (time-format "%k:%M"))
+   " ^2*%n"                     ; group name
+   " ^7*%c"                     ; cpu
+   " ^7*%l"                     ; net
+   )
+
+ *mouse-focus-policy* :click)
+
 (al/mode-line-on)
 
 ;; (set-font "-*-dejavu sans mono-medium-r-normal-*-*-115-*-*-*-*-*-1")
