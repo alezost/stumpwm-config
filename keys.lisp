@@ -293,6 +293,7 @@ additional key."
 (defvar *al/tv-radio-map* (make-sparse-keymap)
   "Keymap for quick access to tv and radio resources.")
 (al/define-key *top-map* "F6" '*al/tv-radio-map*)
+(al/define-key *al/tv-radio-map* "F6" "exec toggle-tvtime")
 (al/define-key *al/tv-radio-map* "v" "al/emms-eval (emms-play-url \"mms://live.rfn.ru/vesti_fm\")")
 (al/define-key *al/tv-radio-map* "o" "al/conkeror-browse-show http://www.onlinetv.ru/")
 (al/define-key *al/tv-radio-map* "e" "al/send-key-to-emacs C-M-s-e")
