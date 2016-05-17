@@ -221,7 +221,7 @@ additional key."
 (al/define-key *top-map* "C-S-SunPrint_Screen" "exec capture video")
 (al/define-key *top-map* "s-F12"               "exec clock")
 (al/define-key *top-map* "s-SunPrint_Screen"   "exec clock")
-(al/define-key *top-map* "XF86TouchpadToggle"  "exec touchpad-toggle")
+(al/define-key *top-map* "XF86TouchpadToggle"  "exec toggle-touchpad")
 (al/define-key *top-map* "XF86Sleep"           "exec monitor blank")
 (al/define-key *top-map* "C-XF86Sleep"         "exec monitor suspend")
 (al/define-key *top-map* "M-XF86Sleep"         "exec monitor off")
