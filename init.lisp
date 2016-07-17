@@ -61,7 +61,7 @@
 (al/load "utils")
 (al/load "layouts")
 (al/load "mana")
-(al/load "setaudio")
+(al/load "sound")
 (al/load "settings")
 (al/load "visual")
 

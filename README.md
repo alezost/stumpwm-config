@@ -14,11 +14,12 @@ separate my settings into several files instead of using a single
   [clx-xkeyboard extension](https://github.com/filonenko-mikhail/clx-xkeyboard).
 - `mana.lisp` – Some commands for convenient playing
   [The Mana World](https://themanaworld.org/).
-- `setaudio.lisp` – An interface to `setaudio` program.  This file is
-  probably of no interest: `setaudio` is a simplified version of
-  `amixer` I wrote (and have not published yet), the main difference is
-  that it shows OSD with volume parameters.
 - `settings.lisp` – Some miscellaneous settings.
+- `sound.lisp` – An interface for setting sound volume and showing it in
+  OSD.  I use [Guile-Daemon](https://github.com/alezost/guile-daemon) and
+  [Guile-XOSD](https://github.com/alezost/guile-xosd) to do this.  See
+  [my Guile-Daemon config](https://github.com/alezost/guile-daemon-config)
+  for details.
 - `utils.lisp` – Additional functions and commands I use (all symbols
   there have `al/` prefix).
 - `visual.lisp` – Visual settings: colors, mode-line and other visual
