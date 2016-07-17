@@ -78,8 +78,8 @@ additional key."
 (al/define-key *top-map* "M-s-n" "al/gmove-to-other-group")
 
 (al/define-key *tile-group-root-map* "s-f" "fullscreen")
-(al/define-key *tile-group-top-map* "s-v" "vsplit")
 (al/define-key *tile-group-top-map* "s-z" "hsplit")
+(al/define-key *tile-group-top-map* "M-s-z" "vsplit")
 (al/define-key *tile-group-top-map* "s-x" "only")
 
 ;;; Focusing windows
@@ -149,14 +149,14 @@ additional key."
 
 ;;; Resizing frames
 
-(al/define-key *top-map* "s-XF86AudioRaiseVolume"     "resize   0  10")
-(al/define-key *top-map* "s-XF86AudioLowerVolume"     "resize   0 -10")
-(al/define-key *top-map* "C-s-XF86AudioRaiseVolume"   "resize   0   1")
-(al/define-key *top-map* "C-s-XF86AudioLowerVolume"   "resize   0  -1")
-(al/define-key *top-map* "M-s-XF86AudioRaiseVolume"   "resize  10   0")
-(al/define-key *top-map* "M-s-XF86AudioLowerVolume"   "resize -10   0")
-(al/define-key *top-map* "C-M-s-XF86AudioRaiseVolume" "resize   1   0")
-(al/define-key *top-map* "C-M-s-XF86AudioLowerVolume" "resize  -1   0")
+(al/define-key *top-map* "M-s-XF86AudioRaiseVolume"   "resize   0  10")
+(al/define-key *top-map* "M-s-XF86AudioLowerVolume"   "resize   0 -10")
+(al/define-key *top-map* "C-M-s-XF86AudioRaiseVolume" "resize   0   1")
+(al/define-key *top-map* "C-M-s-XF86AudioLowerVolume" "resize   0  -1")
+(al/define-key *top-map* "s-XF86AudioRaiseVolume"     "resize  10   0")
+(al/define-key *top-map* "s-XF86AudioLowerVolume"     "resize -10   0")
+(al/define-key *top-map* "C-s-XF86AudioRaiseVolume"   "resize   1   0")
+(al/define-key *top-map* "C-s-XF86AudioLowerVolume"   "resize  -1   0")
 
 
 ;;; Controlling sound
