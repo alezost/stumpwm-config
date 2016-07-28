@@ -224,7 +224,7 @@ additional key."
 (al/define-key *top-map* "S-XF86Documents"  "al/emacs-eval-show (find-file \"~/notes/info.org\")")
 (al/define-key *top-map* "XF86Calculator"   "al/emacs-eval-show (calc)")
 (al/define-key *top-map* "C-XF86Calculator" "al/emacs-eval-show (calendar)")
-(al/define-key *top-map* "H-ESC" "exec mosdctl --hide-all")
+(al/define-key *top-map* "H-ESC" "exec hide-osds")
 (al/define-key *top-map* "s-7" "layout-set 0 s-7")
 (al/define-key *top-map* "s-8" "layout-set 1 s-8")
 (al/define-key *top-map* "s-9" "layout-set 2 s-9")
