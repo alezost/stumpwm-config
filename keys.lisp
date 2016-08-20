@@ -241,6 +241,10 @@ additional key."
 (al/define-key *top-map* "C-XF86Sleep"         "exec monitor suspend")
 (al/define-key *top-map* "M-XF86Sleep"         "exec monitor off")
 (al/define-key *top-map* "C-M-H-XF86Sleep"     "exec shutdown now")
+;; Using "exec suspend" is not possible, because "suspend" is a shell
+;; builtin command, and "sh -c" (which is called by "exec") does not
+;; load my "~/.bashrc" where it is disabled.
+(al/define-key *top-map* "S-s-XF86Sleep"       "exec `which suspend`")
 
 ;; root map
 (al/define-key *root-map* "V"   "version")
