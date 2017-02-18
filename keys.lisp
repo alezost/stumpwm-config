@@ -202,7 +202,6 @@ additional key."
 (al/define-key *al/emacs-map* "i" "al/emacs-eval-show (find-file \"~/notes/info.org\")")
 (al/define-key *al/emacs-map* "m" "al/emms-eval (al/emms-notify)")
 
-(al/define-key *resize-map* "s-g" "abort-iresize")
 (al/define-key *top-map* "s-g" "abort")
 (al/define-key *top-map* "s-h" '*help-map*)
 (al/define-key *top-map* "s-u" "time")
