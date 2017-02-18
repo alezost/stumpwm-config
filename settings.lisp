@@ -1,6 +1,6 @@
 ;;; settings.lisp --- General settings: variables, hooks, ...
 
-;; Copyright © 2013-2016 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2017 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -45,6 +45,8 @@
 
 (push '(:class "Conkeror") *deny-raise-request*)
 (push '(:class "libreoffice-writer") *deny-raise-request*)
+
+(al/banish-pointer)
 
 ;; (setf *debug-level* 10)  ; show all debug info
 
