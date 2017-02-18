@@ -241,7 +241,7 @@ additional key."
 (al/define-key *root-map* "c"   "colon")
 (al/define-key *root-map* "v"   "eval")
 (al/define-key *root-map* "i"   "list-window-properties")
-(al/define-key *root-map* "s-b" "ratwarp 800 0")
+(al/define-key *root-map* "s-b" "al/banish-pointer")
 
 ;; menu map
 (al/define-key *menu-map* "s-c" 'menu-up)

@@ -341,6 +341,12 @@ get nil."
        if (< rnd prob)
        return (car elm))))
 
+(defcommand al/banish-pointer () ()
+  "Move mouse pointer to the top/center of the current screen."
+  (let* ((screen (current-screen))
+         (width  (screen-width screen)))
+    (warp-pointer screen (/ width 2) 0)))
+
 (defcommand al/yank-primary () ()
   "Insert X primary selection into the current window."
   (window-send-string (get-x-selection)))
