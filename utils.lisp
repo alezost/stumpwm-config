@@ -1,6 +1,6 @@
 ;;; utils.lisp --- Additional variables, functions and commands
 
-;; Copyright © 2013-2016 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2017 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -19,8 +19,6 @@
 
 
 ;;; Floating windows
-
-(in-package :stumpwm.floating-group)
 
 (defun al/float-window-focus-forward
     (window-list &optional (window (group-current-window
@@ -376,7 +374,7 @@ If current group is floating, select next window."
       (al/send-key-to-emacs key)
       (if (eq (type-of (current-group)) 'tile-group)
           (fnext)
-          (stumpwm.floating-group:al/float-window-next))))
+          (al/float-window-next))))
 
 (defcommand al/toggle-ignore-emacs () ()
   "Toggle `*al/ignore-emacs*'."

@@ -1,6 +1,6 @@
 ;;; keys.lisp --- Key bindings (Dvorak layout)
 
-;; Copyright © 2013-2016 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2017 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -84,18 +84,14 @@ additional key."
 
 ;;; Focusing windows
 
-(al/define-key *tile-group-top-map* "s-b"            "pull-hidden-other")
-(al/define-key *tile-group-top-map* "M-s-b"          "pull-hidden-next")
-(al/define-key *tile-group-top-map* "s-TAB"          "pull-hidden-next")
-(al/define-key *tile-group-top-map* "s-ISO_Left_Tab" "pull-hidden-previous")
-(al/define-key stumpwm.floating-group::*float-group-top-map*
-                "s-b"            "al/float-window-other")
-(al/define-key stumpwm.floating-group::*float-group-top-map*
-                "M-s-b"          "al/float-window-next")
-(al/define-key stumpwm.floating-group::*float-group-top-map*
-                "s-TAB"          "al/float-window-next")
-(al/define-key stumpwm.floating-group::*float-group-top-map*
-                "s-ISO_Left_Tab" "al/float-window-previous")
+(al/define-key *tile-group-top-map*  "s-b"            "pull-hidden-other")
+(al/define-key *tile-group-top-map*  "M-s-b"          "pull-hidden-next")
+(al/define-key *tile-group-top-map*  "s-TAB"          "pull-hidden-next")
+(al/define-key *tile-group-top-map*  "s-ISO_Left_Tab" "pull-hidden-previous")
+(al/define-key *float-group-top-map* "s-b"            "al/float-window-other")
+(al/define-key *float-group-top-map* "M-s-b"          "al/float-window-next")
+(al/define-key *float-group-top-map* "s-TAB"          "al/float-window-next")
+(al/define-key *float-group-top-map* "s-ISO_Left_Tab" "al/float-window-previous")
 
 ;;; Moving/resizing windows
 
@@ -104,7 +100,7 @@ additional key."
 ;;   [C-]s-<key> for moving
 ;;   C-<key> for moving to the screen edges
 
-(al/define-key stumpwm.floating-group::*float-group-top-map*
+(al/define-key *float-group-top-map*
                 "s-KP_Begin" "al/float-window-gravity center")
 
 (defun al/define-numpad-key-xy (map modifier cmd val)
@@ -120,14 +116,10 @@ additional key."
     (dk "KP_End"       (- val) val)
     (dk "KP_Left"      (- val) 0)))
 
-(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "s-"   "al/move-float-window" 10)
-(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "C-s-" "al/move-float-window" 1)
-(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "M-"   "al/resize-float-window" 10)
-(al/define-numpad-key-xy stumpwm.floating-group::*float-group-top-map*
-                          "C-M-" "al/resize-float-window" 1)
+(al/define-numpad-key-xy *float-group-top-map* "s-"   "al/move-float-window" 10)
+(al/define-numpad-key-xy *float-group-top-map* "C-s-" "al/move-float-window" 1)
+(al/define-numpad-key-xy *float-group-top-map* "M-"   "al/resize-float-window" 10)
+(al/define-numpad-key-xy *float-group-top-map* "C-M-" "al/resize-float-window" 1)
 
 (defun al/define-numpad-key-gravity (map modifier cmd)
   (flet ((dk (key gravity)
@@ -144,8 +136,7 @@ additional key."
     (dk "KP_Left"      "left")))
 
 (al/define-numpad-key-gravity *tile-group-top-map*  "C-" "gravity")
-(al/define-numpad-key-gravity stumpwm.floating-group::*float-group-top-map*
-                               "C-" "al/float-window-gravity")
+(al/define-numpad-key-gravity *float-group-top-map* "C-" "al/float-window-gravity")
 
 ;;; Resizing frames
 
