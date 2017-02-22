@@ -320,6 +320,10 @@ beginning with ':') where a service is started."
   (run-or-raise (al/herd-command "firefox")
                 '(:class "Firefox")))
 
+(defcommand al/toggle-unclutter () ()
+  "Start/stop 'unclutter' on the current display."
+  (al/toggle-shepherd-service "unclutter"))
+
 
 ;;; Mode line
 

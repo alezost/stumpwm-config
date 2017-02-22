@@ -242,6 +242,7 @@ additional key."
 (al/define-key *root-map* "v"   "eval")
 (al/define-key *root-map* "i"   "list-window-properties")
 (al/define-key *root-map* "s-b" "al/banish-pointer")
+(al/define-key *root-map* "s-u" "al/toggle-unclutter")
 
 ;; menu map
 (al/define-key *menu-map* "s-c" 'menu-up)
