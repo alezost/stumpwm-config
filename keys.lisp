@@ -154,7 +154,7 @@ additional key."
 
 (al/define-key *top-map* "XF86AudioMute"            "sound-set-current-scontrol toggle")
 (al/define-key *top-map* "M-XF86AudioMute"          "sound-next-scontrol")
-(al/define-key *top-map* "C-XF86AudioMute"          "sound-current-scontrol")
+(al/define-key *top-map* "C-XF86AudioMute"          "exec tvtime-command TOGGLE_MUTE")
 (al/define-key *top-map* "XF86AudioRaiseVolume"     "sound-set-current-scontrol 3%+")
 (al/define-key *top-map* "XF86AudioLowerVolume"     "sound-set-current-scontrol 3%-")
 (al/define-key *top-map* "C-XF86AudioRaiseVolume"   "sound-set-current-scontrol 1%+")
