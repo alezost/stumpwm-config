@@ -202,14 +202,14 @@ infinite loop is not a joke."
     (echo "Quitting sending keys.")))
 
 
-;;; Interacting with shepherd user services
+;;; Interacting with Shepherd user services
 
 ;; The following makes sense only for my shepherd user services, which
 ;; can be started in different X instances/displays/VTs:
 ;; <https://github.com/alezost/shepherd-config>
 
 (defun al/herd-command (service &optional (action "restart")
-                                   (display (getenv "DISPLAY")))
+                                  (display (getenv "DISPLAY")))
   "Return 'herd ACTION SERVICE:DISPLAY' command.
 DISPLAY is a display number (can be a number or string optionally
 beginning with ':') where a service is started."
@@ -218,6 +218,29 @@ beginning with ':') where a service is started."
           (if (numberp display)
               display
               (string-left-trim ":" display))))
+
+(defun al/shepherd-service-started-p
+    (service &optional (display (getenv "DISPLAY")))
+  "Return non-nil, if Shepherd SERVICE is running."
+  (let ((output (run-shell-command
+                 (al/herd-command service "status" display)
+                 t)))
+    (search "started" output)))
+
+(defcommand al/toggle-shepherd-service
+    (service &optional (display (getenv "DISPLAY")))
+    ((:string "toggle Shepherd service: "))
+  "Start/stop Shepherd SERVICE on DISPLAY."
+  (let* ((startedp (al/shepherd-service-started-p service display)))
+    (run-shell-command (al/herd-command service
+                                        (if startedp "stop" "start")
+                                        display))
+    (message (concat "^5*~a~a^7* has been "
+                     (if startedp
+                         "^B^1*stopped"
+                         "^2*started")
+                     "^b^7*.")
+             service display)))
 
 
 ;;; Interacting with emacs
