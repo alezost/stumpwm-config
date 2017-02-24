@@ -245,9 +245,12 @@ beginning with ':') where a service is started."
 
 ;;; Interacting with emacs
 
-(defun al/emacs-window-p (&optional (win (current-window)))
-  "Return T if WIN is emacs window."
-  (al/class-window-p "Emacs" win))
+(defun al/emacs-window-p (&optional (window (current-window)))
+  "Return non-nil, if WINDOW is Emacs window in the current frame."
+  (and (al/class-window-p "Emacs" window)
+       (or (not (eq (type-of (current-group)) 'tile-group))
+           (eq (frame-window (tile-group-current-frame (current-group)))
+               window))))
 
 (defcommand al/send-key-to-emacs (key) ((:key "Key: "))
   "Focus emacs window and send KEY to it."
