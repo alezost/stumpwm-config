@@ -20,7 +20,7 @@
 (in-package :stumpwm)
 
 
-;;; Groups
+;;; Windows, frames and groups
 
 ;; Name the default group.
 (setf (group-name (car (screen-groups (current-screen))))
@@ -28,8 +28,40 @@
 (gnewbg "tile2")
 (gnewbg-float "float")
 
+(defvar al/frames1 nil)
+
+(defun al/make-frames1 ()
+  "Return a frame layout (list of frames) for `al/frames1'."
+  (let* ((screen    (current-screen))
+         (s-width   (screen-width screen))
+         (s-height  (screen-height screen))
+         (f0-width  (/ s-width 2))
+         (f0-height (* 3 (/ f0-width 4)))
+         (f0 (make-frame
+              :number 0
+              :x 0 :y 0
+              :width f0-width
+              :height f0-height))
+         (f1 (make-frame
+              :number 1
+              :x 0 :y f0-height
+              :width f0-width
+              :height (- s-height f0-height)))
+         (f2 (make-frame
+              :number 2
+              :x f0-width :y 0
+              :width (- s-width f0-width)
+              :height s-height)))
+    (list f0 f2 f1)))
+
+(defcommand al/frames1 (&optional (populatep t)) ()
+  "Show layout of 3 frames with one frame having 4/3 ratio."
+  (al/set-frames (or al/frames1
+                     (setf al/frames1 (al/make-frames1)))
+                 populatep))
+
 
-;;; Layouts
+;;; Keyboard layouts
 
 (layout-set 0)
 (layout-enable-per-window)

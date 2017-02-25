@@ -196,6 +196,7 @@ additional key."
   "Keymap for finding files (and doing other things) in emacs.")
 
 (al/define-key *top-map* "s-f" '*al/emacs-map*)
+(al/define-key *al/emacs-map* "1" "al/frames1")
 (al/define-key *al/emacs-map* "b" "al/emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
 (al/define-key *al/emacs-map* "n" "al/emacs-eval-show (org-capture 1 \"n\")")
 (al/define-key *al/emacs-map* "t" "al/emacs-eval-show (find-file \"~/notes/tasks.org\")")
