@@ -17,6 +17,8 @@
 
 ;;; Code:
 
+(in-package :stumpwm)
+
 
 ;;; Floating windows
 
@@ -96,8 +98,6 @@ GRAVITY controls where the window will appear.  Possible values are:
 
 ;;; Windows, frames and groups
 
-(in-package :stumpwm)
-
 (defun al/class-window-p (class &optional (win (current-window)))
   "Return T if a window WIN is of class CLASS."
   (and win (string= class (window-class win))))
@@ -123,6 +123,30 @@ Return the window or nil if there is no such."
         (progn (gmove group)
                (switch-to-group group))
         (echo "There is only one group."))))
+
+(defun al/set-frames (frames &optional (populatep t))
+  "Display FRAMES in the current group.
+The first frame will become the current one and will contain the current
+window.  If POPULATEP is nil, do not populate the rest frames with
+windows."
+  (let* ((screen     (current-screen))
+         (group      (screen-current-group screen))
+         (head       (current-head group))
+         (cur-window (group-current-window group))
+         (cur-frame  (first frames)))
+    (mapc (lambda (w)
+            (setf (window-frame w) cur-frame))
+          (group-windows group))
+    (mapc (lambda (f)
+            (setf (frame-window f) nil))
+          (rest frames))
+    (setf (frame-window cur-frame) cur-window
+          (tile-group-frame-head group head) frames)
+    (when populatep
+      (populate-frames group))
+    (focus-frame group cur-frame)
+    (update-decoration cur-window)
+    (sync-frame-windows group cur-frame)))
 
 ;;; Showing and toggling the root window
 
