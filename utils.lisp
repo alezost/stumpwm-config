@@ -25,7 +25,7 @@
 (defun al/float-window-focus-forward
     (window-list &optional (window (group-current-window
                                     (current-group))))
-  "Focus the next window in WINDOW-LIST from the window WINDOW."
+  "Focus the next window in WINDOW-LIST after WINDOW."
   (let* ((wins (cdr (member window window-list)))
          (nw (if wins
                  (car wins)
@@ -406,14 +406,14 @@ get nil."
   (window-send-string (get-x-selection)))
 
 (defvar *al/ignore-emacs* nil
-  "If non-nil, do not treat emacs specially in `al/next'.")
+  "If non-nil, do not treat Emacs specially by `al/switch-frame-or-window'.")
 
-(defcommand al/next (&optional key) (:key)
-  "Select next frame or window or emacs window.
+(defun al/switch-frame-or-window (switch-tile switch-float &optional key)
+  "Select frame or window or emacs window.
 If current window is emacs and `*al/ignore-emacs*' is nil, send key
 sequence KEY to it.
-If current group is tiling, select next frame.
-If current group is floating, select next window."
+If current group is tiling, call SWITCH-TILE procedure.
+If current group is floating, call SWITCH-FLOAT procedure."
   (if (and key
            (al/emacs-window-p)
            (null *al/ignore-emacs*)
@@ -433,8 +433,24 @@ If current group is floating, select next window."
                  (/= 1 windows-num))))
       (al/send-key-to-emacs key)
       (if (eq (type-of (current-group)) 'tile-group)
-          (fnext)
-          (al/float-window-next))))
+          (funcall switch-tile)
+          (funcall switch-float))))
+
+(defcommand al/other (&optional key) (:key)
+  "Select previously selected frame or window or emacs window.
+If current window is emacs and `*al/ignore-emacs*' is nil, send key
+sequence KEY to it.
+If current group is tiling, select previously selected frame.
+If current group is floating, select previously selected window."
+  (al/switch-frame-or-window #'fother #'al/float-window-other key))
+
+(defcommand al/next (&optional key) (:key)
+  "Select next frame or window or emacs window.
+If current window is emacs and `*al/ignore-emacs*' is nil, send key
+sequence KEY to it.
+If current group is tiling, select next frame.
+If current group is floating, select next window."
+  (al/switch-frame-or-window #'fnext #'al/float-window-next key))
 
 (defcommand al/toggle-ignore-emacs () ()
   "Toggle `*al/ignore-emacs*'."
