@@ -124,6 +124,19 @@ Return the window or nil if there is no such."
                (switch-to-group group))
         (echo "There is only one group."))))
 
+(defcommand (al/fother tile-group) () ()
+  "Jump to the previously selected frame.
+This is a substitution for `fother': the problem with `fother' is that
+it does nothing if the last frame does not exist anymore.  This command
+simply moves the focus to the next existing frame."
+  (let* ((group      (current-group))
+         (frames     (group-frames group))
+         (last-frame (tile-group-last-frame group)))
+    (if (and last-frame
+             (find last-frame frames))
+        (focus-frame group last-frame)
+        (focus-frame-after group frames))))
+
 (defun al/set-frames (frames &optional (populatep t))
   "Display FRAMES in the current group.
 The first frame will become the current one and will contain the current
@@ -442,7 +455,7 @@ If current window is emacs and `*al/ignore-emacs*' is nil, send key
 sequence KEY to it.
 If current group is tiling, select previously selected frame.
 If current group is floating, select previously selected window."
-  (al/switch-frame-or-window #'fother #'al/float-window-other key))
+  (al/switch-frame-or-window #'al/fother #'al/float-window-other key))
 
 (defcommand al/next (&optional key) (:key)
   "Select next frame or window or emacs window.
