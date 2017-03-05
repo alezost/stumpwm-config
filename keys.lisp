@@ -67,6 +67,8 @@ additional key."
 (al/define-key *root-map* "="   "balance-frames")
 (al/define-key *root-map* "s-c" "delete-window")
 (al/define-key *root-map* "C"   "kill-window")
+(al/define-key *root-map* "o"   "al/fother")
+(al/define-key *root-map* "M-o" "fnext")
 
 (al/define-key *top-map* "s-r"   "al/toggle-root")
 (al/define-key *top-map* "s-w"   "windowlist")
