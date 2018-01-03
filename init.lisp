@@ -1,6 +1,6 @@
 ;;; init.lisp --- Vital settings and loading other files
 
-;; Copyright © 2013-2016 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2018 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -53,6 +53,8 @@
     (if (probe-file file)
         (load file)
         (format *error-output* "File '~a' doesn't exist." file))))
+
+(redirect-all-output (merge-pathnames "log" al/init-directory))
 
 (set-module-dir
  (pathname-as-directory (concat (getenv "HOME")
