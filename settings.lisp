@@ -1,6 +1,6 @@
 ;;; settings.lisp --- General settings: variables, hooks, ...
 
-;; Copyright © 2013–2017 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2018 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -75,8 +75,10 @@
 (setf (symbol-function 'send-fake-key)
       (lambda (win key) (al/send-key key win)))
 
-(push '(:class "Conkeror") *deny-raise-request*)
-(push '(:class "libreoffice-writer") *deny-raise-request*)
+(setf *deny-raise-request*
+      '((:class "Conkeror")
+        (:class "FLTK")         ; xcas
+        (:class "libreoffice-writer")))
 
 (al/banish-pointer)
 
