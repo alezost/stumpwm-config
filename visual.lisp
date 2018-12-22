@@ -1,6 +1,6 @@
 ;;; visual.lisp --- Visual appearance: colors, fonts, mode line, resizing, ...
 
-;; Copyright © 2013-2016 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2018 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,17 @@
 
 ;; Yellow and magenta are swapped to show keys in yellow.
 (setf *colors*
-      '("black" "red" "green" "magenta" "blue" "yellow" "cyan" "white"))
+      '("black"                 ; 0
+        "red"                   ; 1
+        "green"                 ; 2
+        "magenta"               ; 3
+        "#44d0ff"               ; 4
+        "yellow"                ; 5
+        "cyan"                  ; 6
+        "white"                 ; 7
+        "AntiqueWhite3"
+        "khaki3")
+      *bar-hi-color* "^B^5*")
 (update-color-map (current-screen))
 
 (defmacro al/set-color (val color)
