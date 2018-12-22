@@ -88,7 +88,7 @@
  *screen-mode-line-format*
  '("^5*" (:eval (time-format "%k:%M"))
    " ^2*%n"                     ; group name
-   " ^7*%c"                     ; cpu
+   " ^7*%c %t"                  ; cpu
    " ^6*%l"                     ; net
    al/battery-mode-string)
 
