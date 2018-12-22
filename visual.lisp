@@ -84,9 +84,10 @@
  *time-format-string-default*
  (format nil "^5*%H:%M:%S~%^2*%A~%^7*%d %B")
 
+ *time-modeline-string* "%k:%M"
  *mode-line-timeout* 5
  *screen-mode-line-format*
- '("^5*" (:eval (time-format "%k:%M"))
+ '("^5*%d"                      ; time
    " ^2*%n"                     ; group name
    " ^7*%c %t"                  ; cpu
    " ^6*%l"                     ; net
