@@ -1,6 +1,6 @@
 ;;; utils.lisp --- Additional variables, functions and commands
 
-;; Copyright © 2013–2017 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2018 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -470,5 +470,30 @@ If current group is floating, select next window."
   (setf *al/ignore-emacs* (not *al/ignore-emacs*))
   (message "^b^7*Switching between emacs windows ~a^b^7*."
             (if *al/ignore-emacs* "^B^1*disabled" "^2*enabled")))
+
+(defmacro al/defun-with-delay (seconds name args &rest body)
+  "Define NAME function with ARGS and BODY.
+It is like a usual `defun', except when the function is called, it is
+evaluated only if the number of SECONDS has already been passed since
+the last call.  If this time has not been passed yet, the previous value
+of the function is returned without evaluation.
+
+For example, the following `delayed-time' function will return a new
+time string only every 10 seconds:
+
+  (al/defun-with-delay
+   10 delayed-time ()
+   (time-format \"%H:%M:%S\"))
+"
+  (let ((next-time-var  (make-symbol "next-time"))
+        (last-value-var (make-symbol "last-value")))
+    `(let ((,next-time-var 0)
+           ,last-value-var)
+       (defun ,name ,args
+         (let ((now (get-universal-time)))
+           (if (< now ,next-time-var)
+               ,last-value-var
+               (setf ,next-time-var (+ now ,seconds)
+                     ,last-value-var (progn ,@body))))))))
 
 ;;; utils.lisp ends here
