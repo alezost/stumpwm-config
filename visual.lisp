@@ -17,6 +17,10 @@
 
 ;;; Code:
 
+(load-module "cpu")
+(load-module "net")
+(al/load "mode-line-battery")
+
 (in-package :stumpwm)
 
 
@@ -62,15 +66,18 @@
 
 ;;; Visual appearance and the mode-line
 
-(load-module "cpu")
-(load-module "net")
-(load-module "battery-portable")
+(defvar al/battery (car (al/stumpwm-battery:all-batteries)))
 
-(defvar al/battery-mode-string "")
+(defvar al/battery-refresh-time 60)
 
-(when (probe-file "/sys/class/power_supply/BAT0")
-  (setf al/battery-mode-string " ^7*%B"
-        battery-portable:*refresh-time* 30))
+(defvar al/mode-line-battery
+  (if al/battery
+      '(" ^7*" (:eval (al/mode-line-battery)))
+      ""))
+
+(al/defun-with-delay
+ al/battery-refresh-time al/mode-line-battery ()
+ (al/stumpwm-battery:battery-mode-line-string al/battery))
 
 (set-normal-gravity :bottom)
 
@@ -91,7 +98,7 @@
    " ^2*%n"                     ; group name
    " ^7*%c %t"                  ; cpu
    " ^6*%l"                     ; net
-   al/battery-mode-string)
+   al/mode-line-battery)
 
  *mouse-focus-policy* :click)
 
