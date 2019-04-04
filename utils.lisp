@@ -1,6 +1,6 @@
 ;;; utils.lisp --- Additional variables, functions and commands
 
-;; Copyright © 2013–2018 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2019 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,6 +18,14 @@
 ;;; Code:
 
 (in-package :stumpwm)
+
+(defun al/executable-exists? (name)
+  "Return non-nil, if NAME executable exists in PATH."
+  (zerop
+   (nth-value 2
+              (uiop:run-program (concat "command -v " name)
+                                :force-shell t
+                                :ignore-error-status t))))
 
 
 ;;; Floating windows
@@ -322,30 +330,48 @@ beginning with ':') where a service is started."
   (or (al/emacs-window-p) (al/emacs)))
 
 
-;;; Interacting with conkeror
+;;; Interacting with browser
 
-(defcommand al/conkeror () ()
-  "Start conkeror unless it is already running, in which case focus it."
-  (run-or-raise (al/herd-command "conkeror")
-                '(:class "Conkeror")))
+(defvar *al/browsers*
+  '(("icecat" . "Icecat")
+    ("firefox" . "Firefox"))
+  "Alist of browsers.
+Each assoc should have a form of `*al/current-browser*'.")
 
-(defcommand al/conkeror-browse (url) ((:shell "Browse URL: "))
-  "Browse URL with conkeror."
-  (run-prog "conkeror" :args (list url) :wait nil :search t))
+(defvar *al/current-browser* nil
+  "Browser used by `al/browser' command.
+The value should be a cons of program name and window class of this
+program.")
 
-(defcommand al/conkeror-browse-show (url) ((:shell "Browse URL: "))
-  "Browse URL with conkeror and raise conkeror."
-  (al/conkeror-browse url)
-  (al/conkeror))
+(defun al/current-browser ()
+  "Return the currently used browser."
+  (or *al/current-browser*
+      (setf *al/current-browser*
+            (or (find-if (lambda (assoc)
+                           (al/executable-exists? (car assoc)))
+                         *al/browsers*)
+                (progn
+                  (echo "No working browsers found among `*al/browsers*'")
+                  (car *al/browsers*))))))
 
-(defcommand al/conkeror-eval (arg) ((:shell "conkeror-eval: "))
-  "Evaluate ARG with 'conkeror -f'."
-  (run-prog "conkeror" :args (list "-f" arg) :wait nil :search t))
+(defcommand al/browser (&optional args) (:rest)
+  "Start browser unless it is already running, in which case focus it."
+  (let ((browser (al/current-browser)))
+    (if args
+        (progn
+          (run-shell-command (concat (car browser) " " args))
+          (al/browser))
+        (run-or-raise (car browser) `(:class ,(cdr browser))))))
 
-(defcommand al/conkeror-eval-show (arg) ((:shell "conkeror-eval: "))
-  "Evaluate ARG with 'conkeror -f' and raise conkeror."
-  (al/conkeror-eval arg)
-  (al/conkeror))
+(defcommand al/browse (url) ((:shell "Browse URL: "))
+  "Browse URL with `*al/current-browser*'."
+  (run-prog (car (al/current-browser))
+            :args (list url) :wait nil :search t))
+
+(defcommand al/browse-show (url) ((:shell "Browse URL: "))
+  "Browse URL with `*al/current-browser*' and raise it."
+  (al/browse url)
+  (al/browser))
 
 
 ;;; Interacting with other progs
@@ -354,11 +380,6 @@ beginning with ':') where a service is started."
   "Start xterm unless it is already running, in which case focus it."
   (run-or-raise (al/herd-command "xterm")
                 '(:class "XTerm")))
-
-(defcommand al/firefox () ()
-  "Start firefox unless it is already running, in which case focus it."
-  (run-or-raise (al/herd-command "firefox")
-                '(:class "Firefox")))
 
 (defcommand al/toggle-unclutter () ()
   "Start/stop 'unclutter' on the current display."

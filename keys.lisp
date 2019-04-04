@@ -1,6 +1,6 @@
 ;;; keys.lisp --- Key bindings (Dvorak layout)
 
-;; Copyright © 2013–2018 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2019 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -287,29 +287,18 @@ additional key."
 ;;; Web jumps
 
 (defvar *al/web-map* (make-sparse-keymap)
-  "Keymap for quick browsing with conkeror.")
+  "Keymap for quick browsing.")
 (defvar *al/web-wiki-map* (make-sparse-keymap)
-  "Keymap for quick browsing wikipedia with conkeror.")
+  "Keymap for quick browsing wikipedia.")
 (al/define-key *top-map* "F5" '*al/web-map*)
-(al/define-key *al/web-map* "F5" "al/conkeror-eval-show find-url-new-buffer")
-(al/define-key *al/web-map* "g"  "al/conkeror-eval-show internet-search-github-prompted")
-(al/define-key *al/web-map* "G"  "al/conkeror-eval-show internet-search-google-prompted")
-(al/define-key *al/web-map* "d"  "al/conkeror-eval-show internet-search-duckduckgo-prompted")
-(al/define-key *al/web-map* "c"  "al/conkeror-eval-show internet-search-conkeror-prompted")
-(al/define-key *al/web-map* "e"  "al/conkeror-eval-show internet-search-emacswiki-prompted")
-(al/define-key *al/web-map* "a"  "al/conkeror-eval-show internet-search-archwiki-prompted")
-(al/define-key *al/web-map* "A"  "al/conkeror-eval-show internet-search-arch-package-prompted")
-(al/define-key *al/web-map* "m"  "al/conkeror-eval-show internet-search-multitran-prompted")
-(al/define-key *al/web-map* "i"  "al/conkeror-eval-show internet-search-ip-prompted")
-(al/define-key *al/web-map* "y"  "al/conkeror-eval-show internet-search-youtube-prompted")
-(al/define-key *al/web-map* "p"  "al/conkeror-eval-show internet-search-python3-prompted")
-(al/define-key *al/web-map* "z"  "al/conkeror-browse-show zeus")
-(al/define-key *al/web-map* "t"  "al/conkeror-browse-show http://tv.yandex.ru/4/?period=all-day")
-(al/define-key *al/web-map* "M"  "al/conkeror-browse-show https://maps.google.com/maps?hl=ru")
-(al/define-key *al/web-map* "W"  "al/conkeror-browse-show http://www.gismeteo.ru/city/hourly/5039/")
+(al/define-key *al/web-map* "F5" "al/browser --new-tab about:blank")
+(al/define-key *al/web-map* "g"  "al/browse-show https://github.com/notifications")
+(al/define-key *al/web-map* "y"  "al/browse-show https://www.youtube.com/feed/subscriptions")
+(al/define-key *al/web-map* "z"  "al/browse-show zeus")
+(al/define-key *al/web-map* "t"  "al/browse-show http://tv.yandex.ru/4/?period=all-day")
+(al/define-key *al/web-map* "M"  "al/browse-show https://maps.google.com/maps?hl=ru")
+(al/define-key *al/web-map* "W"  "al/browse-show http://www.gismeteo.ru/city/hourly/5039/")
 (al/define-key *al/web-map* "w" '*al/web-wiki-map*)
-(al/define-key *al/web-wiki-map* "e" "al/conkeror-eval-show internet-search-wikipedia-en-prompted")
-(al/define-key *al/web-wiki-map* "r" "al/conkeror-eval-show internet-search-wikipedia-ru-prompted")
 
 ;; tv and radio jumps
 (defvar *al/tv-radio-map* (make-sparse-keymap)
@@ -317,7 +306,7 @@ additional key."
 (al/define-key *top-map* "F6" '*al/tv-radio-map*)
 (al/define-key *al/tv-radio-map* "F6" "exec toggle-tvtime")
 (al/define-key *al/tv-radio-map* "v" "al/emms-eval (emms-play-url \"mms://live.rfn.ru/vesti_fm\")")
-(al/define-key *al/tv-radio-map* "o" "al/conkeror-browse-show http://www.onlinetv.ru/")
+(al/define-key *al/tv-radio-map* "o" "al/browse-show http://www.onlinetv.ru/")
 (al/define-key *al/tv-radio-map* "e" "al/send-key-to-emacs C-M-s-e")
 
 
@@ -331,8 +320,7 @@ additional key."
 (al/define-key *al/exec-map* "E" "exec emacs --no-site-file --debug-init")
 (al/define-key *al/exec-map* "t" "al/xterm")
 (al/define-key *al/exec-map* "T" "exec xterm")
-(al/define-key *al/exec-map* "c" "al/conkeror")
-(al/define-key *al/exec-map* "f" "al/firefox")
+(al/define-key *al/exec-map* "b" "al/browser")
 (al/define-key *al/exec-map* "M" "al/emacs-eval (mana-start)")
 
 
@@ -364,6 +352,5 @@ additional key."
 (al/define-key *al/mana-map* "S" "al/emacs-eval-show (find-file \"~/src/tmw/tmwa-server-data/world/map/npc\")")
 (al/define-key *al/mana-map* "b" "mana-break")
 (al/define-key *al/mana-map* "k" "mana-kill")
-(al/define-key *al/mana-map* "w" "al/conkeror-eval-show internet-search-mana-prompted")
 
 ;;; keys.lisp ends here
