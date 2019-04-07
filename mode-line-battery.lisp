@@ -23,6 +23,9 @@
 ;; I do not like some things that module does, so I adjusted it for my
 ;; needs.
 
+;; Meaning of "/sys/class/power_supply/<BAT>/*" files can be found at
+;; <https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-power>.
+
 ;;; Code:
 
 (defpackage #:al/stumpwm-battery
@@ -59,23 +62,18 @@ Returned time is a floating number of hours.
 Return nil, if it is impossible to calculate.
 Calculation is performed depending on TYPE, which should be either
 `:charging' or `:discharging'."
-  (let ((consumed (or (power-supply-parameter battery "current_now" t)
-                      (power-supply-parameter battery "power_now" t))))
+  (let ((consumed (power-supply-parameter battery "current_now" t)))
     (if (zerop consumed)
         0
-        (let ((left (or (power-supply-parameter battery "charge_now" t)
-                        (power-supply-parameter battery "energy_now" t))))
+        (let ((left (power-supply-parameter battery "charge_now" t)))
           (case type
             (:discharging (/ left consumed))
             (:charging
-             (let ((full (or (power-supply-parameter
-                              battery "charge_full" t)
-                             (power-supply-parameter
-                              battery "energy_full" t))))
+             (let ((full (power-supply-parameter battery "charge_full" t)))
                (/ (- full left) consumed))))))))
 
 (defun battery-state (battery)
-  (if (string= (power-supply-parameter battery "present") "0")
+  (if (zerop (power-supply-parameter battery "present" t))
       :unknown
       (let ((state   (power-supply-parameter battery "status"))
             (percent (power-supply-parameter battery "capacity" t)))
