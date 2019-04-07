@@ -1,7 +1,7 @@
 ;;; mode-line-battery.lisp --- Battery info for the mode line
 
 ;; Copyright © 2008 Julian Stecklina
-;; Copyright © 2018 Alex Kost <alezost@gmail.com>
+;; Copyright © 2018–2019 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -37,15 +37,10 @@
   "Return a line (string) from 'PATH/NAME' sysfs file.
 If TO-NUMBER is non-nil, convert this string into a number.
 Return nil in case of any error."
-  (let ((file-name (probe-file
-                    (merge-pathnames (make-pathname :name name)
-                                     path))))
-    (and file-name
-         (let ((param (with-open-file (file file-name)
-                        (read-line-from-sysfs file))))
-           (if to-number
-               (parse-integer param :junk-allowed t)
-               param)))))
+  (stumpwm::al/read-sys-file
+   (merge-pathnames (make-pathname :name name)
+                    path)
+   to-number))
 
 (defun all-batteries ()
   "Return a list of file paths of all batteries."

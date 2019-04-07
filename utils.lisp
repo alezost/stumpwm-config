@@ -27,6 +27,18 @@
                                 :force-shell t
                                 :ignore-error-status t))))
 
+(defun al/read-sys-file (file-name &optional to-number)
+  "Return a line (string) from FILE-NAME sysfs file.
+If TO-NUMBER is non-nil, convert this string into a number.
+Return nil in case of any error."
+  (let ((file-name (probe-file file-name)))
+    (and file-name
+         (let ((param (with-open-file (file file-name)
+                        (read-line-from-sysfs file))))
+           (if to-number
+               (parse-integer param :junk-allowed t)
+               param)))))
+
 
 ;;; Floating windows
 
