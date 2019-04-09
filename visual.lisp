@@ -1,6 +1,6 @@
 ;;; visual.lisp --- Visual appearance: colors, fonts, mode line, resizing, ...
 
-;; Copyright © 2013–2016, 2018 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2018–2019 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -19,7 +19,6 @@
 
 (load-module "cpu")
 (load-module "net")
-(al/load "mode-line-battery")
 
 (in-package :stumpwm)
 
@@ -64,7 +63,9 @@
  *grab-pointer-background* (hex-to-xlib-color "#2c53ca"))
 
 
-;;; Visual appearance and the mode-line
+;;; mode-line-battery
+
+(al/load "mode-line-battery")
 
 (defvar al/battery (car (al/stumpwm-battery:all-batteries)))
 
@@ -72,12 +73,15 @@
 
 (defvar al/mode-line-battery
   (if al/battery
-      '(" ^7*" (:eval (al/mode-line-battery)))
+      '(" " (:eval (al/mode-line-battery)))
       ""))
 
 (al/defun-with-delay
  al/battery-refresh-time al/mode-line-battery ()
  (al/stumpwm-battery:battery-mode-line-string al/battery))
+
+
+;;; Visual appearance and the mode-line
 
 (set-normal-gravity :bottom)
 

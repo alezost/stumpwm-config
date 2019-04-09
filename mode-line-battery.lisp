@@ -73,6 +73,14 @@ Calculation is performed depending on TYPE, which should be either
                (/ (- full left) consumed))))))))
 
 (defun battery-state (battery)
+  "Return values for the current state of BATTERY.
+
+If the battery is charged, return `:charged percent' values.
+
+If the battery is charging or discharging, return
+`:(dis)charging percent time-left' values.
+
+Otherwise, return `:unknown'."
   (if (zerop (power-supply-parameter battery "present" t))
       :unknown
       (let ((state   (power-supply-parameter battery "status"))
@@ -100,14 +108,16 @@ TIME is a floating number of hours."
   "Return a string with BATTERY info suitable for the mode-line."
   (multiple-value-bind (state percent time)
       (battery-state battery)
-    (ecase state
-      (:unknown (format nil "(no info)"))
-      (:charged (format nil "~D%%" percent))
-      ((:charging :discharging)
-       (format nil "^[~A~D%%~A^]~A"
-               (bar-zone-color percent 90 60 30 t)
-               percent
-               (if (eq state :charging) "^B^2+" "^B^1-")
-               (format-hours time))))))
+    (concat "^[^b^7*"
+            (ecase state
+              (:unknown (format nil "(no info)"))
+              (:charged (format nil "~D%%" percent))
+              ((:charging :discharging)
+               (format nil "~A~D%%~A^n~A"
+                       (bar-zone-color percent 90 60 30 t)
+                       percent
+                       (if (eq state :charging) "^B^2+" "^B^1-")
+                       (format-hours time))))
+            "^]")))
 
 ;;; mode-line-battery.lisp ends here
