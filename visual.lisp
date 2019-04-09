@@ -73,7 +73,7 @@
 
 (defvar al/mode-line-battery
   (if al/battery
-      '(" " (:eval (al/mode-line-battery)))
+      '(" | " (:eval (al/mode-line-battery)))
       ""))
 
 (al/defun-with-delay
@@ -98,10 +98,10 @@
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 5
  *screen-mode-line-format*
- '("^5*%d"                      ; time
-   " ^2*%n"                     ; group name
-   " ^7*%c %t"                  ; cpu
-   " ^6*%l"                     ; net
+ '("^[^5*%d^]"                  ; time
+   " ^[^2*%n^]"                 ; group name
+   " | ^[^7*%c %t^]"            ; cpu
+   " | ^[^6*%l^]"               ; net
    al/mode-line-battery)
 
  *mouse-focus-policy* :click)
