@@ -1,4 +1,4 @@
-;;; visual.lisp --- Visual appearance: colors, fonts, mode line, resizing, ...
+;;; visual.lisp --- Visual appearance: colors, fonts, mode line, ...
 
 ;; Copyright © 2013–2016, 2018–2019 Alex Kost <alezost@gmail.com>
 
@@ -18,7 +18,6 @@
 ;;; Code:
 
 (load-module "cpu")
-(load-module "net")
 
 (in-package :stumpwm)
 
@@ -63,6 +62,20 @@
  *grab-pointer-background* (hex-to-xlib-color "#2c53ca"))
 
 
+;;; mode-line-net
+
+(al/load "mode-line-net")
+
+(defvar al/net-refresh-time 6)
+
+(defvar al/mode-line-net
+  '(" | " (:eval (al/mode-line-net))))
+
+(al/defun-with-delay
+ al/net-refresh-time al/mode-line-net ()
+ (al/stumpwm-net:net-mode-line-string))
+
+
 ;;; mode-line-battery
 
 (al/load "mode-line-battery")
@@ -101,7 +114,7 @@
  '("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
    " | ^[^7*%c %t^]"            ; cpu
-   " | ^[^6*%l^]"               ; net
+   al/mode-line-net
    al/mode-line-battery)
 
  *mouse-focus-policy* :click)
