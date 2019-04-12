@@ -10,7 +10,7 @@ separate my settings into several files instead of using a single
   symlink to this file).
 - `keys.lisp` – All my keybindings (I use dvorak layout, so some of them
   may look weird).
-- `layouts.lisp` – Configuration for
+- `xkb.lisp` – Configuration for
   [clx-xkeyboard extension](https://github.com/filonenko-mikhail/clx-xkeyboard).
 - `mana.lisp` – Some commands for convenient playing
   [The Mana World](https://themanaworld.org/).

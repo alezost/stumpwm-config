@@ -1,6 +1,6 @@
 ;;; init.lisp --- Vital settings and loading other files
 
-;; Copyright © 2013–2016, 2018 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2018–2019 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@
                                 "/src/stumpwm-contrib")))
 (al/load "keys")
 (al/load "utils")
-(al/load "layouts")
+(al/load "xkb")
 (al/load "mana")
 (al/load "sound")
 (al/load "settings")

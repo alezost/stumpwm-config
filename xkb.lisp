@@ -1,6 +1,6 @@
-;;; layouts.lisp --- Switching keyboard layouts
+;;; xkb.lisp --- Wrapper for clx-xkeyboard library
 
-;; Copyright © 2013-2016 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2019 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 ;;; Commentary:
 
 ;; This file uses xkeyboard extension
-;; <https://github.com/filonenko-mikhail/clx-xkeyboard> (i installed it
+;; <https://github.com/filonenko-mikhail/clx-xkeyboard> (I installed it
 ;; with quicklisp and compiled stumpwm with it).  A big part of the
 ;; following code came from the stumpwm example of that extension.
 
@@ -86,4 +86,4 @@ If current window is emacs, send a key sequence KEY to it (if specified)."
   (xlib:lock-group *display* :group num)
   (xlib:display-finish-output *display*))
 
-;;; layouts.lisp ends here
+;;; xkb.lisp ends here
