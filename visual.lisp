@@ -94,6 +94,21 @@
  (al/stumpwm-battery:battery-mode-line-string al/battery))
 
 
+;;; mode-line-locks
+
+(defvar al/mode-line-locks
+  '(:eval (al/mode-line-locks)))
+
+(defun al/mode-line-locks ()
+  (defun bool->color (bool)
+    (if bool "^B^2" ""))
+  (let ((mods (xlib:device-state-locked-mods
+               (xlib:get-state *display*))))
+    (format nil "^[~ACaps^] ^[~ANum^]"
+            (bool->color (al/mod-lock-state +caps-lock+ mods))
+            (bool->color (al/mod-lock-state +num-lock+ mods)))))
+
+
 ;;; Visual appearance and the mode-line
 
 (set-normal-gravity :bottom)
@@ -115,7 +130,9 @@
    " ^[^2*%n^]"                 ; group name
    " | ^[^7*%c %t^]"            ; cpu
    al/mode-line-net
-   al/mode-line-battery)
+   al/mode-line-battery
+   "^>"
+   al/mode-line-locks)
 
  *mouse-focus-policy* :click)
 

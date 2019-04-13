@@ -31,6 +31,9 @@
 ;;   (by sending a specified key sequence to it) instead of the global
 ;;   layout switching.
 
+;; Also I use clx-xkeyboard to control CapsLock, NumLock (to get their
+;; values for the mode line and to change these values).
+
 ;;; Code:
 
 (in-package :stumpwm)
@@ -38,6 +41,9 @@
 ;; We need it because stumpwm opens display before extension definition.
 (xlib::initialize-extensions *display*)
 (xlib:enable-xkeyboard *display*)
+
+
+;;; Keyboard layouts
 
 (defun layout-get-current-layout (display)
   "Return current keyboard layout."
@@ -85,5 +91,26 @@ If current window is emacs, send a key sequence KEY to it (if specified)."
        (al/send-key key))
   (xlib:lock-group *display* :group num)
   (xlib:display-finish-output *display*))
+
+
+;;; Mod locks (CapsLock, NumLock, etc.)
+
+;; These constants were found experimentally (I didn't bother to find
+;; the meaning of the higher bits).  I didn't find any mention of the
+;; possible values of "ModLocks" in the XKeyboard Protocol Specification
+;; <https://www.x.org/releases/current/doc/kbproto/xkbproto.html>.
+;; So what is the source of these values (where are they hard-coded)?
+(defconstant +shift-lock+ #b1)
+(defconstant +caps-lock+  #b10)
+(defconstant +ctrl-lock+  #b100)
+(defconstant +alt-lock+   #b1000)
+(defconstant +num-lock+   #b10000)
+(defconstant +mod3-lock+  #b100000)     ; Hyper
+(defconstant +mod4-lock+  #b1000000)    ; Super
+
+(defun al/mod-lock-state (mod mods)
+  "Return t if MOD lock is enabled in MODS bits.
+Return nil otherwise."
+  (not (zerop (logand mod mods))))
 
 ;;; xkb.lisp ends here

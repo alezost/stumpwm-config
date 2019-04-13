@@ -10,8 +10,10 @@ separate my settings into several files instead of using a single
   symlink to this file).
 - `keys.lisp` – All my keybindings (I use dvorak layout, so some of them
   may look weird).
-- `xkb.lisp` – Configuration for
-  [clx-xkeyboard extension](https://github.com/filonenko-mikhail/clx-xkeyboard).
+- `xkb.lisp` – Configuration for [clx-xkeyboard
+  extension](https://github.com/filonenko-mikhail/clx-xkeyboard).  I use
+  it to switch keyboard layout and to get/set the state of CapsLock and
+  NumLock keys.
 - `mana.lisp` – Some commands for convenient playing
   [The Mana World](https://themanaworld.org/).
 - `settings.lisp` – Some miscellaneous settings.
