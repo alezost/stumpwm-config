@@ -230,6 +230,7 @@ additional key."
 (al/define-key *top-map* "s-7" "layout-set 0 s-7")
 (al/define-key *top-map* "s-8" "layout-set 1 s-8")
 (al/define-key *top-map* "s-9" "layout-set 2 s-9")
+(al/define-key *top-map* "s-Kanji" "al/toggle-caps-lock")
 (al/define-key *top-map* "H-y" "al/yank-primary")
 (al/define-key *top-map* "F12"                 "exec capture desktop")
 (al/define-key *top-map* "M-F12"               "exec capture image")

@@ -113,4 +113,31 @@ If current window is emacs, send a key sequence KEY to it (if specified)."
 Return nil otherwise."
   (not (zerop (logand mod mods))))
 
+(defun al/set-mod-locks (mod-locks &optional affect-mod-locks)
+  "Set key mod locks according to MOD-LOCKS bits.
+If AFFECT-MOD-LOCKS is nil, use the value of MOD-LOCKS."
+  (xlib:latch-lock-state
+   *display*
+   :mod-locks mod-locks
+   :affect-mod-locks (or affect-mod-locks mod-locks)
+   :lock-group nil
+   :group-lock 0
+   :mod-latches 0
+   :affect-mod-latches 0
+   :latch-group nil
+   :group-latch 0)
+  (xlib:display-finish-output *display*))
+
+(defun al/toggle-mod-lock (mod-lock)
+  "Toggle MOD-LOCK key."
+  (if (al/mod-lock-state mod-lock
+                         (xlib:device-state-locked-mods
+                          (xlib:get-state *display*)))
+      (al/set-mod-locks 0 mod-lock)
+      (al/set-mod-locks mod-lock)))
+
+(defcommand al/toggle-caps-lock () ()
+  "Toggle CapsLock key."
+  (al/toggle-mod-lock +caps-lock+))
+
 ;;; xkb.lisp ends here
