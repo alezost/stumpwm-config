@@ -153,6 +153,15 @@ additional key."
 (al/define-key *top-map* "C-s-XF86AudioLowerVolume"   "resize  -1   0")
 
 
+;;; Controlling WiFi
+
+(al/define-key *top-map* "XF86WLAN"   "exec rfkill unblock wlan")
+(al/define-key *top-map* "s-XF86WLAN" "exec rfkill block wlan")
+;; Pressing XF86RFKill blocks/unblocks wlan automatically (on the kernel
+;; level), but this key is still available for binding.
+(al/define-key *top-map* "XF86RFKill" "echo The state of ^[^B^5*wlan^] has been changed")
+
+
 ;;; Controlling brightness
 
 (al/define-key *top-map* "XF86MonBrightnessUp"      "exec osd-backlight -inc 3")
