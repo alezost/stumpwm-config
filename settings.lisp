@@ -1,6 +1,6 @@
 ;;; settings.lisp --- General settings: variables, hooks, ...
 
-;; Copyright © 2013–2018 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2019 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -63,8 +63,13 @@
 
 ;;; Keyboard layouts
 
-(layout-set 0)
-(layout-enable-per-window)
+;; This is needed because stumpwm opens display before extension
+;; definition.
+(xlib::initialize-extensions *display*)
+(xlib:enable-xkeyboard *display*)
+
+(set-display-layout 0)
+(enable-per-window-layout)
 
 
 ;;; Misc
