@@ -445,7 +445,7 @@ get nil."
   "Move mouse pointer to the top/center of the current screen."
   (let* ((screen (current-screen))
          (width  (screen-width screen)))
-    (warp-pointer screen (/ width 2) 0)))
+    (xlib:warp-pointer (screen-root screen) (/ width 2) 0)))
 
 (defcommand al/yank-primary () ()
   "Insert X primary selection into the current window."
