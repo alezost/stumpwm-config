@@ -61,12 +61,12 @@ Return nil in case of any error."
 (defcommand (al/float-window-next float-group) () ()
   "Focus next floating window."
   (al/float-window-focus-forward
-   (stumpwm::sort-windows (current-group))))
+   (sort-windows (current-group))))
 
 (defcommand (al/float-window-previous float-group) () ()
   "Focus previous floating window."
   (al/float-window-focus-forward
-   (nreverse (stumpwm::sort-windows (current-group)))))
+   (nreverse (sort-windows (current-group)))))
 
 (defcommand (al/move-float-window float-group)
     (x y) ((:number "+ X: ") (:number "+ Y: "))
