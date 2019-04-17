@@ -62,7 +62,6 @@
 (al/load "keys")
 (al/load "utils")
 (al/load "xkb")
-(al/load "mana")
 (al/load "sound")
 (al/load "settings")
 (al/load "visual")

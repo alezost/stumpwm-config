@@ -14,8 +14,6 @@ separate my settings into several files instead of using a single
   extension](https://github.com/filonenko-mikhail/clx-xkeyboard).  I use
   it to switch keyboard layout and to get/set the state of CapsLock and
   NumLock keys.
-- `mana.lisp` – Some commands for convenient playing
-  [The Mana World](https://themanaworld.org/).
 - `settings.lisp` – Some miscellaneous settings.
 - `sound.lisp` – An interface for setting sound volume and showing it in
   OSD.  I use [Guile-Daemon](https://github.com/alezost/guile-daemon) and
