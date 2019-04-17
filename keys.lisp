@@ -172,17 +172,17 @@ additional key."
 
 ;;; Controlling sound
 
-(al/define-key *top-map* "XF86AudioMute"            "sound-set-current-scontrol toggle")
-(al/define-key *top-map* "M-XF86AudioMute"          "sound-next-scontrol")
+(al/define-key *top-map* "XF86AudioMute"            "al/sound-set-current-scontrol toggle")
+(al/define-key *top-map* "M-XF86AudioMute"          "al/sound-next-scontrol")
 (al/define-key *top-map* "C-XF86AudioMute"          "exec tvtime-command TOGGLE_MUTE")
-(al/define-key *top-map* "XF86AudioRaiseVolume"     "sound-set-current-scontrol 3%+")
-(al/define-key *top-map* "XF86AudioLowerVolume"     "sound-set-current-scontrol 3%-")
-(al/define-key *top-map* "C-XF86AudioRaiseVolume"   "sound-set-current-scontrol 1%+")
-(al/define-key *top-map* "C-XF86AudioLowerVolume"   "sound-set-current-scontrol 1%-")
-(al/define-key *top-map* "M-XF86AudioRaiseVolume"   "sound-set-current-scontrol 10%+")
-(al/define-key *top-map* "M-XF86AudioLowerVolume"   "sound-set-current-scontrol 10%-")
-(al/define-key *top-map* "C-M-XF86AudioRaiseVolume" "sound-set-current-scontrol 60%")
-(al/define-key *top-map* "C-M-XF86AudioLowerVolume" "sound-set-current-scontrol 20%")
+(al/define-key *top-map* "XF86AudioRaiseVolume"     "al/sound-set-current-scontrol 3%+")
+(al/define-key *top-map* "XF86AudioLowerVolume"     "al/sound-set-current-scontrol 3%-")
+(al/define-key *top-map* "C-XF86AudioRaiseVolume"   "al/sound-set-current-scontrol 1%+")
+(al/define-key *top-map* "C-XF86AudioLowerVolume"   "al/sound-set-current-scontrol 1%-")
+(al/define-key *top-map* "M-XF86AudioRaiseVolume"   "al/sound-set-current-scontrol 10%+")
+(al/define-key *top-map* "M-XF86AudioLowerVolume"   "al/sound-set-current-scontrol 10%-")
+(al/define-key *top-map* "C-M-XF86AudioRaiseVolume" "al/sound-set-current-scontrol 60%")
+(al/define-key *top-map* "C-M-XF86AudioLowerVolume" "al/sound-set-current-scontrol 20%")
 
 
 ;;; Controlling EMMS
@@ -236,9 +236,9 @@ additional key."
 (al/define-key *top-map* "XF86Calculator"   "al/emacs-eval-show (calc)")
 (al/define-key *top-map* "C-XF86Calculator" "al/emacs-eval-show (calendar)")
 (al/define-key *top-map* "H-ESC" "exec hide-osds")
-(al/define-key *top-map* "s-7" "set-layout 0 s-7")
-(al/define-key *top-map* "s-8" "set-layout 1 s-8")
-(al/define-key *top-map* "s-9" "set-layout 2 s-9")
+(al/define-key *top-map* "s-7" "al/set-layout 0 s-7")
+(al/define-key *top-map* "s-8" "al/set-layout 1 s-8")
+(al/define-key *top-map* "s-9" "al/set-layout 2 s-9")
 (al/define-key *top-map* "s-Kanji" "al/toggle-caps-lock")
 (al/define-key *top-map* "H-y" "al/yank-primary")
 (al/define-key *top-map* "F12"                 "exec capture desktop")

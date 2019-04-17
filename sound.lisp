@@ -33,44 +33,44 @@
 
 (in-package :stumpwm)
 
-(defvar *sound-program* "osd-sound"
+(defvar *al/sound-program* "osd-sound"
   "Name of a program to be called with amixer arguments.")
 
-(defvar *sound-scontrols* '("Master" "Line")
+(defvar *al/sound-scontrols* '("Master" "Line")
   "List of simple controls for managing.")
 
-(defvar *sound-current-scontrol-num* 0
+(defvar *al/sound-current-scontrol-num* 0
   "The number of the currently used simple control.")
 
-(defun sound-get-current-scontrol ()
-  "Return the current simple control from `*sound-scontrols*'."
-  (nth *sound-current-scontrol-num* *sound-scontrols*))
+(defun al/sound-get-current-scontrol ()
+  "Return the current simple control from `*al/sound-scontrols*'."
+  (nth *al/sound-current-scontrol-num* *al/sound-scontrols*))
 
-(defun sound-get-next-scontrol ()
-  "Return next simple control from `*sound-scontrols*'."
-  (setq *sound-current-scontrol-num*
-        (if (>= *sound-current-scontrol-num*
-                (- (length *sound-scontrols*) 1))
+(defun al/sound-get-next-scontrol ()
+  "Return next simple control from `*al/sound-scontrols*'."
+  (setq *al/sound-current-scontrol-num*
+        (if (>= *al/sound-current-scontrol-num*
+                (- (length *al/sound-scontrols*) 1))
             0
-            (+ 1 *sound-current-scontrol-num*)))
-  (sound-get-current-scontrol))
+            (+ 1 *al/sound-current-scontrol-num*)))
+  (al/sound-get-current-scontrol))
 
-(defun sound-call (&rest args)
-  "Execute `*sound-program*' using amixer ARGS."
-  (run-prog *sound-program*
+(defun al/sound-call (&rest args)
+  "Execute `*al/sound-program*' using amixer ARGS."
+  (run-prog *al/sound-program*
             :args args :wait nil :search t))
 
-(defcommand sound-set-current-scontrol (&rest args) (:rest)
+(defcommand al/sound-set-current-scontrol (&rest args) (:rest)
   "Set sound value for the current simple control.
 ARGS are the rest amixer arguments after 'sset CONTROL'."
-  (apply #'sound-call "sset" (sound-get-current-scontrol) args))
+  (apply #'al/sound-call "sset" (al/sound-get-current-scontrol) args))
 
-(defcommand sound-current-scontrol () ()
+(defcommand al/sound-current-scontrol () ()
   "Show sound value of the current simple control."
-  (sound-call "sget" (sound-get-current-scontrol)))
+  (al/sound-call "sget" (al/sound-get-current-scontrol)))
 
-(defcommand sound-next-scontrol () ()
+(defcommand al/sound-next-scontrol () ()
   "Switch simple control and show its sound value."
-  (sound-call "sget" (sound-get-next-scontrol)))
+  (al/sound-call "sget" (al/sound-get-next-scontrol)))
 
 ;;; sound.lisp ends here

@@ -41,56 +41,56 @@
 
 ;;; Keyboard layouts
 
-(defun current-layout (&optional (display *display*))
+(defun al/current-layout (&optional (display *display*))
   "Return current keyboard layout."
   (xlib:device-state-locked-group (xlib:get-state display)))
 
-(defun window-layout (window)
+(defun al/window-layout (window)
   "Return keyboard layout of a specified WINDOW."
   (getf (xlib:window-plist (window-xwin window))
         :keyboard-layout))
 
-(defun set-display-layout (group &optional (display *display*))
+(defun al/set-display-layout (group &optional (display *display*))
   "Set keyboard layout to a specified GROUP."
   (xlib:lock-group display :group group)
   (xlib:display-finish-output display))
 
-(defun update-window-layout (window previous-window)
+(defun al/update-window-layout (window previous-window)
   "Update keyboard layout when switching from PREVIOUS-WINDOW to WINDOW."
-  (let ((current-layout (current-layout)))
+  (let ((current-layout (al/current-layout)))
     (when previous-window
       (setf (getf (xlib:window-plist (window-xwin previous-window))
                   :keyboard-layout)
             current-layout)
       (when window
-        (let ((window-layout (window-layout window)))
+        (let ((window-layout (al/window-layout window)))
           (when (and window-layout
                      (not (equal current-layout window-layout)))
-            (set-display-layout window-layout)))))))
+            (al/set-display-layout window-layout)))))))
 
-(defun update-group-layout (group previous-group)
+(defun al/update-group-layout (group previous-group)
   "Update keyboard layout when switching from PREVIOUS-GROUP to GROUP."
-  (update-window-layout (group-current-window group)
-                        (group-current-window previous-group)))
+  (al/update-window-layout (group-current-window group)
+                           (group-current-window previous-group)))
 
-(defcommand enable-per-window-layout () ()
+(defcommand al/enable-per-window-layout () ()
   "Enable changing keyboard layouts per window."
-  (add-hook *focus-window-hook* 'update-window-layout)
-  (add-hook *focus-group-hook*  'update-group-layout))
+  (add-hook *focus-window-hook* 'al/update-window-layout)
+  (add-hook *focus-group-hook*  'al/update-group-layout))
 
-(defcommand disable-per-window-layout () ()
+(defcommand al/disable-per-window-layout () ()
   "Disable changing keyboard layouts per window."
-  (remove-hook *focus-window-hook* 'update-window-layout)
-  (remove-hook *focus-group-hook*  'update-group-layout))
+  (remove-hook *focus-window-hook* 'al/update-window-layout)
+  (remove-hook *focus-group-hook*  'al/update-group-layout))
 
-(defcommand set-layout (group &optional key)
+(defcommand al/set-layout (group &optional key)
     ((:number "Layout number: ") :key)
   "Set keyboard layout to a specified xkb GROUP.
 If current window is emacs, send a key sequence KEY to it (if specified)."
   (when (and key (al/emacs-window-p))
     (setq group 0)
     (al/send-key key))
-  (set-display-layout group))
+  (al/set-display-layout group))
 
 
 ;;; Mod locks (CapsLock, NumLock, etc.)

@@ -144,15 +144,15 @@
 
 ;;; Message after a part of key sequence
 
-;; Idea from <https://github.com/stumpwm/stumpwm/wiki/FAQ>.
-(defun key-seq-msg (key key-seq cmd)
+;; Idea from <https://github.com/stumpwm/stumpwm/wiki/FAQ#how-do-i-make-keypresses-show-up-in-a-message-window-as-i-press-them>.
+(defun al/key-seq-msg (_key key-seq cmd)
   "Show a message with current incomplete key sequence."
-  (declare (ignore key))
+  (declare (ignore _key))
   (or (eq *top-map* *resize-map*)
       (stringp cmd)
       (let ((*message-window-gravity* :bottom-left))
         (message "~A" (print-key-seq (reverse key-seq))))))
 
-(add-hook *key-press-hook* 'key-seq-msg)
+(add-hook *key-press-hook* 'al/key-seq-msg)
 
 ;;; visual.lisp ends here

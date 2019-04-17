@@ -68,8 +68,8 @@
 (xlib::initialize-extensions *display*)
 (xlib:enable-xkeyboard *display*)
 
-(set-display-layout 0)
-(enable-per-window-layout)
+(al/set-display-layout 0)
+(al/enable-per-window-layout)
 
 
 ;;; Misc
