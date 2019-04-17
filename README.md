@@ -26,6 +26,7 @@ separate my settings into several files instead of using a single
   there have `al/` prefix).
 - `visual.lisp` – Visual settings: colors, mode-line and other visual
   appearance.
+- `unused` directory contains some old and unused code.
 
 ## Feedback
 
