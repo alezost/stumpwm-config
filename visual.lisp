@@ -111,12 +111,7 @@
 
 ;;; Visual appearance and the mode-line
 
-(set-normal-gravity :bottom)
-
 (setf
- *message-window-gravity* :bottom-right
- *input-window-gravity*   :center
-
  *window-info-format*
  (format nil "^>^B^5*%c ^b^6*%w^7*x^6*%h^7*~%%t")
 
@@ -132,27 +127,11 @@
    al/mode-line-net
    al/mode-line-battery
    "^>"
-   al/mode-line-locks)
-
- *mouse-focus-policy* :click)
+   al/mode-line-locks))
 
 (al/mode-line-on)
 
 ;; (set-font "-*-dejavu sans mono-medium-r-normal-*-*-115-*-*-*-*-*-1")
 (set-font "9x15bold")
-
-
-;;; Message after a part of key sequence
-
-;; Idea from <https://github.com/stumpwm/stumpwm/wiki/FAQ#how-do-i-make-keypresses-show-up-in-a-message-window-as-i-press-them>.
-(defun al/key-seq-msg (_key key-seq cmd)
-  "Show a message with current incomplete key sequence."
-  (declare (ignore _key))
-  (or (eq *top-map* *resize-map*)
-      (stringp cmd)
-      (let ((*message-window-gravity* :bottom-left))
-        (message "~A" (print-key-seq (reverse key-seq))))))
-
-(add-hook *key-press-hook* 'al/key-seq-msg)
 
 ;;; visual.lisp ends here
