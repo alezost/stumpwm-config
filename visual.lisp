@@ -97,6 +97,10 @@
             (bool->color (al/mod-lock-state +caps-lock+ mods))
             (bool->color (al/mod-lock-state +num-lock+ mods)))))
 
+(defun al/mode-line-layout ()
+  (format nil "^[^7*~A^]"
+          (al/layout-string (al/current-layout))))
+
 
 ;;; Visual appearance and mode-line settings
 
@@ -118,7 +122,8 @@
       '(" | " (:eval (al/mode-line-battery)))
       "")
    "^>"
-   (:eval (al/mode-line-locks))))
+   (:eval (al/mode-line-layout))
+   " | " (:eval (al/mode-line-locks))))
 
 (al/mode-line-on)
 
