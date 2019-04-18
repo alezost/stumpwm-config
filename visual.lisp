@@ -62,21 +62,18 @@
  *grab-pointer-background* (hex-to-xlib-color "#2c53ca"))
 
 
-;;; mode-line-net
+;;; mode-line net
 
 (al/load "mode-line-net")
 
 (defvar al/net-refresh-time 6)
-
-(defvar al/mode-line-net
-  '(" | " (:eval (al/mode-line-net))))
 
 (al/defun-with-delay
  al/net-refresh-time al/mode-line-net ()
  (al/stumpwm-net:net-mode-line-string))
 
 
-;;; mode-line-battery
+;;; mode-line battery
 
 (al/load "mode-line-battery")
 
@@ -84,20 +81,12 @@
 
 (defvar al/battery-refresh-time 60)
 
-(defvar al/mode-line-battery
-  (if al/battery
-      '(" | " (:eval (al/mode-line-battery)))
-      ""))
-
 (al/defun-with-delay
  al/battery-refresh-time al/mode-line-battery ()
  (al/stumpwm-battery:battery-mode-line-string al/battery))
 
 
-;;; mode-line-locks
-
-(defvar al/mode-line-locks
-  '(:eval (al/mode-line-locks)))
+;;; mode-line keyboard
 
 (defun al/mode-line-locks ()
   (defun bool->color (bool)
@@ -109,7 +98,7 @@
             (bool->color (al/mod-lock-state +num-lock+ mods)))))
 
 
-;;; Visual appearance and the mode-line
+;;; Visual appearance and mode-line settings
 
 (setf
  *window-info-format*
@@ -121,13 +110,15 @@
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 3
  *screen-mode-line-format*
- '("^[^5*%d^]"                  ; time
+ `("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
    " | ^[^7*%c %t^]"            ; cpu
-   al/mode-line-net
-   al/mode-line-battery
+   " | " (:eval (al/mode-line-net))
+   ,(if al/battery
+      '(" | " (:eval (al/mode-line-battery)))
+      "")
    "^>"
-   al/mode-line-locks))
+   (:eval (al/mode-line-locks))))
 
 (al/mode-line-on)
 
