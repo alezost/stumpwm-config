@@ -62,6 +62,17 @@
  *grab-pointer-background* (hex-to-xlib-color "#2c53ca"))
 
 
+;;; mode-line cpu
+
+(al/load "mode-line-cpu")
+
+(defvar al/cpu-refresh-time 3)
+
+(al/defun-with-delay
+ al/cpu-refresh-time al/mode-line-cpu ()
+ (al/stumpwm-cpu:cpu-mode-line-string))
+
+
 ;;; mode-line net
 
 (al/load "mode-line-net")
@@ -116,7 +127,8 @@
  *screen-mode-line-format*
  `("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
-   " | ^[^7*%c %t^]"            ; cpu
+   " | " (:eval (al/mode-line-cpu))
+   " | ^[^7*%t^]"               ; cpu temperature
    " | " (:eval (al/mode-line-net))
    ,(if al/battery
       '(" | " (:eval (al/mode-line-battery)))
