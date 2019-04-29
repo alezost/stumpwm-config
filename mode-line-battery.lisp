@@ -40,7 +40,7 @@
   "Return a line (string) from 'PATH/NAME' sysfs file.
 If TO-NUMBER is non-nil, convert this string into a number.
 Return nil in case of any error."
-  (stumpwm::al/read-sys-file
+  (al/read-sys-file
    (merge-pathnames (make-pathname :name name)
                     path)
    to-number))

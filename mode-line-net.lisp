@@ -62,7 +62,7 @@
 If DEVICE is nil, use `*net-device*'.
 If TO-NUMBER is non-nil, convert this string into a number.
 Return nil in case of any error."
-  (stumpwm::al/read-sys-file
+  (al/read-sys-file
    (concat (net-device-file-name device) "/" file-name)
    to-number))
 
@@ -85,7 +85,7 @@ If the interface is blocked, return `:hard' or `:soft'.
 Otherwise, return nil."
   (let ((dir (net-rfkill-dir device)))
     (defun blocked? (type)
-      (not (zerop (stumpwm::al/read-sys-file
+      (not (zerop (al/read-sys-file
                    (merge-pathnames dir type) t))))
     (and dir
          (or (and (blocked? "hard") :hard)
