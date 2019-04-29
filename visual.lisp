@@ -60,6 +60,15 @@
  *grab-pointer-background* (hex-to-xlib-color "#2c53ca"))
 
 
+;;; mode-line auxiliary code
+
+(defvar al/ml-separator " | ")
+
+(defun al/ml-separate (str)
+  "Concatenate `al/ml-separator' and STR."
+  (concat al/ml-separator str))
+
+
 ;;; mode-line cpu
 
 (al/load "mode-line-cpu")
@@ -68,7 +77,7 @@
 
 (al/defun-with-delay
  al/cpu-refresh-time al/mode-line-cpu ()
- (al/stumpwm-cpu:cpu-mode-line-string))
+ (al/ml-separate (al/stumpwm-cpu:cpu-mode-line-string)))
 
 
 ;;; mode-line thermal
@@ -82,11 +91,12 @@
 
 (al/defun-with-delay
  al/thermal-zones-refresh-time al/mode-line-thermal-zones ()
- (al/stumpwm-thermal:thermal-zones-mode-line-string al/thermal-zone))
+ (al/ml-separate
+  (al/stumpwm-thermal:thermal-zones-mode-line-string al/thermal-zone)))
 
 (defun al/mode-line-thermal-zones-maybe ()
   (if al/thermal-zone
-      (concat " | " (al/mode-line-thermal-zones))
+      (al/mode-line-thermal-zones)
       ""))
 
 
@@ -98,7 +108,7 @@
 
 (al/defun-with-delay
  al/net-refresh-time al/mode-line-net ()
- (al/stumpwm-net:net-mode-line-string))
+ (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
 
 
 ;;; mode-line battery
@@ -111,11 +121,12 @@
 
 (al/defun-with-delay
  al/battery-refresh-time al/mode-line-battery ()
- (al/stumpwm-battery:battery-mode-line-string al/battery))
+ (al/ml-separate
+  (al/stumpwm-battery:battery-mode-line-string al/battery)))
 
 (defun al/mode-line-battery-maybe ()
   (if al/battery
-      (concat " | " (al/mode-line-battery))
+      (al/mode-line-battery)
       ""))
 
 
@@ -126,13 +137,15 @@
     (if bool "^B^2" ""))
   (let ((mods (xlib:device-state-locked-mods
                (xlib:get-state *display*))))
-    (format nil "^[~ACaps^] ^[~ANum^]"
-            (bool->color (al/mod-lock-state +caps-lock+ mods))
-            (bool->color (al/mod-lock-state +num-lock+ mods)))))
+    (al/ml-separate
+     (format nil "^[~ACaps^] ^[~ANum^]"
+             (bool->color (al/mod-lock-state +caps-lock+ mods))
+             (bool->color (al/mod-lock-state +num-lock+ mods))))))
 
 (defun al/mode-line-layout ()
-  (format nil "^[^7*~A^]"
-          (al/layout-string (al/current-layout))))
+  (al/ml-separate
+   (format nil "^[^7*~A^]"
+           (al/layout-string (al/current-layout)))))
 
 
 ;;; Visual appearance and mode-line settings
@@ -149,13 +162,13 @@
  *screen-mode-line-format*
  '("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
-   " | " (:eval (al/mode-line-cpu))
+   (:eval (al/mode-line-cpu))
    (:eval (al/mode-line-thermal-zones-maybe))
-   " | " (:eval (al/mode-line-net))
+   (:eval (al/mode-line-net))
    (:eval (al/mode-line-battery-maybe))
    "^>"
    (:eval (al/mode-line-layout))
-   " | " (:eval (al/mode-line-locks))))
+   (:eval (al/mode-line-locks))))
 
 (al/mode-line-on)
 
