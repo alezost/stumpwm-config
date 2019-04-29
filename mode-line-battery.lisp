@@ -46,7 +46,7 @@ Return nil in case of any error."
    to-number))
 
 (defun all-batteries ()
-  "Return a list of file paths of all batteries."
+  "Return a list of files of all batteries."
   (remove nil
           (mapcar (lambda (path)
                     (handler-case
@@ -54,7 +54,7 @@ Return nil in case of any error."
                                        (power-supply-parameter path "type"))
                           path)
                       (file-error () nil)))
-                  (list-directory "/sys/class/power_supply/"))))
+                  (list-directory #P"/sys/class/power_supply/"))))
 
 (defun battery-time-left (battery &optional (type :charging))
   "Return estimated time left for BATTERY to become empty.
@@ -113,7 +113,7 @@ TIME is a floating number of hours."
               (:unknown (format nil "(no info)"))
               (:charged (format nil "~D%%" percent))
               ((:charging :discharging)
-               (format nil "~A~D%%~A^n~A"
+               (format nil "^[~A~D^]%%~A^n~A"
                        (bar-zone-color percent 90 60 30 t)
                        percent
                        (if (eq state :charging) "^B^2+" "^B^1-")
