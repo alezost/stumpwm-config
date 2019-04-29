@@ -17,8 +17,6 @@
 
 ;;; Code:
 
-(load-module "cpu")
-
 (in-package :stumpwm)
 
 
@@ -71,6 +69,25 @@
 (al/defun-with-delay
  al/cpu-refresh-time al/mode-line-cpu ()
  (al/stumpwm-cpu:cpu-mode-line-string))
+
+
+;;; mode-line thermal
+
+(al/load "mode-line-thermal")
+
+(defvar al/thermal-zone
+  (car (al/stumpwm-thermal:all-thermal-zones)))
+
+(defvar al/thermal-zones-refresh-time 6)
+
+(al/defun-with-delay
+ al/thermal-zones-refresh-time al/mode-line-thermal-zones ()
+ (al/stumpwm-thermal:thermal-zones-mode-line-string al/thermal-zone))
+
+(defun al/mode-line-thermal-zones-maybe ()
+  (if al/thermal-zone
+      (concat " | " (al/mode-line-thermal-zones))
+      ""))
 
 
 ;;; mode-line net
@@ -128,7 +145,7 @@
  `("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
    " | " (:eval (al/mode-line-cpu))
-   " | ^[^7*%t^]"               ; cpu temperature
+   (:eval (al/mode-line-thermal-zones-maybe))
    " | " (:eval (al/mode-line-net))
    ,(if al/battery
       '(" | " (:eval (al/mode-line-battery)))

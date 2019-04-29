@@ -20,7 +20,7 @@
 (in-package :stumpwm)
 
 (defun al/executable-exists? (name)
-  "Return non-nil, if NAME executable exists in PATH."
+  "Return t, if NAME executable exists in PATH."
   (zerop
    (nth-value 2
               (uiop:run-program (concat "command -v " name)
@@ -38,6 +38,13 @@ Return nil in case of any error."
            (if to-number
                (parse-integer param :junk-allowed t)
                param)))))
+
+(defun al/file-readable? (file)
+  "Return t, if FILE is available for reading."
+  (handler-case
+      (with-open-file (f file)
+        (and (read-line f) t))
+    (stream-error () nil)))
 
 
 ;;; Floating windows

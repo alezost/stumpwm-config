@@ -56,9 +56,13 @@
 
 (redirect-all-output (merge-pathnames "log" al/init-directory))
 
-(set-module-dir
- (pathname-as-directory (concat (getenv "HOME")
-                                "/src/stumpwm-contrib")))
+;; Currently I don't use "stumpwm-contrib" modules.  I use my analogs
+;; instead ("mode-line-*.lisp" files).
+
+;; (set-module-dir
+;;  (pathname-as-directory (concat (getenv "HOME")
+;;                                 "/src/stumpwm-contrib")))
+
 (al/load "keys")
 (al/load "utils")
 (al/load "xkb")

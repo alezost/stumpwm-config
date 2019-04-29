@@ -35,6 +35,11 @@ All symbols (commands, functions, macros, variables) in my config have
   appearance.  This file loads the following `mode-line-` files that
   provide additional features for my stumpwm mode line.
 
+- `mode-line-cpu.lisp` and `mode-line-thermal.lisp` – modules to get CPU
+  usage and temperature.  I use these files instead of
+  [cpu](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/cpu)
+  contributed stumpwm module.
+
 - `mode-line-battery.lisp` – module to get battery info.  I use it instead of
   [battery-portable](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/battery-portable)
   contributed stumpwm module.
