@@ -113,6 +113,11 @@
  al/battery-refresh-time al/mode-line-battery ()
  (al/stumpwm-battery:battery-mode-line-string al/battery))
 
+(defun al/mode-line-battery-maybe ()
+  (if al/battery
+      (concat " | " (al/mode-line-battery))
+      ""))
+
 
 ;;; mode-line keyboard
 
@@ -142,14 +147,12 @@
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 3
  *screen-mode-line-format*
- `("^[^5*%d^]"                  ; time
+ '("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
    " | " (:eval (al/mode-line-cpu))
    (:eval (al/mode-line-thermal-zones-maybe))
    " | " (:eval (al/mode-line-net))
-   ,(if al/battery
-      '(" | " (:eval (al/mode-line-battery)))
-      "")
+   (:eval (al/mode-line-battery-maybe))
    "^>"
    (:eval (al/mode-line-layout))
    " | " (:eval (al/mode-line-locks))))
