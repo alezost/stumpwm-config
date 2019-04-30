@@ -76,7 +76,7 @@
 (defvar al/cpu-refresh-time 3)
 
 (al/defun-with-delay
- al/cpu-refresh-time al/mode-line-cpu ()
+ al/cpu-refresh-time al/ml-cpu ()
  (al/ml-separate (al/stumpwm-cpu:cpu-mode-line-string)))
 
 
@@ -90,13 +90,13 @@
 (defvar al/thermal-zones-refresh-time 6)
 
 (al/defun-with-delay
- al/thermal-zones-refresh-time al/mode-line-thermal-zones ()
+ al/thermal-zones-refresh-time al/ml-thermal-zones ()
  (al/ml-separate
   (al/stumpwm-thermal:thermal-zones-mode-line-string al/thermal-zone)))
 
-(defun al/mode-line-thermal-zones-maybe ()
+(defun al/ml-thermal-zones-maybe ()
   (if al/thermal-zone
-      (al/mode-line-thermal-zones)
+      (al/ml-thermal-zones)
       ""))
 
 
@@ -107,7 +107,7 @@
 (defvar al/net-refresh-time 6)
 
 (al/defun-with-delay
- al/net-refresh-time al/mode-line-net ()
+ al/net-refresh-time al/ml-net ()
  (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
 
 
@@ -120,19 +120,19 @@
 (defvar al/battery-refresh-time 60)
 
 (al/defun-with-delay
- al/battery-refresh-time al/mode-line-battery ()
+ al/battery-refresh-time al/ml-battery ()
  (al/ml-separate
   (al/stumpwm-battery:battery-mode-line-string al/battery)))
 
-(defun al/mode-line-battery-maybe ()
+(defun al/ml-battery-maybe ()
   (if al/battery
-      (al/mode-line-battery)
+      (al/ml-battery)
       ""))
 
 
 ;;; mode-line keyboard
 
-(defun al/mode-line-locks ()
+(defun al/ml-locks ()
   (defun bool->color (bool)
     (if bool "^B^2" ""))
   (let ((mods (xlib:device-state-locked-mods
@@ -142,7 +142,7 @@
              (bool->color (al/mod-lock-state +caps-lock+ mods))
              (bool->color (al/mod-lock-state +num-lock+ mods))))))
 
-(defun al/mode-line-layout ()
+(defun al/ml-layout ()
   (al/ml-separate
    (format nil "^[^7*~A^]"
            (al/layout-string (al/current-layout)))))
@@ -162,13 +162,13 @@
  *screen-mode-line-format*
  '("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
-   (:eval (al/mode-line-cpu))
-   (:eval (al/mode-line-thermal-zones-maybe))
-   (:eval (al/mode-line-net))
-   (:eval (al/mode-line-battery-maybe))
+   (:eval (al/ml-cpu))
+   (:eval (al/ml-thermal-zones-maybe))
+   (:eval (al/ml-net))
+   (:eval (al/ml-battery-maybe))
    "^>"
-   (:eval (al/mode-line-layout))
-   (:eval (al/mode-line-locks))))
+   (:eval (al/ml-layout))
+   (:eval (al/ml-locks))))
 
 (al/mode-line-on)
 
