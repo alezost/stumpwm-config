@@ -19,7 +19,7 @@
 
 ;; This file uses xkeyboard extension
 ;; <https://github.com/filonenko-mikhail/clx-xkeyboard> (I installed it
-;; with quicklisp and compiled stumpwm with it).  A big part of the
+;; with quicklisp to make it available in my config).  A big part of the
 ;; following code came from the stumpwm example of that extension.
 
 ;; This file provides some functions and commands for working with

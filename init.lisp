@@ -18,7 +18,6 @@
 ;;; Commentary:
 
 ;; This file should be symlinked by "~/.stumpwmrc".
-;; I compile stumpwm with swank, so i don't need to load it.
 
 ;;; Code:
 
