@@ -81,14 +81,19 @@
 
 ;;; Message after a part of key sequence
 
-;; Idea from <https://github.com/stumpwm/stumpwm/wiki/FAQ#how-do-i-make-keypresses-show-up-in-a-message-window-as-i-press-them>.
+;; Idea and code came from `which-key-mode' command and
+;; <https://github.com/stumpwm/stumpwm/wiki/FAQ#how-do-i-make-keypresses-show-up-in-a-message-window-as-i-press-them>.
 (defun al/key-seq-msg (_key key-seq cmd)
   "Show a message with current incomplete key sequence."
   (declare (ignore _key))
-  (or (eq *top-map* *resize-map*)
-      (stringp cmd)
-      (let ((*message-window-gravity* :bottom-left))
-        (message "~A" (print-key-seq (reverse key-seq))))))
+  (unless (or (stringp cmd)
+              (eq *top-map* *resize-map*))
+    (let* ((oriented-key-seq (reverse key-seq))
+           (maps (get-kmaps-at-key-seq (dereference-kmaps (top-maps))
+                                       oriented-key-seq)))
+      (when maps
+        (let ((*message-window-gravity* :bottom-left))
+          (message "~A" (print-key-seq oriented-key-seq)))))))
 
 (add-hook *key-press-hook* 'al/key-seq-msg)
 
