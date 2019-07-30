@@ -172,7 +172,8 @@
 
 (al/mode-line-on)
 
-;; (set-font "-*-dejavu sans mono-medium-r-normal-*-*-115-*-*-*-*-*-1")
-(set-font "9x15bold")
+(if (al/load-module "ttf-fonts")
+    (al/load "ttf")
+    (set-font "9x15bold"))
 
 ;;; visual.lisp ends here
