@@ -53,14 +53,21 @@
         (load file)
         (format *error-output* "File '~a' doesn't exist." file))))
 
+(defun al/load-module (name)
+  "Load contributed stumpwm module NAME.
+Return nil, if the module does not exist.
+This function is similar to `load-module' command, except it returns nil
+instead of any error."
+  (let ((module (find-module (string-downcase name))))
+    (and module
+         (progn (asdf:operate 'asdf:load-op module)
+                t))))
+
 (redirect-all-output (merge-pathnames "log" al/init-directory))
 
-;; Currently I don't use "stumpwm-contrib" modules.  I use my analogs
-;; instead ("mode-line-*.lisp" files).
-
-;; (set-module-dir
-;;  (pathname-as-directory (concat (getenv "HOME")
-;;                                 "/src/stumpwm-contrib")))
+(set-module-dir
+ (pathname-as-directory (concat (getenv "HOME")
+                                "/src/stumpwm-contrib")))
 
 (al/load "keys")
 (al/load "utils")
