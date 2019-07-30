@@ -108,7 +108,7 @@
 
 (setf *deny-raise-request*
       '((:class "Conkeror")
-        (:class "Firefox")
+        (:class "firefox")
         (:class "IceCat")
         (:class "FLTK")         ; xcas
         (:class "libreoffice-writer")))
