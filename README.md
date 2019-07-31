@@ -48,6 +48,10 @@ All symbols (commands, functions, macros, variables) in my config have
   [net](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/net)
   contributed stumpwm module.
 
+- `ttf.lisp` – Setting TTF font using
+  [ttf-fonts](https://github.com/stumpwm/stumpwm-contrib/blob/master/util/ttf-fonts)
+  contributed stumpwm module.
+
 - `unused` directory contains some old and unused code.
 
 ## Feedback
