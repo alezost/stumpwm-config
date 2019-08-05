@@ -63,6 +63,13 @@ If it fails, and TRY is non-nil, display an error message."
               (xft:cache-fonts)
               (al/set-preferred-font 1))))))
 
+(defvar al/guix-fonts-dir
+  (merge-pathnames
+   (make-pathname :directory '(:relative "fonts/fonts/share/fonts"))
+   (pathname-as-directory (getenv "MY_GUIX_PROFILES_DIR"))))
+
+(push (namestring al/guix-fonts-dir) xft:*font-dirs*)
+
 (al/set-preferred-font)
 
 ;;; ttf.lisp ends here
