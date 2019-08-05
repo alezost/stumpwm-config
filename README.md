@@ -8,6 +8,14 @@ All symbols (commands, functions, macros, variables) in my config have
 `al/` prefix to make sure they will not conflict with symbols from
 `:stumpwm` module.
 
+My mode line (customized with `*screen-mode-line-format*` variable):
+
+![mode-line](screenshots/mode-line.png)
+
+My time message (`time` command customized with
+`*time-format-string-default*` variable):
+![time](screenshots/time.png)
+
 ## Files
 
 - `init.lisp` – The main file for loading the other ones (`~/.stumpwmrc` is a
