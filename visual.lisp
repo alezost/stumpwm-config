@@ -178,14 +178,23 @@
 ;; `time-hour' uses "~2,D" format which leads to an extra space if the
 ;; current hour is a one-digit integer.  I don't like this extra space
 ;; (i.e., I prefer "9:40" instead of " 9:40").
+;; The same for `time-day-of-month'.
 
 (defun al/time-hour ()
   (format nil "~D" (getf (time-plist) :hour)))
 
-(setf (cadr (find-if (lambda (elt)
-                       (eq #\k (car elt)))
-                     *time-format-string-alist*))
-      'al/time-hour)
+(defun al/time-day-of-month ()
+  (format nil "~D" (getf (time-plist) :dom)))
+
+(defun al/time-set-format-alist (char symbol)
+  "Replace function name for CHAR by SYMBOL in `*time-format-string-alist*'."
+  (setf (cadr (find-if (lambda (elt)
+                         (eq char (car elt)))
+                       *time-format-string-alist*))
+        symbol))
+
+(al/time-set-format-alist #\k 'al/time-hour)
+(al/time-set-format-alist #\d 'al/time-day-of-month)
 
 
 ;;; Fonts
