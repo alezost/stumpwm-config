@@ -1,6 +1,6 @@
 ;;; visual.lisp --- Visual appearance: colors, fonts, mode line, ...
 
-;; Copyright © 2013–2016, 2018–2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2018–2020 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -171,6 +171,24 @@
    (:eval (al/ml-locks))))
 
 (al/mode-line-on)
+
+
+;;; Time format
+
+;; `time-hour' uses "~2,D" format which leads to an extra space if the
+;; current hour is a one-digit integer.  I don't like this extra space
+;; (i.e., I prefer "9:40" instead of " 9:40").
+
+(defun al/time-hour ()
+  (format nil "~D" (getf (time-plist) :hour)))
+
+(setf (cadr (find-if (lambda (elt)
+                       (eq #\k (car elt)))
+                     *time-format-string-alist*))
+      'al/time-hour)
+
+
+;;; Fonts
 
 (if (al/load-module "ttf-fonts")
     (al/load "ttf")
