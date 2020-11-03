@@ -155,7 +155,7 @@
  (format nil "^>^B^5*%c ^b^6*%w^7*x^6*%h^7*~%%t")
 
  *time-format-string-default*
- (format nil "^5*%H:%M:%S~%^2*%A~%^7*%d %B")
+ (format nil "^5*%k:%M:%S~%^2*%A~%^7*%d %B~%^7*%d.%m.%Y")
 
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 3
