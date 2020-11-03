@@ -69,6 +69,16 @@
   (concat al/ml-separator str))
 
 
+;;; mode-line date
+
+(defvar al/date-refresh-time 120)
+
+(al/defun-with-delay
+ al/date-refresh-time al/ml-date ()
+ (format nil "^[^7*~A^]"
+           (time-format "%a %d %b")))
+
+
 ;;; mode-line cpu
 
 (al/load "mode-line-cpu")
@@ -160,7 +170,8 @@
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 3
  *screen-mode-line-format*
- '("^[^5*%d^]"                  ; time
+ '((:eval (al/ml-date))
+   " ^[^5*%d^]"                 ; time
    " ^[^2*%n^]"                 ; group name
    (:eval (al/ml-cpu))
    (:eval (al/ml-thermal-zones-maybe))
