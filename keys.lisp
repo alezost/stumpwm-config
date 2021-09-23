@@ -332,7 +332,6 @@ additional key."
 (al/define-key *al/exec-map* "t" "al/xterm")
 (al/define-key *al/exec-map* "T" "exec xterm")
 (al/define-key *al/exec-map* "b" "al/browser")
-(al/define-key *al/exec-map* "M" "al/emacs-eval (mana-start)")
 
 
 ;;; Mode line
