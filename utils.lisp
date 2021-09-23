@@ -1,6 +1,6 @@
 ;;; utils.lisp --- Additional variables, functions and commands
 
-;; Copyright © 2013–2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -146,6 +146,20 @@ Return the window or nil if there is no such."
             (focus-all win)
             (message "No ~a window." class))
         win)))
+
+(defun al/raise-window (props &optional (all-groups *run-or-raise-all-groups*)
+                                        (all-screens *run-or-raise-all-screens*))
+  "Switch to a window matching PROPS.
+This is similar to `run-or-raise' except it shows a message instead of
+running a shell command if there is no suitable window."
+  (let* ((matches (find-matching-windows props all-groups all-screens))
+         (other-matches (member (current-window) matches))
+         (win (if (> (length other-matches) 1)
+                  (second other-matches)
+                  (first matches))))
+    (if win
+        (focus-all win)
+        (message "No window matching ~a" props))))
 
 (defcommand al/gmove-to-other-group () ()
   "Move the current window to the other group and go to that group."
@@ -404,6 +418,10 @@ program.")
   "Start xterm unless it is already running, in which case focus it."
   (run-or-raise (al/herd-command "xterm")
                 '(:class "XTerm")))
+
+(defcommand al/mpv () ()
+  "Switch to the next mpv window."
+  (al/raise-window '(:class "mpv")))
 
 (defcommand al/toggle-unclutter () ()
   "Start/stop 'unclutter' on the current display."

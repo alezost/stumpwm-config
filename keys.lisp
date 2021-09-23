@@ -1,6 +1,6 @@
 ;;; keys.lisp --- Key bindings (Dvorak layout)
 
-;; Copyright © 2013–2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -79,6 +79,7 @@ additional key."
 (al/define-key *top-map* "s-H-o" "al/toggle-ignore-emacs")
 (al/define-key *top-map* "s-n"   "gother")
 (al/define-key *top-map* "M-s-n" "al/gmove-to-other-group")
+(al/define-key *top-map* "s-;"   "al/mpv")
 
 (al/define-key *tile-group-root-map* "s-f" "fullscreen")
 (al/define-key *tile-group-top-map* "s-z" "hsplit")
