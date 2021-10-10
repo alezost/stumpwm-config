@@ -1,6 +1,6 @@
 ;;; visual.lisp --- Visual appearance: colors, fonts, mode line, ...
 
-;; Copyright © 2013–2016, 2018–2020 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2018–2021 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -119,6 +119,12 @@
 (al/defun-with-delay
  al/net-refresh-time al/ml-net ()
  (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
+
+(defcommand al/mode-line-next-net-device () ()
+  "Set next net device in the mode-line."
+  (setf al/stumpwm-net:*net-device*
+        (al/next-list-element al/stumpwm-net:*net-devices*
+                              al/stumpwm-net:*net-device*)))
 
 
 ;;; mode-line battery

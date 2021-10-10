@@ -471,6 +471,18 @@ get nil."
        if (< rnd prob)
        return (car elm))))
 
+(defun al/next-list-element (list element)
+  ;; XXX Is there a ready-to-use function for this?
+  "Return an element from LIST which follows ELEMENT.
+If ELEMENT is the last element of the LIST, return the first one.
+Return nil, if ELEMENT is not in the LIST."
+  (let ((rest list))
+    (loop
+       until (equal (car rest) element)
+       do (setq rest (cdr rest))
+       if (null rest) return nil
+       finally (return (or (cadr rest) (car list))))))
+
 (defcommand al/banish-pointer () ()
   "Move mouse pointer to the top/center of the current screen."
   (let* ((screen (current-screen))

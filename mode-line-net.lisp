@@ -1,7 +1,7 @@
 ;;; mode-line-net.lisp --- Network info for the mode line
 
 ;; Copyright © 2009 Vitaly Mayatskikh
-;; Copyright © 2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2019–2021 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -33,7 +33,9 @@
 (defpackage #:al/stumpwm-net
   (:use :common-lisp
         :stumpwm)
-  (:export #:net-mode-line-string))
+  (:export #:*net-devices*
+           #:*net-device*
+           #:net-mode-line-string))
 
 (in-package #:al/stumpwm-net)
 
