@@ -40,10 +40,12 @@
 (in-package #:al/stumpwm-net)
 
 (defvar *net-devices*
-  (mapcar (lambda (dir)
-            ;; Is there a better way to do this?
-            (first (last (pathname-directory dir))))
-          (uiop:subdirectories "/sys/class/net/"))
+  (delete "lo"
+          (mapcar (lambda (dir)
+                    ;; Is there a better way to do this?
+                    (first (last (pathname-directory dir))))
+                  (uiop:subdirectories "/sys/class/net/"))
+          :test #'equal)
   "List of available network devices (interfaces).")
 
 (defvar *net-device*
