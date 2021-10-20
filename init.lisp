@@ -1,6 +1,6 @@
 ;;; init.lisp --- Vital settings and loading other files
 
-;; Copyright © 2013–2016, 2018–2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -18,6 +18,15 @@
 ;;; Commentary:
 
 ;; This file should be symlinked by "~/.stumpwmrc".
+;;
+;; My config depends on `swank' and `xkeyboard' CL packages (installed
+;; with Quicklisp).  I compile stumpwm image with them, so I do not load
+;; these packages here.  To compile stumpwm, I add the following lines:
+;;
+;;   (require 'swank)
+;;   (require 'xkeyboard)
+;;
+;; to "load-stumpwm.lisp.in" file (then, "./configure" and "make" will do it).
 
 ;;; Code:
 
