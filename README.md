@@ -56,10 +56,6 @@ My time message (`time` command customized with
   [net](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/net)
   contributed stumpwm module.
 
-- `ttf.lisp` – Setting TTF font using
-  [ttf-fonts](https://github.com/stumpwm/stumpwm-contrib/blob/master/util/ttf-fonts)
-  contributed stumpwm module.
-
 - `unused` directory contains some old and unused code.
 
 ## Feedback

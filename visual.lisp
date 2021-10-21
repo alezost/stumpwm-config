@@ -216,8 +216,7 @@
 
 ;;; Fonts
 
-(if (al/load-module "ttf-fonts")
-    (al/load "ttf")
+(or (set-font "-*-terminus-bold-r-normal-*-22-*-*-*-*-*-*-*")
     (set-font "9x15bold"))
 
 ;;; visual.lisp ends here
