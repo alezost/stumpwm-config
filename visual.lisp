@@ -44,7 +44,8 @@
 
 (al/set-color screen-fg-color (hex-to-xlib-color "#e5e8ef"))
 (al/set-color screen-bg-color "gray15")
-(al/set-color screen-focus-color "DeepSkyBlue")
+(al/set-color screen-focus-color "black")
+(al/set-color screen-unfocus-color "gray20")
 (al/set-color screen-border-color "ForestGreen")
 (al/set-color screen-float-focus-color "DeepSkyBlue")
 (al/set-color screen-float-unfocus-color "gray15")
