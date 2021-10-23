@@ -1,6 +1,6 @@
 ;;; settings.lisp --- General settings: variables, hooks, ...
 
-;; Copyright © 2013–2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@
 (gnewbg "tile2")
 (gnewbg-float "float")
 
-(set-normal-gravity :bottom)
+(set-normal-gravity :top)
 
 (setf
  *message-window-gravity* :bottom-right
