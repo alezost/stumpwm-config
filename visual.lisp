@@ -168,6 +168,7 @@
 ;;; Visual appearance and mode-line settings
 
 (setf
+ *window-format* "%m%n%s^[^4%c^] %70t"
  *window-info-format*
  (format nil "^>^B^5*%c ^b^6*%w^7*x^6*%h^7*~%%t")
 
