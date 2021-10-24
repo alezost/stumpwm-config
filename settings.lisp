@@ -92,7 +92,7 @@
            (maps (get-kmaps-at-key-seq (dereference-kmaps (top-maps))
                                        oriented-key-seq)))
       (when maps
-        (let ((*message-window-gravity* :bottom-left))
+        (let ((*message-window-gravity* :center))
           (message "~A" (print-key-seq oriented-key-seq)))))))
 
 (add-hook *key-press-hook* 'al/key-seq-msg)
