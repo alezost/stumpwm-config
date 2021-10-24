@@ -165,6 +165,54 @@
            (al/layout-string (al/current-layout)))))
 
 
+;;; mode-line windows
+
+(defvar al/window-alist nil
+  "Alist of (CLASS . NUM) pairs of the available windows.
+CLASS is a window class; NUM is the number of windows of this class.")
+
+(defvar al/current-window nil
+  "Class of the current window.")
+
+(defun al/update-window-alist (&rest _)
+  "Refresh the value of `al/window-alist'."
+  (declare (ignore _))
+  (setf al/window-alist nil)
+  (mapc (lambda (w)
+          (let* ((wc (window-class w))
+                 (entry (assoc wc al/window-alist :test #'string=)))
+            (if entry
+                (setf (cdr entry)
+                      (1+ (or (cdr entry) 1)))
+                (push (list wc) al/window-alist))))
+        (screen-windows (current-screen))))
+
+(defun al/update-current-window (&rest _)
+  "Refresh the value of `al/current-window'."
+  (declare (ignore _))
+  (setf al/current-window
+        (window-class (current-window))))
+
+(add-hook *focus-window-hook*   'al/update-current-window)
+(add-hook *new-window-hook*     'al/update-window-alist)
+(add-hook *destroy-window-hook* 'al/update-window-alist)
+
+(defun al/ml-windows ()
+  (when (and al/window-alist al/current-window)
+    (al/ml-separate
+     (format nil "~{~A~^  ~}"
+             (mapcar (lambda (assoc)
+                       (destructuring-bind (class . num)
+                           assoc
+                         (concat
+                          (if (string= class al/current-window)
+                              (concat "^[^B^4" class "^]")
+                              (concat "^[^4" class "^]"))
+                          (when num
+                            (concat "(^[^7*" (write-to-string num) "^])")))))
+                     al/window-alist)))))
+
+
 ;;; Visual appearance and mode-line settings
 
 (setf
@@ -185,6 +233,7 @@
    (:eval (al/ml-thermal-zones-maybe))
    (:eval (al/ml-net))
    (:eval (al/ml-battery-maybe))
+   (:eval (al/ml-windows))
    "^>"
    (:eval (al/ml-layout))
    (:eval (al/ml-locks))))
