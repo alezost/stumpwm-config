@@ -176,7 +176,7 @@
  (format nil "^5*%k:%M:%S~%^2*%A~%^7*%d %B~%^7*%d.%m.%Y")
 
  *time-modeline-string* "%k:%M"
- *mode-line-timeout* 3
+ *mode-line-timeout* 5
  *screen-mode-line-format*
  '((:eval (al/ml-date))
    " ^[^5*%d^]"                 ; time
