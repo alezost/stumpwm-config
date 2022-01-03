@@ -69,6 +69,10 @@
   "Concatenate `al/ml-separator' and STR."
   (concat al/ml-separator str))
 
+(defun al/ml-normal-string (str)
+  "Make STR a normal string."
+  (concat "^[^b^7*" str "^]"))
+
 
 ;;; mode-line date
 
@@ -76,8 +80,7 @@
 
 (al/defun-with-delay
  al/date-refresh-time al/ml-date ()
- (format nil "^[^7*~A^]"
-           (time-format "%a %d %b")))
+ (al/ml-normal-string (time-format "%a %d %b")))
 
 
 ;;; mode-line cpu
@@ -161,8 +164,7 @@
 
 (defun al/ml-layout ()
   (al/ml-separate
-   (format nil "^[^7*~A^]"
-           (al/layout-string (al/current-layout)))))
+   (al/ml-normal-string (al/layout-string (al/current-layout)))))
 
 
 ;;; mode-line windows
@@ -209,7 +211,9 @@ CLASS is a window class; NUM is the number of windows of this class.")
                               (concat "^[^B^4" class "^]")
                               (concat "^[^4" class "^]"))
                           (when num
-                            (concat "(^[^7*" (write-to-string num) "^])")))))
+                            (concat "("
+                                    (al/ml-normal-string (write-to-string num))
+                                    ")")))))
                      al/window-alist)))))
 
 
