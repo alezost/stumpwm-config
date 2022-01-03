@@ -90,7 +90,7 @@
           (system (d system))
           (io     (d io))
           (irq    (d irq)))
-      (format nil "^[^b^7*CPU:^[~A~3D^]%% (~2,'0D ~2,'0D ~D ~D)^]"
+      (format nil "^[^b^7*^[~A~3D^]%% (~2,'0D ~2,'0D ~D ~D)^]"
               (bar-zone-color cpu) cpu
               user system io irq))))
 

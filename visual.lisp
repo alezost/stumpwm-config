@@ -1,6 +1,6 @@
 ;;; visual.lisp --- Visual appearance: colors, fonts, mode line, ...
 
-;; Copyright © 2013–2016, 2018–2021 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2018–2022 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -73,6 +73,10 @@
   "Make STR a normal string."
   (concat "^[^b^7*" str "^]"))
 
+(defun al/ml-title-string (str)
+  "Make STR a title string."
+  (concat "^[^b^8*" str "^]"))
+
 
 ;;; mode-line date
 
@@ -91,7 +95,9 @@
 
 (al/defun-with-delay
  al/cpu-refresh-time al/ml-cpu ()
- (al/ml-separate (al/stumpwm-cpu:cpu-mode-line-string)))
+ (al/ml-separate
+  (concat (al/ml-title-string "CPU")
+          (al/stumpwm-cpu:cpu-mode-line-string))))
 
 
 ;;; mode-line thermal
@@ -142,7 +148,8 @@
 (al/defun-with-delay
  al/battery-refresh-time al/ml-battery ()
  (al/ml-separate
-  (al/stumpwm-battery:battery-mode-line-string al/battery)))
+  (concat (al/ml-title-string "Bat ")
+          (al/stumpwm-battery:battery-mode-line-string al/battery))))
 
 (defun al/ml-battery-maybe ()
   (if al/battery
