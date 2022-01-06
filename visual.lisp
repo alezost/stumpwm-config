@@ -94,6 +94,10 @@ If BRIGHT is set and is non-nil, use bright color."
   "Make STR a title string."
   (al/ml-string str :fg "#a0aa98"))
 
+(defun al/ml-window-class (&optional (str "%c"))
+  "Window class color construct for mode-line and window list."
+  (al/ml-string str :fg "#e0e044" :bg "#4d4da0"))
+
 
 ;;; mode-line date
 
@@ -226,28 +230,29 @@ CLASS is a window class; NUM is the number of windows of this class.")
 (defun al/ml-windows ()
   (when (and al/window-alist al/current-window)
     (al/ml-separate
-     (format nil "~{~A~^  ~}"
-             (mapcar (lambda (assoc)
-                       (destructuring-bind (class . num)
-                           assoc
-                         (concat
-                          (if (string= class al/current-window)
-                              (concat "^[^B^4" class "^]")
-                              (concat "^[^4" class "^]"))
-                          (when num
-                            (concat "("
-                                    (al/ml-normal-string (write-to-string num))
-                                    ")")))))
-                     al/window-alist)))))
+     (format
+      nil "~{~A~^ ~}"
+      (mapcar (lambda (assoc)
+                (destructuring-bind (class . num)
+                    assoc
+                  (concat
+                   (if (string= class al/current-window)
+                       (al/ml-window-class (concat " " class " "))
+                       (al/ml-string (concat " " class " ")
+                                     :fg "#a0a0a0" :bg "#555555"))
+                   (and num
+                        (al/ml-string (concat " " (write-to-string num) " ")
+                                      :bg "#407777")))))
+              al/window-alist)))))
 
 
 ;;; Visual appearance and mode-line settings
 
 (setf
- *window-format* "%m%n%s^[^4%c^] %70t"
- *window-info-format*
- (format nil "^>^B^5*%c ^b^6*%w^7*x^6*%h^7*~%%t")
-
+ *window-format* (concat "%m%n%s" (al/ml-window-class) " %70t")
+ *window-info-format* (concat "^>" (al/ml-window-class)
+                              "^b^6* %w^7*x^6*%h"
+                              '(#\newline) "^7*%t")
  *time-format-string-default*
  (format nil "^5*%k:%M:%S~%^2*%A~%^7*%d %B~%^7*%d.%m.%Y")
 
