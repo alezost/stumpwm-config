@@ -371,8 +371,8 @@ beginning with ':') where a service is started."
 ;;; Interacting with browser
 
 (defvar *al/browsers*
-  '(("icecat" . "IceCat")
-    ("firefox" . "firefox"))
+  '(("firefox" . "firefox")
+    ("icecat" . "IceCat"))
   "Alist of browsers.
 Each assoc should have a form of `*al/current-browser*'.")
 
