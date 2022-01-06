@@ -69,13 +69,30 @@
   "Concatenate `al/ml-separator' and STR."
   (concat al/ml-separator str))
 
-(defun al/ml-normal-string (str)
-  "Make STR a normal string."
-  (concat "^[^b^7*" str "^]"))
+(defun al/ml-string (str &key (fg "7") bg (bright nil bright-set))
+  "Make STR a mode-line string with FG and BG colors.
+FG and BG can be nil or a string containing either a single digit (a
+number from `*colors*' list) or #XXXXXX value.
+If BRIGHT is set and is non-nil, use bright color."
+  ;; See (info "(stumpwm) Colors") for details on the color machinery.
+  (let ((fc (and (stringp fg)
+                 (concat "^(:fg "
+                         (if (= 1 (length fg))
+                             fg
+                             (concat "\"" fg "\""))
+                         ")")))
+        (bc (and (stringp bg)
+                 (concat "^(:bg "
+                         (if (= 1 (length bg))
+                             bg
+                             (concat "\"" bg "\""))
+                         ")"))))
+    (concat "^[" (and bright-set (if bright "^B" "^b"))
+            fc bc str "^]")))
 
 (defun al/ml-title-string (str)
   "Make STR a title string."
-  (concat "^[^b^8*" str "^]"))
+  (al/ml-string str :fg "#a0aa98"))
 
 
 ;;; mode-line date
@@ -84,7 +101,7 @@
 
 (al/defun-with-delay
  al/date-refresh-time al/ml-date ()
- (al/ml-normal-string (time-format "%a %d %b")))
+ (al/ml-string (time-format "%a %d %b")))
 
 
 ;;; mode-line cpu
@@ -171,7 +188,7 @@
 
 (defun al/ml-layout ()
   (al/ml-separate
-   (al/ml-normal-string (al/layout-string (al/current-layout)))))
+   (al/ml-string (al/layout-string (al/current-layout)))))
 
 
 ;;; mode-line windows
