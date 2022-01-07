@@ -1,6 +1,6 @@
 ;;; keys.lisp --- Key bindings (Dvorak layout)
 
-;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2022 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -165,10 +165,12 @@ additional key."
 
 ;;; Controlling brightness
 
-(al/define-key *top-map* "XF86MonBrightnessUp"      "exec osd-backlight -inc 3")
-(al/define-key *top-map* "XF86MonBrightnessDown"    "exec osd-backlight -dec 3")
-(al/define-key *top-map* "M-XF86MonBrightnessUp"    "exec osd-backlight -inc 10")
-(al/define-key *top-map* "M-XF86MonBrightnessDown"  "exec osd-backlight -dec 10")
+(al/define-key *top-map* "XF86MonBrightnessUp"      "al/set-backlight -inc 3")
+(al/define-key *top-map* "XF86MonBrightnessDown"    "al/set-backlight -dec 3")
+(al/define-key *top-map* "C-XF86MonBrightnessUp"    "al/set-backlight -inc 1")
+(al/define-key *top-map* "C-XF86MonBrightnessDown"  "al/set-backlight -dec 1")
+(al/define-key *top-map* "M-XF86MonBrightnessUp"    "al/set-backlight -inc 10")
+(al/define-key *top-map* "M-XF86MonBrightnessDown"  "al/set-backlight -dec 10")
 
 
 ;;; Controlling sound

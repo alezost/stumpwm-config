@@ -1,6 +1,6 @@
 ;;; utils.lisp --- Additional variables, functions and commands
 
-;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2022 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -426,6 +426,44 @@ program.")
 (defcommand al/toggle-unclutter () ()
   "Start/stop 'unclutter' on the current display."
   (al/toggle-shepherd-service "unclutter"))
+
+
+;;; Backlight brightness
+
+(defvar al/backlight nil
+  "Backlight brightness of the current display.
+This variable should have (STRING . TIME) value, where STRING is the
+latest value of the backlight, and TIME is the time (seconds since epoch)
+of the latest update.")
+
+(defun al/update-backlight ()
+  "Update `al/backlight'."
+  (let* ((output (run-shell-command "xbacklight -get" t))
+         (strings (split-string output '(#\newline)))
+         (backlights (mapcar (lambda (str)
+                               (and (not (string= "" str)) str))
+                             strings))
+         (backlight (first (delete nil backlights)))
+         ;; Convert "22.000000" to "22"
+         (backlight (and (stringp backlight)
+                         (first (split-string backlight ".")))))
+    (setf al/backlight
+          (cons backlight
+                (if backlight
+                    (get-universal-time)
+                    ;; If backlight is not available, do not update it
+                    ;; for a day.
+                    (+ (get-universal-time) (* 24 3600)))))))
+
+(defcommand al/set-backlight (&rest args) (:rest)
+  "Set backlight brightness of the current display.
+Pass ARGS as arguments to 'xbacklight' shell command."
+  ;; XXX For some reason, the following line works if 'al/set-backlight'
+  ;; is evaluated as a function but does not work if it is called as a
+  ;; command.
+  ;;(run-prog "osd-backlight" :args args :wait t :search t)
+  (run-shell-command (format nil "osd-backlight ~{~A~^ ~}" args))
+  (setf al/backlight (cons nil (get-universal-time))))
 
 
 ;;; Mode line

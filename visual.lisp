@@ -178,6 +178,36 @@ If BRIGHT is set and is non-nil, use bright color."
       ""))
 
 
+;;; mode-line backlight
+
+(defvar al/ml-backlight nil)
+
+(defun al/ml-backlight-string (bl)
+  (and (stringp bl)
+       (not (string= "" bl))
+       (al/ml-separate
+        (concat (al/ml-title-string "BL ")
+                (al/ml-string bl :fg "#66bbff")))))
+
+(defun al/ml-backlight ()
+  (when (null al/backlight)
+    (al/update-backlight))
+  (let ((bl      (car al/backlight))
+        (bl-time (cdr al/backlight))
+        (ml-time (cdr al/ml-backlight)))
+    (if bl
+        (when (or (null ml-time) (> bl-time ml-time))
+          (setf al/ml-backlight
+                (cons (al/ml-backlight-string bl) bl-time)))
+        ;; Do not refresh mode-line for 2 seconds after the backlight update.
+        (when (> (get-universal-time) (+ 2 bl-time))
+          (al/update-backlight)
+          (setf al/ml-backlight
+                (cons (al/ml-backlight-string (car al/backlight))
+                      (cdr al/backlight))))))
+  (car al/ml-backlight))
+
+
 ;;; mode-line keyboard
 
 (defun al/ml-locks ()
@@ -268,6 +298,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
    (:eval (al/ml-battery-maybe))
    (:eval (al/ml-windows))
    "^>"
+   (:eval (al/ml-backlight))
    (:eval (al/ml-layout))
    (:eval (al/ml-locks))))
 
