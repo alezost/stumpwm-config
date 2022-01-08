@@ -34,11 +34,11 @@
 
 (in-package #:al/stumpwm-cpu)
 
-(defvar *last-user-time* 0)
-(defvar *last-system-time* 0)
-(defvar *last-idle-time* 0)
-(defvar *last-iowait-time* 0)
-(defvar *last-irq-time* 0)
+(defvar last-user-time 0)
+(defvar last-system-time 0)
+(defvar last-idle-time 0)
+(defvar last-iowait-time 0)
+(defvar last-irq-time 0)
 
 (defun current-cpu-usage ()
   "Return the average CPU usage since the last call.
@@ -59,11 +59,11 @@
              (cur-idle-time   (read stat))
              (cur-iowait-time (read stat))
              (cur-irq-time    (+ (read stat) (read stat)))
-             (user-time       (- cur-user-time   *last-user-time*))
-             (system-time     (- cur-system-time *last-system-time*))
-             (idle-time       (- cur-idle-time   *last-idle-time*))
-             (iowait-time     (- cur-iowait-time *last-iowait-time*))
-             (irq-time        (- cur-irq-time    *last-irq-time*))
+             (user-time       (- cur-user-time   last-user-time))
+             (system-time     (- cur-system-time last-system-time))
+             (idle-time       (- cur-idle-time   last-idle-time))
+             (iowait-time     (- cur-iowait-time last-iowait-time))
+             (irq-time        (- cur-irq-time    last-irq-time))
              (cpu-time        (+ user-time system-time iowait-time irq-time))
              (total-time      (+ cpu-time idle-time)))
         (unless (zerop total-time)
@@ -72,11 +72,11 @@
                 system% (/ system-time total-time)
                 io%     (/ iowait-time total-time)
                 irq%    (/ irq-time    total-time)
-                *last-user-time*   cur-user-time
-                *last-system-time* cur-system-time
-                *last-idle-time*   cur-idle-time
-                *last-iowait-time* cur-iowait-time
-                *last-irq-time*    cur-irq-time))))
+                last-user-time   cur-user-time
+                last-system-time cur-system-time
+                last-idle-time   cur-idle-time
+                last-iowait-time cur-iowait-time
+                last-irq-time    cur-irq-time))))
     (values cpu% user% system% io% irq%)))
 
 (defun cpu-mode-line-string ()

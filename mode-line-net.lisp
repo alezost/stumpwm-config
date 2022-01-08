@@ -33,13 +33,13 @@
 (defpackage #:al/stumpwm-net
   (:use :common-lisp
         :stumpwm)
-  (:export #:*net-devices*
-           #:*net-device*
+  (:export #:net-devices
+           #:net-device
            #:net-mode-line-string))
 
 (in-package #:al/stumpwm-net)
 
-(defvar *net-devices*
+(defvar net-devices
   (delete "lo"
           (mapcar (lambda (dir)
                     ;; Is there a better way to do this?
@@ -48,42 +48,42 @@
           :test #'equal)
   "List of available network devices (interfaces).")
 
-(defvar *net-device*
+(defvar net-device
   ;; At first, search for "wlp*" (wlan), then for "enp*" (eth).
   (or (find-if (lambda (name) (ppcre:scan "^w" name))
-               *net-devices*)
+               net-devices)
       (find-if (lambda (name) (ppcre:scan "^e" name))
-               *net-devices*))
+               net-devices))
   "Currently used network device.")
 
-(defun net-device-file-name (&optional (device *net-device*))
+(defun net-device-file-name (&optional (device net-device))
   "Return sysfs file name of the DEVICE."
   (concat "/sys/class/net/" device))
 
-(defun net-device-parameter (file-name &key (device *net-device*)
+(defun net-device-parameter (file-name &key (device net-device)
                                             to-number)
   "Return a line (string) from '/sys/class/net/DEVICE/FILE-NAME'.
-If DEVICE is nil, use `*net-device*'.
+If DEVICE is nil, use `net-device'.
 If TO-NUMBER is non-nil, convert this string into a number.
 Return nil in case of any error."
   (al/read-sys-file
    (concat (net-device-file-name device) "/" file-name)
    to-number))
 
-(defvar *net-rfkill-dirs* nil
+(defvar net-rfkill-dirs nil
   "Alist of (DEVICE . RFKILL-DIR) pairs.")
 
 (defun net-rfkill-dir (device)
   "Return the sysfs rfkill directory for the network DEVICE."
-  (let ((assoc (assoc device *net-rfkill-dirs*)))
+  (let ((assoc (assoc device net-rfkill-dirs)))
     (if assoc
         (cdr assoc)
         (let ((dir (car (directory (concat (net-device-file-name device)
                                            "/phy*/rfkill*")))))
-          (push (cons device dir) *net-rfkill-dirs*)
+          (push (cons device dir) net-rfkill-dirs)
           dir))))
 
-(defun net-rfkill-state (&optional (device *net-device*))
+(defun net-rfkill-state (&optional (device net-device))
   "Return the current rfkill state of the network DEVICE.
 If the interface is blocked, return `:hard' or `:soft'.
 Otherwise, return nil."
@@ -95,11 +95,11 @@ Otherwise, return nil."
          (or (and (blocked? "hard") :hard)
              (and (blocked? "soft") :soft)))))
 
-(defvar *last-rx* 0)
-(defvar *last-tx* 0)
-(defvar *last-time* 0)
+(defvar last-rx 0)
+(defvar last-tx 0)
+(defvar last-time 0)
 
-(defun net-state (&optional (device *net-device*))
+(defun net-state (&optional (device net-device))
   "Return values for the current state of the network DEVICE.
 
 If the interface is 'rfkill'-ed, return `:soft' or `:hard'.
@@ -124,12 +124,12 @@ Otherwise, return `:unknown' value."
 	          (tx (net-device-parameter "statistics/tx_bytes"
                                             :device device
                                             :to-number t))
-                  (dt (- now *last-time*))
-                  (drx (- rx *last-rx*))
-                  (dtx (- tx *last-tx*)))
-             (setq *last-rx* rx
-	           *last-tx* tx
-	           *last-time* now)
+                  (dt (- now last-time))
+                  (drx (- rx last-rx))
+                  (dtx (- tx last-tx)))
+             (setq last-rx rx
+	           last-tx tx
+	           last-time now)
              (values :up
                      (round (/ drx dt))
 	             (round (/ dtx dt)))))
@@ -157,7 +157,7 @@ Otherwise, return `:unknown' value."
 (defun net-mode-line-string ()
   "Return a string with NET info suitable for the mode-line."
   (multiple-value-bind (state down up)
-      (net-state *net-device*)
+      (net-state net-device)
     (let ((fmt-device (ecase state
                         (:up      "^b^6*~A")
                         (:down    "^B^5*~A")
@@ -167,10 +167,10 @@ Otherwise, return `:unknown' value."
       (concat "^["
               (if (and down up)
                   (format nil (concat fmt-device "^7 ~A ~A")
-                          *net-device*
+                          net-device
                           (format-bytes down)
                           (format-bytes up))
-                  (format nil fmt-device *net-device*))
+                  (format nil fmt-device net-device))
               "^]"))))
 
 ;;; mode-line-net.lisp ends here

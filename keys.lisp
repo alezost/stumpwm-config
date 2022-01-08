@@ -215,16 +215,16 @@ additional key."
 
 ;;; Miscellaneous bindings
 
-(defvar *al/emacs-map* (make-sparse-keymap)
+(defvar al/emacs-map (make-sparse-keymap)
   "Keymap for finding files (and doing other things) in emacs.")
 
-(al/define-key *top-map* "s-f" '*al/emacs-map*)
-(al/define-key *al/emacs-map* "1" "al/frames1")
-(al/define-key *al/emacs-map* "b" "al/emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
-(al/define-key *al/emacs-map* "n" "al/emacs-eval-show (org-capture 1 \"n\")")
-(al/define-key *al/emacs-map* "t" "al/emacs-eval-show (find-file \"~/notes/tasks.org\")")
-(al/define-key *al/emacs-map* "i" "al/emacs-eval-show (find-file \"~/notes/info.org\")")
-(al/define-key *al/emacs-map* "m" "al/emms-eval (al/emms-notify)")
+(al/define-key *top-map* "s-f" 'al/emacs-map)
+(al/define-key al/emacs-map "1" "al/frames1")
+(al/define-key al/emacs-map "b" "al/emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
+(al/define-key al/emacs-map "n" "al/emacs-eval-show (org-capture 1 \"n\")")
+(al/define-key al/emacs-map "t" "al/emacs-eval-show (find-file \"~/notes/tasks.org\")")
+(al/define-key al/emacs-map "i" "al/emacs-eval-show (find-file \"~/notes/info.org\")")
+(al/define-key al/emacs-map "m" "al/emms-eval (al/emms-notify)")
 
 (al/define-key *top-map* "s-g" "abort")
 (al/define-key *top-map* "s-h" '*help-map*)
@@ -299,71 +299,71 @@ additional key."
 
 ;;; Web jumps
 
-(defvar *al/web-map* (make-sparse-keymap)
+(defvar al/web-map (make-sparse-keymap)
   "Keymap for quick browsing.")
-(defvar *al/web-wiki-map* (make-sparse-keymap)
+(defvar al/web-wiki-map (make-sparse-keymap)
   "Keymap for quick browsing wikipedia.")
-(al/define-key *top-map* "F5" '*al/web-map*)
-(al/define-key *al/web-map* "F5" "al/browser --new-tab about:blank")
-(al/define-key *al/web-map* "g"  "al/browse-show https://github.com/notifications")
-(al/define-key *al/web-map* "y"  "al/browse-show https://www.youtube.com/feed/subscriptions")
-(al/define-key *al/web-map* "z"  "al/browse-show zeus")
-(al/define-key *al/web-map* "t"  "al/browse-show http://tv.yandex.ru/4/?period=all-day")
-(al/define-key *al/web-map* "M"  "al/browse-show https://maps.google.com/maps?hl=ru")
-(al/define-key *al/web-map* "W"  "al/browse-show http://www.gismeteo.ru/city/hourly/5039/")
-(al/define-key *al/web-map* "w" '*al/web-wiki-map*)
+(al/define-key *top-map* "F5" 'al/web-map)
+(al/define-key al/web-map "F5" "al/browser --new-tab about:blank")
+(al/define-key al/web-map "g"  "al/browse-show https://github.com/notifications")
+(al/define-key al/web-map "y"  "al/browse-show https://www.youtube.com/feed/subscriptions")
+(al/define-key al/web-map "z"  "al/browse-show zeus")
+(al/define-key al/web-map "t"  "al/browse-show http://tv.yandex.ru/4/?period=all-day")
+(al/define-key al/web-map "M"  "al/browse-show https://maps.google.com/maps?hl=ru")
+(al/define-key al/web-map "W"  "al/browse-show http://www.gismeteo.ru/city/hourly/5039/")
+(al/define-key al/web-map "w" 'al/web-wiki-map)
 
 ;; tv and radio jumps
-(defvar *al/tv-radio-map* (make-sparse-keymap)
+(defvar al/tv-radio-map (make-sparse-keymap)
   "Keymap for quick access to tv and radio resources.")
-(al/define-key *top-map* "F6" '*al/tv-radio-map*)
-(al/define-key *al/tv-radio-map* "F6" "exec toggle-tvtime")
-(al/define-key *al/tv-radio-map* "v" "al/emms-eval (emms-play-url \"mms://live.rfn.ru/vesti_fm\")")
-(al/define-key *al/tv-radio-map* "o" "al/browse-show http://www.onlinetv.ru/")
-(al/define-key *al/tv-radio-map* "e" "al/send-key-to-emacs C-M-s-e")
+(al/define-key *top-map* "F6" 'al/tv-radio-map)
+(al/define-key al/tv-radio-map "F6" "exec toggle-tvtime")
+(al/define-key al/tv-radio-map "v" "al/emms-eval (emms-play-url \"mms://live.rfn.ru/vesti_fm\")")
+(al/define-key al/tv-radio-map "o" "al/browse-show http://www.onlinetv.ru/")
+(al/define-key al/tv-radio-map "e" "al/send-key-to-emacs C-M-s-e")
 
 
 ;;; Executing progs
 
-(defvar *al/exec-map* (make-sparse-keymap)
+(defvar al/exec-map (make-sparse-keymap)
   "Keymap for executing shell commands or switching to running applications.")
-(al/define-key *top-map* "s-m" '*al/exec-map*)
-(al/define-key *al/exec-map* "s-m" "exec")
-(al/define-key *al/exec-map* "e" "al/emacs")
-(al/define-key *al/exec-map* "E" "exec emacs --no-site-file --debug-init")
-(al/define-key *al/exec-map* "t" "al/xterm")
-(al/define-key *al/exec-map* "T" "exec xterm")
-(al/define-key *al/exec-map* "b" "al/browser")
+(al/define-key *top-map* "s-m" 'al/exec-map)
+(al/define-key al/exec-map "s-m" "exec")
+(al/define-key al/exec-map "e" "al/emacs")
+(al/define-key al/exec-map "E" "exec emacs --no-site-file --debug-init")
+(al/define-key al/exec-map "t" "al/xterm")
+(al/define-key al/exec-map "T" "exec xterm")
+(al/define-key al/exec-map "b" "al/browser")
 
 
 ;;; Mode line
 
-(defvar *al/mode-line-map* (make-sparse-keymap)
+(defvar al/mode-line-map (make-sparse-keymap)
   "Keymap for controlling the mode line.")
-(al/define-key *top-map* "M-s-m" '*al/mode-line-map*)
-(al/define-key *al/mode-line-map* "M-s-m" "mode-line")
-(al/define-key *al/mode-line-map* "t" "mode-line")
-(al/define-key *al/mode-line-map* "." "al/mode-line-top")
-(al/define-key *al/mode-line-map* "e" "al/mode-line-bottom")
-(al/define-key *al/mode-line-map* "n" "al/mode-line-next-net-device")
+(al/define-key *top-map* "M-s-m" 'al/mode-line-map)
+(al/define-key al/mode-line-map "M-s-m" "mode-line")
+(al/define-key al/mode-line-map "t" "mode-line")
+(al/define-key al/mode-line-map "." "al/mode-line-top")
+(al/define-key al/mode-line-map "e" "al/mode-line-bottom")
+(al/define-key al/mode-line-map "n" "al/mode-line-next-net-device")
 
 
 ;;; Mana
 
-(defvar *al/mana-map* (make-sparse-keymap)
+(defvar al/mana-map (make-sparse-keymap)
   "Keymap for sending keys to Mana.")
-(al/define-key *top-map* "s-j" '*al/mana-map*)
-(al/define-key *al/mana-map* "s-j" "mana-state")
-(al/define-key *al/mana-map* "a" "mana-attack")
-(al/define-key *al/mana-map* "A" "mana-quick-attack")
-(al/define-key *al/mana-map* "H" "mana-bat-quest-full")
-(al/define-key *al/mana-map* "h" "mana-bat-quest-cont")
-(al/define-key *al/mana-map* "l" "al/emacs-eval-show (find-file \"~/.local/share/mana/logs/server.themanaworld.org/\")")
-(al/define-key *al/mana-map* "m" "al/emacs-eval-show (find-file \"~/notes/tmw/monsters.org\")")
-(al/define-key *al/mana-map* "q" "al/emacs-eval-show (find-file \"~/notes/tmw/quests.org\")")
-(al/define-key *al/mana-map* "s" "al/emacs-eval-show (find-file \"~/notes/tmw/spells.org\")")
-(al/define-key *al/mana-map* "S" "al/emacs-eval-show (find-file \"~/src/tmw/tmwa-server-data/world/map/npc\")")
-(al/define-key *al/mana-map* "b" "mana-break")
-(al/define-key *al/mana-map* "k" "mana-kill")
+(al/define-key *top-map* "s-j" 'al/mana-map)
+(al/define-key al/mana-map "s-j" "mana-state")
+(al/define-key al/mana-map "a" "mana-attack")
+(al/define-key al/mana-map "A" "mana-quick-attack")
+(al/define-key al/mana-map "H" "mana-bat-quest-full")
+(al/define-key al/mana-map "h" "mana-bat-quest-cont")
+(al/define-key al/mana-map "l" "al/emacs-eval-show (find-file \"~/.local/share/mana/logs/server.themanaworld.org/\")")
+(al/define-key al/mana-map "m" "al/emacs-eval-show (find-file \"~/notes/tmw/monsters.org\")")
+(al/define-key al/mana-map "q" "al/emacs-eval-show (find-file \"~/notes/tmw/quests.org\")")
+(al/define-key al/mana-map "s" "al/emacs-eval-show (find-file \"~/notes/tmw/spells.org\")")
+(al/define-key al/mana-map "S" "al/emacs-eval-show (find-file \"~/src/tmw/tmwa-server-data/world/map/npc\")")
+(al/define-key al/mana-map "b" "mana-break")
+(al/define-key al/mana-map "k" "mana-kill")
 
 ;;; keys.lisp ends here

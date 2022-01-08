@@ -33,13 +33,13 @@
 
 (in-package :stumpwm)
 
-(defvar *al/sound-program* "osd-sound"
+(defvar al/sound-program "osd-sound"
   "Name of a program to be called with amixer arguments.")
 
-(defvar *al/sound-scontrols* '("Master" "Line")
+(defvar al/sound-scontrols '("Master" "Line")
   "List of simple controls for managing.")
 
-(defvar *al/sound-current-scontrol-num* 0
+(defvar al/sound-current-scontrol-num 0
   "The number of the currently used simple control.")
 
 (defvar al/sound-volume nil
@@ -49,21 +49,21 @@ latest value of the sound volume and TIME is the time (seconds since epoch)
 of the latest update.")
 
 (defun al/sound-get-current-scontrol ()
-  "Return the current simple control from `*al/sound-scontrols*'."
-  (nth *al/sound-current-scontrol-num* *al/sound-scontrols*))
+  "Return the current simple control from `al/sound-scontrols'."
+  (nth al/sound-current-scontrol-num al/sound-scontrols))
 
 (defun al/sound-get-next-scontrol ()
-  "Return next simple control from `*al/sound-scontrols*'."
-  (setq *al/sound-current-scontrol-num*
-        (if (>= *al/sound-current-scontrol-num*
-                (- (length *al/sound-scontrols*) 1))
+  "Return next simple control from `al/sound-scontrols'."
+  (setq al/sound-current-scontrol-num
+        (if (>= al/sound-current-scontrol-num
+                (- (length al/sound-scontrols) 1))
             0
-            (+ 1 *al/sound-current-scontrol-num*)))
+            (+ 1 al/sound-current-scontrol-num)))
   (al/sound-get-current-scontrol))
 
 (defun al/sound-call (&rest args)
-  "Execute `*al/sound-program*' using amixer ARGS."
-  (run-prog *al/sound-program*
+  "Execute `al/sound-program' using amixer ARGS."
+  (run-prog al/sound-program
             :args args :wait nil :search t))
 
 (defcommand al/sound-set-current-scontrol (&rest args) (:rest)

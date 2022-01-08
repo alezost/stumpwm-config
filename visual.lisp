@@ -153,9 +153,9 @@ If BRIGHT is set and is non-nil, use bright color."
 
 (defcommand al/mode-line-next-net-device () ()
   "Set next net device in the mode-line."
-  (setf al/stumpwm-net:*net-device*
-        (al/next-list-element al/stumpwm-net:*net-devices*
-                              al/stumpwm-net:*net-device*)))
+  (setf al/stumpwm-net:net-device
+        (al/next-list-element al/stumpwm-net:net-devices
+                              al/stumpwm-net:net-device)))
 
 
 ;;; mode-line battery

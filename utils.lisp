@@ -209,7 +209,7 @@ windows."
 
 ;;; Showing and toggling the root window
 
-(defvar *al/window-configuration* nil
+(defvar al/window-configuration nil
   "Last saved window configuration.")
 
 (defcommand al/show-root () ()
@@ -223,11 +223,11 @@ windows."
   "Toggle between root window and last window configuration."
   (if (current-window)
       (progn
-        (setf *al/window-configuration* (dump-group (current-group)))
+        (setf al/window-configuration (dump-group (current-group)))
         (al/show-root))
       ;; Current window is root.
-      (if *al/window-configuration*
-        (restore-group (current-group) *al/window-configuration*)
+      (if al/window-configuration
+        (restore-group (current-group) al/window-configuration)
         (echo "There is no saved window configuration yet."))))
 
 
@@ -370,27 +370,27 @@ beginning with ':') where a service is started."
 
 ;;; Interacting with browser
 
-(defvar *al/browsers*
+(defvar al/browsers
   '(("firefox" . "firefox")
     ("icecat" . "IceCat"))
   "Alist of browsers.
-Each assoc should have a form of `*al/current-browser*'.")
+Each assoc should have a form of `al/current-browser'.")
 
-(defvar *al/current-browser* nil
+(defvar al/current-browser nil
   "Browser used by `al/browser' command.
 The value should be a cons of program name and window class of this
 program.")
 
 (defun al/current-browser ()
   "Return the currently used browser."
-  (or *al/current-browser*
-      (setf *al/current-browser*
+  (or al/current-browser
+      (setf al/current-browser
             (or (find-if (lambda (assoc)
                            (al/executable-exists? (car assoc)))
-                         *al/browsers*)
+                         al/browsers)
                 (progn
-                  (echo "No working browsers found among `*al/browsers*'")
-                  (car *al/browsers*))))))
+                  (echo "No working browsers found among `al/browsers'")
+                  (car al/browsers))))))
 
 (defcommand al/browser (&optional args) (:rest)
   "Start browser unless it is already running, in which case focus it."
@@ -402,12 +402,12 @@ program.")
         (run-or-raise (car browser) `(:class ,(cdr browser))))))
 
 (defcommand al/browse (url) ((:shell "Browse URL: "))
-  "Browse URL with `*al/current-browser*'."
+  "Browse URL with `al/current-browser'."
   (run-prog (car (al/current-browser))
             :args (list url) :wait nil :search t))
 
 (defcommand al/browse-show (url) ((:shell "Browse URL: "))
-  "Browse URL with `*al/current-browser*' and raise it."
+  "Browse URL with `al/current-browser' and raise it."
   (al/browse url)
   (al/browser))
 
@@ -531,18 +531,18 @@ Return nil, if ELEMENT is not in the LIST."
   "Insert X primary selection into the current window."
   (window-send-string (get-x-selection)))
 
-(defvar *al/ignore-emacs* nil
+(defvar al/ignore-emacs nil
   "If non-nil, do not treat Emacs specially by `al/switch-frame-or-window'.")
 
 (defun al/switch-frame-or-window (switch-tile switch-float &optional key)
   "Select frame or window or emacs window.
-If current window is emacs and `*al/ignore-emacs*' is nil, send key
+If current window is emacs and `al/ignore-emacs' is nil, send key
 sequence KEY to it.
 If current group is tiling, call SWITCH-TILE procedure.
 If current group is floating, call SWITCH-FLOAT procedure."
   (if (and key
            (al/emacs-window-p)
-           (null *al/ignore-emacs*)
+           (null al/ignore-emacs)
            ;; Ignore emacs anyway, if it has a single window.
            ;; The following code checks WINDOWS_NUM window property.
            ;; You can "teach" emacs to update this property by adding
@@ -564,7 +564,7 @@ If current group is floating, call SWITCH-FLOAT procedure."
 
 (defcommand al/other (&optional key) (:key)
   "Select previously selected frame or window or emacs window.
-If current window is emacs and `*al/ignore-emacs*' is nil, send key
+If current window is emacs and `al/ignore-emacs' is nil, send key
 sequence KEY to it.
 If current group is tiling, select previously selected frame.
 If current group is floating, select previously selected window."
@@ -572,17 +572,17 @@ If current group is floating, select previously selected window."
 
 (defcommand al/next (&optional key) (:key)
   "Select next frame or window or emacs window.
-If current window is emacs and `*al/ignore-emacs*' is nil, send key
+If current window is emacs and `al/ignore-emacs' is nil, send key
 sequence KEY to it.
 If current group is tiling, select next frame.
 If current group is floating, select next window."
   (al/switch-frame-or-window #'fnext #'al/float-window-next key))
 
 (defcommand al/toggle-ignore-emacs () ()
-  "Toggle `*al/ignore-emacs*'."
-  (setf *al/ignore-emacs* (not *al/ignore-emacs*))
+  "Toggle `al/ignore-emacs'."
+  (setf al/ignore-emacs (not al/ignore-emacs))
   (message "^b^7*Switching between emacs windows ~a^b^7*."
-            (if *al/ignore-emacs* "^B^1*disabled" "^2*enabled")))
+            (if al/ignore-emacs "^B^1*disabled" "^2*enabled")))
 
 (defmacro al/defun-with-delay (seconds name args &rest body)
   "Define NAME function with ARGS and BODY.
