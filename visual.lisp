@@ -208,6 +208,45 @@ If BRIGHT is set and is non-nil, use bright color."
   (car al/ml-backlight))
 
 
+;;; mode-line sound
+
+(defvar al/ml-sound nil)
+(defvar al/sound-refresh-time 30)
+
+(defun al/ml-sound-string (vol)
+  (and (stringp vol)
+       (not (string= "" vol))
+       (al/ml-separate
+        (concat (al/ml-title-string "Snd ")
+                (al/ml-string vol :fg "#50e050")))))
+
+(defun al/ml-sound ()
+  (when (null al/sound-volume)
+    (al/sound-update-volume))
+  (let ((vol      (car al/sound-volume))
+        (vol-time (cdr al/sound-volume))
+        (ml-time  (cdr al/ml-sound))
+        (now      (get-universal-time)))
+    (if (or (and (null vol)
+                 ;; Do not refresh mode-line for 2 seconds after the
+                 ;; latest sound update.
+                 (> now (+ 2 vol-time)))
+            (and ml-time
+                 (> (get-universal-time)
+                    (+ ml-time al/sound-refresh-time))))
+        (progn
+          (al/sound-update-volume)
+          (setf al/ml-sound
+                (cons (al/ml-sound-string (car al/sound-volume))
+                      (cdr al/sound-volume))))
+        (when (and vol
+                   (or (null ml-time)
+                       (> vol-time ml-time)))
+          (setf al/ml-sound
+                (cons (al/ml-sound-string vol) vol-time)))))
+  (car al/ml-sound))
+
+
 ;;; mode-line keyboard
 
 (defun al/ml-locks ()
@@ -298,6 +337,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
    (:eval (al/ml-battery-maybe))
    (:eval (al/ml-windows))
    "^>"
+   (:eval (al/ml-sound))
    (:eval (al/ml-backlight))
    (:eval (al/ml-layout))
    (:eval (al/ml-locks))))

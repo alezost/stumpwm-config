@@ -1,6 +1,6 @@
 ;;; sound.lisp --- Set sound parameters and show them in OSD
 
-;; Copyright © 2013-2016 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2016, 2022 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -42,6 +42,12 @@
 (defvar *al/sound-current-scontrol-num* 0
   "The number of the currently used simple control.")
 
+(defvar al/sound-volume nil
+  "Sound volume of the current simple control.
+This variable should have (STRING . TIME) value, where STRING is the
+latest value of the sound volume and TIME is the time (seconds since epoch)
+of the latest update.")
+
 (defun al/sound-get-current-scontrol ()
   "Return the current simple control from `*al/sound-scontrols*'."
   (nth *al/sound-current-scontrol-num* *al/sound-scontrols*))
@@ -63,7 +69,8 @@
 (defcommand al/sound-set-current-scontrol (&rest args) (:rest)
   "Set sound value for the current simple control.
 ARGS are the rest amixer arguments after 'sset CONTROL'."
-  (apply #'al/sound-call "sset" (al/sound-get-current-scontrol) args))
+  (apply #'al/sound-call "sset" (al/sound-get-current-scontrol) args)
+  (setf al/sound-volume (cons nil (get-universal-time))))
 
 (defcommand al/sound-current-scontrol () ()
   "Show sound value of the current simple control."
@@ -71,6 +78,22 @@ ARGS are the rest amixer arguments after 'sset CONTROL'."
 
 (defcommand al/sound-next-scontrol () ()
   "Switch simple control and show its sound value."
-  (al/sound-call "sget" (al/sound-get-next-scontrol)))
+  (al/sound-call "sget" (al/sound-get-next-scontrol))
+  (setf al/sound-volume (cons nil (get-universal-time))))
+
+(defun al/sound-update-volume (&optional scontrol)
+  "Update `al/sound-volume' with SCONTROL (\"Master\" by default)."
+  (let* ((cmd (concat "amixer sget "
+                      (or scontrol (al/sound-get-current-scontrol))
+                      " | sed -rn '$s/[^[]+\\[([0-9]+)%.*/\\1/p'"))
+         (output (run-shell-command cmd t))
+         (res (first (split-string output '(#\newline)))))
+    (setf al/sound-volume
+          (cons res
+                (if res
+                    (get-universal-time)
+                    ;; If sound volume is not available for some reason,
+                    ;; do not update it for an hour.
+                    (+ (get-universal-time) 3600))))))
 
 ;;; sound.lisp ends here
