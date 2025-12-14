@@ -1,6 +1,6 @@
 ;;; init.lisp --- Vital settings and loading other files
 
-;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -84,5 +84,9 @@ instead of any error."
 (al/load "sound")
 (al/load "settings")
 (al/load "visual")
+
+;; This is needed to have SSH prompt (via GnuPG) in the current X session.
+;; See "man gpg-agent" for details.
+(run-shell-command "gpg-connect-agent updatestartuptty /bye")
 
 ;;; init.lisp ends here
