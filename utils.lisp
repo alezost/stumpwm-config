@@ -438,15 +438,18 @@ of the latest update.")
 
 (defun al/update-backlight ()
   "Update `al/backlight'."
-  (let* ((output (run-shell-command "xbacklight -get" t))
-         (strings (split-string output '(#\newline)))
-         (backlights (mapcar (lambda (str)
-                               (and (not (string= "" str)) str))
-                             strings))
-         (backlight (first (delete nil backlights)))
-         ;; Convert "22.000000" to "22"
-         (backlight (and (stringp backlight)
-                         (first (split-string backlight ".")))))
+  (let ((backlight
+          (and (al/executable-exists? "xbacklight")
+               (let* ((output (run-shell-command "xbacklight -get" t))
+                      (strings (split-string output '(#\newline)))
+                      (backlights (mapcar (lambda (str)
+                                            (and (not (string= "" str)) str))
+                                          strings))
+                      (backlight (first (delete nil backlights)))
+                      ;; Convert string to number.
+                      (backlight (read-from-string backlight)))
+                 ;; Round it and convert back to string.
+                 (write-to-string (round backlight))))))
     (setf al/backlight
           (cons backlight
                 (if backlight
