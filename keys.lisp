@@ -1,6 +1,6 @@
 ;;; keys.lisp --- Key bindings (Dvorak layout)
 
-;; Copyright © 2013–2022 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -294,6 +294,7 @@ additional key."
 (al/define-key *input-map* "M-P" 'input-kill-to-beginning)
 (al/define-key *input-map* "M-." 'input-history-back)
 (al/define-key *input-map* "M-e" 'input-history-forward)
+(al/define-key *input-map* "C-k" 'al/input-kill-line)
 (al/define-key *input-map* "C-m" 'input-submit)
 
 

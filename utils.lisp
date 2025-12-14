@@ -1,6 +1,6 @@
 ;;; utils.lisp --- Additional variables, functions and commands
 
-;; Copyright © 2013–2022 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -490,6 +490,19 @@ Pass ARGS as arguments to 'xbacklight' shell command."
 (defcommand al/mode-line-top () ()
   "Put the mode line on the top of the screen."
   (al/mode-line-pos :top))
+
+
+;;; Input line
+
+(defun al/input-kill-line (input key)
+  "Kill the current input line."
+  ;; This is a combination of `input-kill-line' and `input-kill-to-beginning'.
+  (declare (ignore key))
+  (let ((str (input-line-string input)))
+    (unless (= 0 (length str))
+      (set-x-selection (subseq str 0))
+      (setf (fill-pointer str) 0
+            (input-line-position input) 0))))
 
 
 ;;; Misc
