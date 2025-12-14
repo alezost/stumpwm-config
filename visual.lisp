@@ -1,6 +1,6 @@
 ;;; visual.lisp --- Visual appearance: colors, fonts, mode line, ...
 
-;; Copyright © 2013–2016, 2018–2022 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -94,9 +94,9 @@ If BRIGHT is set and is non-nil, use bright color."
   "Make STR a title string."
   (al/ml-string str :fg "#a0aa98"))
 
-(defun al/ml-window-class (&optional (str "%c"))
+(defun al/ml-window-class (&optional (str " %c "))
   "Window class color construct for mode-line and window list."
-  (al/ml-string str :fg "#e0e044" :bg "#4d4da0"))
+  (al/ml-string str :fg "#d8d844" :bg "#3838a0"))
 
 
 ;;; mode-line date
