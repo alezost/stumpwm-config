@@ -304,8 +304,6 @@ additional key."
 
 (defvar al/web-map (make-sparse-keymap)
   "Keymap for quick browsing.")
-(defvar al/web-wiki-map (make-sparse-keymap)
-  "Keymap for quick browsing wikipedia.")
 (al/define-key *top-map* "F5" 'al/web-map)
 (al/define-key al/web-map "F5" "al/browser --new-tab about:blank")
 (al/define-key al/web-map "g"  "al/browse-show https://github.com/notifications")
@@ -313,8 +311,8 @@ additional key."
 (al/define-key al/web-map "z"  "al/browse-show zeus")
 (al/define-key al/web-map "t"  "al/browse-show http://tv.yandex.ru/4/?period=all-day")
 (al/define-key al/web-map "M"  "al/browse-show https://maps.google.com/maps?hl=ru")
-(al/define-key al/web-map "W"  "al/browse-show http://www.gismeteo.ru/city/hourly/5039/")
-(al/define-key al/web-map "w" 'al/web-wiki-map)
+(al/define-key al/web-map "w"  "al/browse-show https://www.gismeteo.ru/city/hourly/5039/")
+(al/define-key al/web-map "W"  "al/browse-show https://yandex.ru/pogoda/ru/details?lat=50.595415&lon=36.587272")
 
 ;; tv and radio jumps
 (defvar al/tv-radio-map (make-sparse-keymap)
