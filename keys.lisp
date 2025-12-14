@@ -152,6 +152,8 @@ additional key."
 (al/define-key *top-map* "s-XF86AudioLowerVolume"     "resize -10   0")
 (al/define-key *top-map* "C-s-XF86AudioRaiseVolume"   "resize   1   0")
 (al/define-key *top-map* "C-s-XF86AudioLowerVolume"   "resize  -1   0")
+(al/define-key *top-map* "S-XF86AudioRaiseVolume"     "exec pavucontrol")
+(al/define-key *top-map* "S-XF86AudioLowerVolume"     "exec pavucontrol")
 
 
 ;;; Controlling WiFi
