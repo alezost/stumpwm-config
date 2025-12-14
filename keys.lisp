@@ -294,8 +294,10 @@ additional key."
 (al/define-key *input-map* "M-P" 'input-kill-to-beginning)
 (al/define-key *input-map* "M-." 'input-history-back)
 (al/define-key *input-map* "M-e" 'input-history-forward)
+(al/define-key *input-map* "C-." 'input-complete-backward)
+(al/define-key *input-map* "C-e" 'input-complete-forward)
 (al/define-key *input-map* "C-k" 'al/input-kill-line)
-(al/define-key *input-map* "C-m" 'input-submit)
+(al/define-key *input-map* "C-j" 'input-submit)
 
 
 ;;; Web jumps
