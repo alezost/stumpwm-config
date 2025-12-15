@@ -163,6 +163,7 @@ additional key."
 ;; Pressing XF86RFKill blocks/unblocks wlan automatically (on the kernel
 ;; level), but this key is still available for binding.
 (al/define-key *top-map* "XF86RFKill" "echo The state of ^[^B^5*wlan^] has been changed")
+(al/define-key *top-map* "s-," "exec rfkill toggle wlan")
 
 
 ;;; Controlling brightness
