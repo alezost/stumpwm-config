@@ -70,6 +70,7 @@ additional key."
 (al/define-key *root-map* "o"   "al/fother")
 (al/define-key *root-map* "M-o" "fnext")
 
+(al/define-key *top-map* "s-M"   "al/hide-current-window")
 (al/define-key *top-map* "s-r"   "al/toggle-root")
 (al/define-key *top-map* "s-w"   "windowlist")
 (al/define-key *top-map* "M-s-w" "vgroups")

@@ -161,6 +161,10 @@ running a shell command if there is no suitable window."
         (focus-all win)
         (message "No window matching ~a" props))))
 
+(defcommand al/hide-current-window () ()
+  "Hide current window."
+  (hide-window (current-window)))
+
 (defcommand al/gmove-to-other-group () ()
   "Move the current window to the other group and go to that group."
   (let ((group (car (remove-if (lambda (g) (eq g (current-group)))
