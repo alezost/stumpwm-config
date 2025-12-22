@@ -69,7 +69,7 @@
   "Concatenate `al/ml-separator' and STR."
   (concat al/ml-separator str))
 
-(defun al/ml-string (str &key (fg "7") bg (bright nil bright-set))
+(defun al/ml-string (str &key fg bg (bright nil bright-set))
   "Make STR a mode-line string with FG and BG colors.
 FG and BG can be nil or a string containing either a single digit (a
 number from `*colors*' list) or #XXXXXX value.
@@ -261,7 +261,7 @@ If BRIGHT is set and is non-nil, use bright color."
 
 (defun al/ml-layout ()
   (al/ml-separate
-   (al/ml-string (al/layout-string (al/current-layout)))))
+   (al/ml-string (al/layout-string (al/current-layout)) :fg "7")))
 
 
 ;;; mode-line windows
@@ -311,7 +311,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
                                      :fg "#a0a0a0" :bg "#555555"))
                    (and num
                         (al/ml-string (concat " " (write-to-string num) " ")
-                                      :bg "#407777")))))
+                                      :fg "7" :bg "#407777")))))
               al/window-alist)))))
 
 
