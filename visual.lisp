@@ -99,15 +99,6 @@ If BRIGHT is set and is non-nil, use bright color."
   (al/ml-string str :fg "#d8d844" :bg "#3838a0"))
 
 
-;;; mode-line date
-
-(defvar al/date-refresh-time 120)
-
-(al/defun-with-delay
- al/date-refresh-time al/ml-date ()
- (al/ml-string (time-format "%a %d %b")))
-
-
 ;;; mode-line cpu
 
 (al/load "mode-line-cpu")
@@ -328,8 +319,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 5
  *screen-mode-line-format*
- '((:eval (al/ml-date))
-   " ^[^5*%d^]"                 ; time
+ '("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
    (:eval (al/ml-cpu))
    (:eval (al/ml-thermal-zones-maybe))
