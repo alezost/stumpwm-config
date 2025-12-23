@@ -69,6 +69,9 @@
   "Concatenate `al/ml-separator' and STR."
   (concat al/ml-separator str))
 
+;; Export to make this available in "mode-line-<…>.lisp" files.
+(export '(al/ml-string))
+
 (defun al/ml-string (str &key fg bg (bright nil bright-set))
   "Make STR a mode-line string with FG and BG colors.
 FG and BG can be nil or a string containing either a single digit (a
