@@ -1,7 +1,7 @@
 ;;; mode-line-cpu.lisp --- CPU info for the mode line
 
 ;; Copyright © 2007 Anonymous Coward, Jonathan Moore Liles
-;; Copyright © 2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2019–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -90,8 +90,12 @@
           (system (d system))
           (io     (d io))
           (irq    (d irq)))
-      (format nil "^[^b^7*^[~A~3D^]%% (~2,'0D ~2,'0D ~D ~D)^]"
-              (bar-zone-color cpu 30 60 90) cpu
-              user system io irq))))
+      (al/ml-string
+       (concat (al/ml-zone-string cpu)
+               (al/ml-string "(" :reset t)
+               (format nil "~2,'0D ~2,'0D ~D ~D"
+                       user system io irq)
+               (al/ml-string ")" :reset t))
+       :fg "7"))))
 
 ;;; mode-line-cpu.lisp ends here
