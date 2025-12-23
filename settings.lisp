@@ -107,7 +107,7 @@
       (lambda (win key) (al/send-key key win)))
 
 (setf *deny-raise-request*
-      '((:class "Conkeror")
+      '((:class "Chromium")
         (:class "firefox")
         (:class "IceCat")
         (:class "FLTK")         ; xcas
