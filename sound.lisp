@@ -1,6 +1,6 @@
 ;;; sound.lisp --- Set sound parameters and show them in OSD
 
-;; Copyright © 2013–2016, 2022 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -44,9 +44,10 @@
 
 (defvar al/sound-volume nil
   "Sound volume of the current simple control.
-This variable should have (STRING . TIME) value, where STRING is the
-latest value of the sound volume and TIME is the time (seconds since epoch)
-of the latest update.")
+This variable should have (TIME VOLUME ON) value, where TIME is the
+time (seconds since epoch) of the latest update, VOLUME is the latest
+value of the sound volume and ON is a boolean value showing if the sound
+is on or off (muted).")
 
 (defun al/sound-get-current-scontrol ()
   "Return the current simple control from `al/sound-scontrols'."
@@ -54,7 +55,7 @@ of the latest update.")
 
 (defun al/sound-get-next-scontrol ()
   "Return next simple control from `al/sound-scontrols'."
-  (setq al/sound-current-scontrol-num
+  (setf al/sound-current-scontrol-num
         (if (>= al/sound-current-scontrol-num
                 (- (length al/sound-scontrols) 1))
             0
@@ -70,7 +71,7 @@ of the latest update.")
   "Set sound value for the current simple control.
 ARGS are the rest amixer arguments after 'sset CONTROL'."
   (apply #'al/sound-call "sset" (al/sound-get-current-scontrol) args)
-  (setf al/sound-volume (cons nil (get-universal-time))))
+  (setf al/sound-volume (list (get-universal-time) nil nil)))
 
 (defcommand al/sound-current-scontrol () ()
   "Show sound value of the current simple control."
@@ -79,21 +80,19 @@ ARGS are the rest amixer arguments after 'sset CONTROL'."
 (defcommand al/sound-next-scontrol () ()
   "Switch simple control and show its sound value."
   (al/sound-call "sget" (al/sound-get-next-scontrol))
-  (setf al/sound-volume (cons nil (get-universal-time))))
+  (setf al/sound-volume (list (get-universal-time) nil nil)))
 
 (defun al/sound-update-volume (&optional scontrol)
   "Update `al/sound-volume' with SCONTROL (\"Master\" by default)."
   (let* ((cmd (concat "amixer sget "
                       (or scontrol (al/sound-get-current-scontrol))
-                      " | sed -rn '$s/[^[]+\\[([0-9]+)%.*/\\1/p'"))
+                      " | sed -rn '$s/[^[]+\\[([0-9]+)%\\].+\\[([a-z]+)\\].*/\\1 \\2/p'"))
          (output (run-shell-command cmd t))
-         (res (first (split-string output '(#\newline)))))
+         (res (first (split-string output '(#\newline))))
+         (res (split-string res " "))
+         (vol (first res))
+         (on  (string= "on" (second res))))
     (setf al/sound-volume
-          (cons res
-                (if res
-                    (get-universal-time)
-                    ;; If sound volume is not available for some reason,
-                    ;; do not update it for an hour.
-                    (+ (get-universal-time) 3600))))))
+          (list (get-universal-time) vol on))))
 
 ;;; sound.lisp ends here

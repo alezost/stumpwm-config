@@ -204,18 +204,18 @@ If BRIGHT is set and is non-nil, use bright color."
 (defvar al/ml-sound nil)
 (defvar al/sound-refresh-time 30)
 
-(defun al/ml-sound-string (vol)
+(defun al/ml-sound-string (vol &optional (vol-on t))
   (and (stringp vol)
        (not (string= "" vol))
        (al/ml-separate
         (concat (al/ml-title-string "Snd ")
-                (al/ml-string vol :fg "#50e050")))))
+                (al/ml-string vol :fg (if vol-on "#50e050" "#fa3333"))))))
 
 (defun al/ml-sound ()
   (when (null al/sound-volume)
     (al/sound-update-volume))
-  (let ((vol      (car al/sound-volume))
-        (vol-time (cdr al/sound-volume))
+  (let ((vol-time (first  al/sound-volume))
+        (vol      (second al/sound-volume))
         (ml-time  (cdr al/ml-sound))
         (now      (get-universal-time)))
     (if (or (and (null vol)
@@ -228,13 +228,15 @@ If BRIGHT is set and is non-nil, use bright color."
         (progn
           (al/sound-update-volume)
           (setf al/ml-sound
-                (cons (al/ml-sound-string (car al/sound-volume))
-                      (cdr al/sound-volume))))
+                (cons (al/ml-sound-string (second al/sound-volume)
+                                          (third al/sound-volume))
+                      (first al/sound-volume))))
         (when (and vol
                    (or (null ml-time)
                        (> vol-time ml-time)))
           (setf al/ml-sound
-                (cons (al/ml-sound-string vol) vol-time)))))
+                (cons (al/ml-sound-string vol (third al/sound-volume))
+                      vol-time)))))
   (car al/ml-sound))
 
 
