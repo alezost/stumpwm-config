@@ -72,26 +72,32 @@
 ;; Export to make this available in "mode-line-<…>.lisp" files.
 (export '(al/ml-string))
 
-(defun al/ml-string (str &key fg bg (bright nil bright-set))
+(defun al/ml-string (str &key fg bg (bright nil bright-set) reset)
   "Make STR a mode-line string with FG and BG colors.
+
 FG and BG can be nil or a string containing either a single digit (a
 number from `*colors*' list) or #XXXXXX value.
-If BRIGHT is set and is non-nil, use bright color."
+
+If BRIGHT is set and is non-nil, use bright color.
+
+If RESET is non-nil, use \"^n\" construct and ignore other arguments."
   ;; See (info "(stumpwm) Colors") for details on the color machinery.
-  (let ((fc (and (stringp fg)
-                 (concat "^(:fg "
-                         (if (= 1 (length fg))
-                             fg
-                             (concat "\"" fg "\""))
-                         ")")))
-        (bc (and (stringp bg)
-                 (concat "^(:bg "
-                         (if (= 1 (length bg))
-                             bg
-                             (concat "\"" bg "\""))
-                         ")"))))
-    (concat "^[" (and bright-set (if bright "^B" "^b"))
-            fc bc str "^]")))
+  (if reset
+      (concat "^[^n" str "^]")
+      (let ((fc (and (stringp fg)
+                     (concat "^(:fg "
+                             (if (= 1 (length fg))
+                                 fg
+                                 (concat "\"" fg "\""))
+                             ")")))
+            (bc (and (stringp bg)
+                     (concat "^(:bg "
+                             (if (= 1 (length bg))
+                                 bg
+                                 (concat "\"" bg "\""))
+                             ")"))))
+        (concat "^[" (and bright-set (if bright "^B" "^b"))
+                fc bc str "^]"))))
 
 (defun al/ml-title-string (str)
   "Make STR a title string."
