@@ -91,7 +91,7 @@
           (io     (d io))
           (irq    (d irq)))
       (format nil "^[^b^7*^[~A~3D^]%% (~2,'0D ~2,'0D ~D ~D)^]"
-              (bar-zone-color cpu) cpu
+              (bar-zone-color cpu 30 60 90) cpu
               user system io irq))))
 
 ;;; mode-line-cpu.lisp ends here
