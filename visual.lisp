@@ -33,8 +33,7 @@
         "cyan"                  ; 6
         "white"                 ; 7
         "AntiqueWhite3"
-        "khaki3")
-      *bar-hi-color* "^B^5*")
+        "khaki3"))
 (update-color-map (current-screen))
 
 (defmacro al/set-color (val color)
@@ -70,7 +69,8 @@
   (concat al/ml-separator str))
 
 ;; Export to make this available in "mode-line-<…>.lisp" files.
-(export '(al/ml-string))
+(export '(al/ml-string
+          al/ml-zone-string))
 
 (defun al/ml-string (str &key fg bg (bright nil bright-set) reset)
   "Make STR a mode-line string with FG and BG colors.
@@ -98,6 +98,32 @@ If RESET is non-nil, use \"^n\" construct and ignore other arguments."
                              ")"))))
         (concat "^[" (and bright-set (if bright "^B" "^b"))
                 fc bc str "^]"))))
+
+(defun al/ml-zone-string (number &key (colors '("^B^1*" "^B^5*" "^B"))
+                                   (zones '(90 60 30)) reverse
+                                   (format "~3D") (ending "%%"))
+  ;; This is a replacement for `bar-zone-color'.
+  "Format NUMBER with FORMAT string, make it colored, and add ENDING to it.
+
+ZONES is a descending list of integers that is compared to NUMBER.
+COLORS is a list of respecting color specifications.
+ZONES and COLORS lists must have the same length.
+
+If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
+  (let ((compare (if reverse #'<= #'>=))
+        (num-str (format nil format number))
+        (color nil))
+    (do ((zones (if reverse (reverse zones) zones)
+                (cdr zones))
+         (colors colors (cdr colors)))
+        ((or color (null zones))
+         color)
+      (when (funcall compare number (car zones))
+        (setf color (car colors))))
+    (concat (if color
+                (al/ml-string (concat color num-str))
+                num-str)
+            ending)))
 
 (defun al/ml-title-string (str)
   "Make STR a title string."
