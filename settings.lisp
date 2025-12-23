@@ -1,6 +1,6 @@
 ;;; settings.lisp --- General settings: variables, hooks, ...
 
-;; Copyright © 2013–2021 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -21,6 +21,11 @@
 
 
 ;;; Windows, frames and groups
+
+;; Why does stumpwm want to sync keys every time I switch between windows?
+(remove-hook *focus-frame-hook*  'minor-mode-sync-keys-hook-function)
+(remove-hook *focus-window-hook* 'minor-mode-sync-keys-hook-function)
+(remove-hook *focus-group-hook*  'minor-mode-sync-keys-hook-function)
 
 ;; Name the default group.
 (setf (group-name (car (screen-groups (current-screen))))
