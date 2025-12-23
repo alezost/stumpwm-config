@@ -147,6 +147,19 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
           (al/stumpwm-cpu:cpu-mode-line-string))))
 
 
+;;; mode-line memory
+
+(al/load "mode-line-memory")
+
+(defvar al/memory-refresh-time 8)
+
+(al/defun-with-delay
+ al/memory-refresh-time al/ml-memory ()
+ (al/ml-separate
+  (concat (al/ml-title-string "Mem")
+          (al/stumpwm-memory:memory-mode-line-string))))
+
+
 ;;; mode-line thermal
 
 (al/load "mode-line-thermal")
@@ -359,6 +372,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
  '("^[^5*%d^]"                  ; time
    " ^[^2*%n^]"                 ; group name
    (:eval (al/ml-cpu))
+   (:eval (al/ml-memory))
    (:eval (al/ml-thermal-zones-maybe))
    (:eval (al/ml-net))
    (:eval (al/ml-battery-maybe))
