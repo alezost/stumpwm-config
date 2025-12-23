@@ -1,7 +1,7 @@
 ;;; mode-line-battery.lisp --- Battery info for the mode line
 
 ;; Copyright © 2008 Julian Stecklina
-;; Copyright © 2018–2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2018–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -108,16 +108,16 @@ TIME is a floating number of hours."
   "Return a string with BATTERY info suitable for the mode-line."
   (multiple-value-bind (state percent time)
       (battery-state battery)
-    (concat "^[^b^7*"
-            (ecase state
-              (:unknown (format nil "(no info)"))
-              (:charged (format nil "~D%%" percent))
-              ((:charging :discharging)
-               (format nil "^[~A~D^]%%~A^n~A"
-                       (bar-zone-color percent 90 60 30 t)
-                       percent
-                       (if (eq state :charging) "^B^2+" "^B^1-")
-                       (format-hours time))))
-            "^]")))
+    (al/ml-string
+     (ecase state
+       (:unknown "(no info)")
+       (:charged (concat (write-to-string percent) "%%"))
+       ((:charging :discharging)
+        (concat (al/ml-zone-string percent :format "~2D" :reverse t)
+                (if (eq state :charging)
+                    (al/ml-string "+" :fg "2" :bright t)
+                    (al/ml-string "-" :fg "1" :bright t))
+                (format-hours time))))
+     :fg "7")))
 
 ;;; mode-line-battery.lisp ends here
