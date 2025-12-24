@@ -81,6 +81,7 @@ additional key."
 (al/define-key *top-map* "s-n"   "gother")
 (al/define-key *top-map* "M-s-n" "al/gmove-to-other-group")
 (al/define-key *top-map* "s-;"   "al/mpv")
+(al/define-key *top-map* "H-w"   "al/emacs")
 
 (al/define-key *tile-group-root-map* "s-f" "fullscreen")
 (al/define-key *tile-group-top-map* "s-z" "hsplit")
