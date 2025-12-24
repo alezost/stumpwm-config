@@ -22,7 +22,8 @@
 ;; These symbols are used in "mode-line-*.lisp" files.
 (export
  '(al/read-sys-file
-   al/file-readable?))
+   al/file-readable?
+   al/mapconcat))
 
 (defun al/executable-exists? (name)
   "Return t, if NAME executable exists in PATH."

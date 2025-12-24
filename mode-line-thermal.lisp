@@ -1,7 +1,7 @@
 ;;; mode-line-thermal.lisp --- Thermal zones info for the mode line
 
 ;; Copyright © 2007 Anonymous Coward, Jonathan Moore Liles
-;; Copyright © 2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2019–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -53,19 +53,18 @@
 
 (defun thermal-zones-mode-line-string (&rest zones)
   "Return a string with thermal ZONES info suitable for the mode-line."
+  (defun temp (zone)
+    (al/ml-zone-string (thermal-zone-temperature zone)
+                       :zones '(70 60 50)
+                       :format "~2D"
+                       :ending ""))
+
   (if (null zones)
       ""
-      (concat
-       "^[^b^7*"
-       (if (cdr zones)          ; not a single zone
-           (apply #'concat
-                  "°C:"
-                  (mapcar (lambda (zone)
-                            (format nil " ~D"
-                                    (thermal-zone-temperature zone)))
-                          zones))
-           (format nil "~D°C"
-                   (thermal-zone-temperature (car zones))))
-       "^]")))
+      (al/ml-string
+       (if (cdr zones)
+           (concat "°C: " (al/mapconcat #'temp zones " "))
+           (concat (temp (car zones)) "°C"))
+       :fg "7")))
 
 ;;; mode-line-thermal.lisp ends here
