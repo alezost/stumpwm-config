@@ -1,7 +1,7 @@
 ;;; mode-line-net.lisp --- Network info for the mode line
 
 ;; Copyright © 2009 Vitaly Mayatskikh
-;; Copyright © 2019–2021 Alex Kost <alezost@gmail.com>
+;; Copyright © 2019–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 (defpackage #:al/stumpwm-net
   (:use :common-lisp
+        :alexandria
         :stumpwm)
   (:export #:net-devices
            #:net-device
@@ -75,13 +76,12 @@ Return nil in case of any error."
 
 (defun net-rfkill-dir (device)
   "Return the sysfs rfkill directory for the network DEVICE."
-  (let ((assoc (assoc device net-rfkill-dirs)))
-    (if assoc
-        (cdr assoc)
-        (let ((dir (car (directory (concat (net-device-file-name device)
-                                           "/phy*/rfkill*")))))
-          (push (cons device dir) net-rfkill-dirs)
-          dir))))
+  (if-let ((assoc (assoc device net-rfkill-dirs)))
+    (cdr assoc)
+    (let ((dir (car (directory (concat (net-device-file-name device)
+                                       "/phy*/rfkill*")))))
+      (push (cons device dir) net-rfkill-dirs)
+      dir)))
 
 (defun net-rfkill-state (&optional (device net-device))
   "Return the current rfkill state of the network DEVICE.
@@ -150,27 +150,27 @@ Otherwise, return `:unknown' value."
   (if (numberp bytes)
       (let ((mb (/ bytes 1e6)))
         (if (> mb 1)
-            (concat (format-float mb) "^[^2M^]")
-            (concat (format-float (/ bytes 1e3)) "^[^nk^]")))
+            (concat (format-float mb)
+                    (al/ml-string "M" :fg "2"))
+            (concat (format-float (/ bytes 1e3))
+                    (al/ml-string "k" :reset t))))
       ""))
 
 (defun net-mode-line-string ()
   "Return a string with NET info suitable for the mode-line."
   (multiple-value-bind (state down up)
       (net-state net-device)
-    (let ((fmt-device (ecase state
-                        (:up      "^b^6*~A")
-                        (:down    "^B^5*~A")
-                        (:soft    "^b^7*~A")
-                        (:hard    "~A")
-                        (:unknown "^B^1*~A"))))
-      (concat "^["
-              (if (and down up)
-                  (format nil (concat fmt-device "^7 ~A ~A")
-                          net-device
-                          (format-bytes down)
-                          (format-bytes up))
-                  (format nil fmt-device net-device))
-              "^]"))))
+    (let ((color (ecase state
+                   (:up      "^b^6*")
+                   (:down    "^B^5*")
+                   (:soft    "^b^7*")
+                   (:hard    "")
+                   (:unknown "^B^1*"))))
+      (concat
+       (al/ml-string (concat color net-device))
+       (and down up
+            (al/ml-string (concat " " (format-bytes down)
+                                  " " (format-bytes up))
+                          :fg "7"))))))
 
 ;;; mode-line-net.lisp ends here
