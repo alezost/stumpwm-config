@@ -542,6 +542,14 @@ Return nil, if ELEMENT is not in the LIST."
        if (null rest) return nil
        finally (return (or (cadr rest) (car list))))))
 
+(defun al/mapconcat (function sequence &optional (separator ""))
+  "Apply FUNCTION to each element of SEQUENCE and concat resulting strings.
+If SEPARATOR is non-nil, it must be a string.  It will be put between
+each pair of the result."
+  ;; (check-type separator string)
+  (format nil (concat "~{~A~^" separator "~}")
+          (mapcar function sequence)))
+
 (defcommand al/banish-pointer () ()
   "Move mouse pointer to the top/center of the current screen."
   (let* ((screen (current-screen))

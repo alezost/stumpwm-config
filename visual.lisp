@@ -340,20 +340,20 @@ CLASS is a window class; NUM is the number of windows of this class.")
 (defun al/ml-windows ()
   (when (and al/window-alist al/current-window)
     (al/ml-separate
-     (format
-      nil "~{~A~^ ~}"
-      (mapcar (lambda (assoc)
-                (destructuring-bind (class . num)
-                    assoc
-                  (concat
-                   (if (string= class al/current-window)
-                       (al/ml-window-class (concat " " class " "))
-                       (al/ml-string (concat " " class " ")
-                                     :fg "#a0a0a0" :bg "#555555"))
-                   (and num
-                        (al/ml-string (concat " " (write-to-string num) " ")
-                                      :fg "7" :bg "#407777")))))
-              al/window-alist)))))
+     (al/mapconcat
+      (lambda (assoc)
+        (destructuring-bind (class . num)
+            assoc
+          (concat
+           (if (string= class al/current-window)
+               (al/ml-window-class (concat " " class " "))
+               (al/ml-string (concat " " class " ")
+                             :fg "#a0a0a0" :bg "#555555"))
+           (and num
+                (al/ml-string (concat " " (write-to-string num) " ")
+                              :fg "7" :bg "#407777")))))
+      al/window-alist
+      " "))))
 
 
 ;;; Visual appearance and mode-line settings
