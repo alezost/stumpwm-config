@@ -64,9 +64,9 @@
 
 (defvar al/ml-separator " | ")
 
-(defun al/ml-separate (string)
-  "Concatenate `al/ml-separator' and STRING."
-  (concat al/ml-separator string))
+(defun al/ml-separate (&rest strings)
+  "Concatenate `al/ml-separator' and STRINGS."
+  (apply #'concat al/ml-separator strings))
 
 ;; Export to make this available in "mode-line-<…>.lisp" files.
 (export '(al/ml-string
@@ -149,8 +149,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/defun-with-delay al/cpu-refresh-time al/ml-cpu ()
   (al/ml-separate
-   (concat (al/ml-title-string "CPU")
-           (al/stumpwm-cpu:cpu-mode-line-string))))
+   (al/ml-title-string "CPU")
+   (al/stumpwm-cpu:cpu-mode-line-string)))
 
 
 ;;; mode-line memory
@@ -161,8 +161,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/defun-with-delay al/memory-refresh-time al/ml-memory ()
   (al/ml-separate
-   (concat (al/ml-title-string "Mem")
-           (al/stumpwm-memory:memory-mode-line-string))))
+   (al/ml-title-string "Mem")
+   (al/stumpwm-memory:memory-mode-line-string)))
 
 
 ;;; mode-line thermal
@@ -230,8 +230,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/defun-with-delay al/battery-refresh-time al/ml-battery ()
   (al/ml-separate
-   (concat (al/ml-title-string "Bat ")
-           (al/stumpwm-battery:battery-mode-line-string al/battery))))
+   (al/ml-title-string "Bat ")
+   (al/stumpwm-battery:battery-mode-line-string al/battery)))
 
 (defun al/ml-battery-maybe ()
   (if al/battery
@@ -247,8 +247,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
   (and (stringp bl)
        (not (string= "" bl))
        (al/ml-separate
-        (concat (al/ml-title-string "BL ")
-                (al/ml-string bl :fg "#66bbff")))))
+        (al/ml-title-string "BL ")
+        (al/ml-string bl :fg "#66bbff"))))
 
 (defun al/ml-backlight ()
   (when (null al/backlight)
@@ -278,8 +278,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
   (and (stringp vol)
        (not (string= "" vol))
        (al/ml-separate
-        (concat (al/ml-title-string "Snd ")
-                (al/ml-string vol :fg (if vol-on "#50e050" "#fa3333"))))))
+        (al/ml-title-string "Snd ")
+        (al/ml-string vol :fg (if vol-on "#50e050" "#fa3333")))))
 
 (defun al/ml-sound ()
   (when (null al/sound-volume)
