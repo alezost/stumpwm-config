@@ -517,6 +517,18 @@ Pass ARGS as arguments to 'xbacklight' shell command."
   "Put the mode line on the top of the screen."
   (al/mode-line-pos :top))
 
+(defun al/mode-line-message (string &optional (position :left))
+  "Show STRING message near the mode line.
+POSITION can be one of the following symbols: `:left', `:center', `:right'."
+  (let ((*message-window-y-margin* 28)
+        (*message-window-gravity*
+          (if (eq position :center)
+              *mode-line-position*
+              (intern (concat (symbol-name *mode-line-position*)
+                              "-" (symbol-name position))
+                      :keyword))))
+    (echo string)))
+
 
 ;;; Input line
 
