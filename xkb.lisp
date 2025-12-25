@@ -1,6 +1,6 @@
 ;;; xkb.lisp --- Wrapper for clx-xkeyboard library
 
-;; Copyright © 2013–2016, 2019 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -117,7 +117,8 @@ If current window is emacs, send a key sequence KEY to it (if specified)."
 (defconstant +mod3-lock+  #b100000)     ; Hyper
 (defconstant +mod4-lock+  #b1000000)    ; Super
 
-(defun al/mod-lock-state (mod mods)
+(defun al/mod-lock-on-p (mod &optional (mods (xlib:device-state-locked-mods
+                                               (xlib:get-state *display*))))
   "Return t if MOD lock is enabled in MODS bits.
 Return nil otherwise."
   (not (zerop (logand mod mods))))
@@ -139,9 +140,7 @@ If AFFECT-MOD-LOCKS is nil, use the value of MOD-LOCKS."
 
 (defun al/toggle-mod-lock (mod-lock)
   "Toggle MOD-LOCK key."
-  (if (al/mod-lock-state mod-lock
-                         (xlib:device-state-locked-mods
-                          (xlib:get-state *display*)))
+  (if (al/mod-lock-on-p mod-lock)
       (al/set-mod-locks 0 mod-lock)
       (al/set-mod-locks mod-lock)))
 

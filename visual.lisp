@@ -313,14 +313,15 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 ;;; mode-line keyboard
 
 (defun al/ml-locks ()
-  (defun bool->color (bool)
-    (if bool "^B^2" ""))
   (let ((mods (xlib:device-state-locked-mods
                (xlib:get-state *display*))))
-    (al/ml-separate
-     (format nil "^[~ACaps^] ^[~ANum^]"
-             (bool->color (al/mod-lock-state +caps-lock+ mods))
-             (bool->color (al/mod-lock-state +num-lock+ mods))))))
+    (flet ((color (lock)
+             (if (al/mod-lock-on-p lock mods)
+                 "^B^2" "")))
+      (al/ml-separate
+       (format nil "^[~ACaps^] ^[~ANum^]"
+               (color +caps-lock+)
+               (color +num-lock+))))))
 
 (defun al/ml-layout ()
   (al/ml-separate
