@@ -41,14 +41,17 @@
 
 ;;; Keyboard layouts
 
-(defun al/layout-string (group)
-  "Convert xkb group (number) to a string suitable for the mode line."
+(defvar al/layout-alist
   ;; Layouts ("dvorak"/"йцукен"/"qwerty") are set by my Xorg config:
   ;; <https://github.com/alezost/config/blob/master/X/xorg.conf/10-input.conf>.
-  (case group
-    (0 "dv")
-    (1 "ru")
-    (2 "qw")))
+  '((0 . "dv")
+    (1 . "ru")
+    (2 . "qw"))
+  "Alist of available layouts and their mode-line designations.")
+
+(defun al/layout-string (group)
+  "Convert xkb group (number) to a string suitable for the mode line."
+  (cdr (assoc group al/layout-alist :test #'eq)))
 
 (defun al/current-layout (&optional (display *display*))
   "Return current keyboard layout."
