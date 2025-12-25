@@ -131,36 +131,55 @@ GRAVITY controls where the window will appear.  Possible values are:
 
 ;;; Windows, frames and groups
 
-(defun al/class-window-p (class &optional (win (current-window)))
-  "Return T if a window WIN is of class CLASS."
-  (and win (string= class (window-class win))))
+(defun al/class-window-p (classes &optional (win (current-window)))
+  "Return non-nil if a window WIN matches any class of CLASSES.
+CLASSES can be a string (single class) or a list of strings (multiple classes)."
+  (and win      ; (current-window) returns nil for the root window
+       (let ((win-class (window-class win)))
+         (if (listp classes)
+             (some (lambda (class)
+                     (string= class win-class))
+                   classes)
+             (string= classes win-class)))))
 
-(defcommand al/focus-window-by-class (class) ((:string "Window class: "))
-  "Focus window class CLASS.
-Return the window or nil if there is no such."
-  (if (al/class-window-p class)
+(defun al/class-windows (classes)
+  ;; (defun al/class-windows (classes &optional (groups (list (current-group))))
+  ;;
+  ;; Ideally, this function should have `groups' argument.  However,
+  ;; (mapcan #'group-windows (screen-groups (current-screen))) may hang
+  ;; and eventually fail with SB-KERNEL::HEAP-EXHAUSTED-ERROR.
+  "Return list of windows matching any class of CLASSES.
+CLASSES can be a string (single class) or a list of strings (multiple classes)."
+  ;; Originates from `find-matching-windows'.
+  (let* ((all (screen-windows (current-screen)))
+         ;; (all (mapcan #'group-windows groups))
+         (matching (remove-if-not (lambda (win)
+                                    (al/class-window-p classes win))
+                                  all)))
+    ;; Sort by `window-number'.  Otherwise, `al/focus-class-window' will
+    ;; cycle between 2 latest windows because `screen-windows' returns
+    ;; the list sorted by recency.
+    (sort matching #'< :key #'window-number)))
+
+(defun al/focus-class-window (classes &optional ignore-current)
+  "Focus window matching any class of CLASSES.
+CLASSES can be a string (single class) or a list of strings (multiple classes).
+Return the window or nil if there are no matching windows.
+If IGNORE-CURRENT is non-nil, skip current window even if it matches."
+  (if (and (not ignore-current)
+           (al/class-window-p classes))
       (current-window)
-      (let ((win (car (or ;; priority to the window from the current group
-                       (find-matching-windows (list :class class) nil nil)
-                       (find-matching-windows (list :class class) t t)))))
+      (let* ((windows (al/class-windows classes))
+             (win (if ignore-current
+                      (if-let ((next-wins
+                                (cdr (member (current-window) windows))))
+                        (car next-wins)
+                        (first windows))
+                      (car windows))))
         (if win
             (focus-all win)
-            (message "No ~a window." class))
+            (message "No window matching ~a" classes))
         win)))
-
-(defun al/raise-window (props &optional (all-groups *run-or-raise-all-groups*)
-                                        (all-screens *run-or-raise-all-screens*))
-  "Switch to a window matching PROPS.
-This is similar to `run-or-raise' except it shows a message instead of
-running a shell command if there is no suitable window."
-  (let* ((matches (find-matching-windows props all-groups all-screens))
-         (other-matches (member (current-window) matches))
-         (win (if (> (length other-matches) 1)
-                  (second other-matches)
-                  (first matches))))
-    (if win
-        (focus-all win)
-        (message "No window matching ~a" props))))
 
 (defcommand al/hide-current-window () ()
   "Hide current window."
@@ -426,7 +445,7 @@ program.")
 
 (defcommand al/mpv () ()
   "Switch to the next mpv window."
-  (al/raise-window '(:class "mpv")))
+  (al/focus-class-window "mpv" 'next))
 
 (defcommand al/toggle-unclutter () ()
   "Start/stop 'unclutter' on the current display."
