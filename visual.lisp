@@ -378,6 +378,16 @@ CLASS is a window class; NUM is the number of windows of this class.")
       " "))))
 
 
+;;; mode-line time
+
+(defun al/ml-show-time (&rest _)
+  (declare (ignore _))
+  (al/mode-line-message
+   (time-format *time-format-string-default*)))
+
+(register-ml-on-click-id :al/ml-show-time #'al/ml-show-time)
+
+
 ;;; Visual appearance and mode-line settings
 
 (setf
@@ -391,7 +401,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 5
  *screen-mode-line-format*
- '("^[^5*%d^]"                  ; time
+ `(,(al/ml-string "%d" :fg "5" :click :al/ml-show-time)
    " ^[^2*%n^]"                 ; group name
    (:eval (al/ml-cpu))
    (:eval (al/ml-memory))
