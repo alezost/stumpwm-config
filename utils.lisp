@@ -641,19 +641,26 @@ of the function is returned without evaluation.
 For example, the following `delayed-time' function will return a new
 time string only every 10 seconds:
 
-  (al/defun-with-delay
-   10 delayed-time ()
-   (time-format \"%H:%M:%S\"))
+  (al/defun-with-delay 10 delayed-time ()
+    (time-format \"%H:%M:%S\"))
 "
-  (let ((next-time-var  (make-symbol "next-time"))
-        (last-value-var (make-symbol "last-value")))
+  (let* ((next-time-var  (make-symbol "next-time"))
+         (last-value-var (make-symbol "last-value"))
+         (seconds-str (write-to-string seconds))
+         (name-str (symbol-name name))
+         (var-name (intern (concat name-str "-UPDATE"))))
     `(let ((,next-time-var 0)
            ,last-value-var)
+       (defvar ,var-name nil
+         ,(concat "If non-nil, `" name-str "' evaluates its body immediately.
+I.e., without waiting for `" seconds-str "' seconds."))
        (defun ,name ,args
          (let ((now (get-universal-time)))
-           (if (< now ,next-time-var)
+           (if (and (null ,var-name)
+                    (< now ,next-time-var))
                ,last-value-var
-               (setf ,next-time-var (+ now ,seconds)
+               (setf ,var-name nil
+                     ,next-time-var (+ now ,seconds)
                      ,last-value-var (progn ,@body))))))))
 
 ;;; utils.lisp ends here
