@@ -147,11 +147,10 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defvar al/cpu-refresh-time 3)
 
-(al/defun-with-delay
- al/cpu-refresh-time al/ml-cpu ()
- (al/ml-separate
-  (concat (al/ml-title-string "CPU")
-          (al/stumpwm-cpu:cpu-mode-line-string))))
+(al/defun-with-delay al/cpu-refresh-time al/ml-cpu ()
+  (al/ml-separate
+   (concat (al/ml-title-string "CPU")
+           (al/stumpwm-cpu:cpu-mode-line-string))))
 
 
 ;;; mode-line memory
@@ -160,11 +159,10 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defvar al/memory-refresh-time 8)
 
-(al/defun-with-delay
- al/memory-refresh-time al/ml-memory ()
- (al/ml-separate
-  (concat (al/ml-title-string "Mem")
-          (al/stumpwm-memory:memory-mode-line-string))))
+(al/defun-with-delay al/memory-refresh-time al/ml-memory ()
+  (al/ml-separate
+   (concat (al/ml-title-string "Mem")
+           (al/stumpwm-memory:memory-mode-line-string))))
 
 
 ;;; mode-line thermal
@@ -212,9 +210,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defvar al/net-refresh-time 6)
 
-(al/defun-with-delay
- al/net-refresh-time al/ml-net ()
- (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
+(al/defun-with-delay al/net-refresh-time al/ml-net ()
+  (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
 
 (defcommand al/mode-line-next-net-device () ()
   "Set next net device in the mode-line."
@@ -231,11 +228,10 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defvar al/battery-refresh-time 60)
 
-(al/defun-with-delay
- al/battery-refresh-time al/ml-battery ()
- (al/ml-separate
-  (concat (al/ml-title-string "Bat ")
-          (al/stumpwm-battery:battery-mode-line-string al/battery))))
+(al/defun-with-delay al/battery-refresh-time al/ml-battery ()
+  (al/ml-separate
+   (concat (al/ml-title-string "Bat ")
+           (al/stumpwm-battery:battery-mode-line-string al/battery))))
 
 (defun al/ml-battery-maybe ()
   (if al/battery
