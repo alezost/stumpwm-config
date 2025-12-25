@@ -168,12 +168,11 @@ running a shell command if there is no suitable window."
 
 (defcommand al/gmove-to-other-group () ()
   "Move the current window to the other group and go to that group."
-  (let ((group (car (remove-if (lambda (g) (eq g (current-group)))
-                               (screen-groups (current-screen))))))
-    (if group
-        (progn (gmove group)
-               (switch-to-group group))
-        (echo "There is only one group."))))
+  (if-let ((group (car (remove-if (lambda (g) (eq g (current-group)))
+                                  (screen-groups (current-screen))))))
+    (progn (gmove group)
+           (switch-to-group group))
+    (echo "There is only one group.")))
 
 (defcommand (al/fother tile-group) () ()
   "Jump to the previously selected frame.
@@ -342,8 +341,8 @@ beginning with ':') where a service is started."
 
 (defcommand al/send-key-to-emacs (key) ((:key "Key: "))
   "Focus emacs window and send KEY to it."
-  (let ((win (al/focus-window-by-class "Emacs")))
-    (and win (al/send-key key win))))
+  (when-let ((win (al/focus-class-window "Emacs")))
+    (al/send-key key win)))
 
 (defcommand al/emacs () ()
   "Start emacs unless it is already running, in which case focus it."
@@ -531,17 +530,14 @@ get nil."
        if (< rnd prob)
        return (car elm))))
 
-(defun al/next-list-element (list element)
-  ;; XXX Is there a ready-to-use function for this?
+(defun al/next-list-element (list element &optional (test #'equal))
   "Return an element from LIST which follows ELEMENT.
 If ELEMENT is the last element of the LIST, return the first one.
 Return nil, if ELEMENT is not in the LIST."
-  (let ((rest list))
-    (loop
-       until (equal (car rest) element)
-       do (setq rest (cdr rest))
-       if (null rest) return nil
-       finally (return (or (cadr rest) (car list))))))
+  (when list
+    (when-let ((pos (position element list :test test)))
+      (nth (mod (1+ pos) (length list))
+           list))))
 
 (defun al/mapconcat (function sequence &optional (separator ""))
   "Apply FUNCTION to each element of SEQUENCE and concat resulting strings.
