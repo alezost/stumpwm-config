@@ -340,7 +340,17 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defun al/ml-layout ()
   (al/ml-separate
-   (al/ml-string (al/layout-string (al/current-layout)) :fg "7")))
+   (al/ml-string (al/layout-string (al/current-layout))
+                 :fg "7"
+                 :click :al/ml-toggle-layout)))
+
+(defun al/ml-toggle-layout (&rest _)
+  (declare (ignore _))
+  (al/set-display-layout (mod (1+ (al/current-layout))
+                              (length al/layout-alist)))
+  (update-all-mode-lines))
+
+(register-ml-on-click-id :al/ml-toggle-layout #'al/ml-toggle-layout)
 
 
 ;;; mode-line windows
