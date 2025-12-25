@@ -171,18 +171,37 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/load "mode-line-thermal")
 
-(defvar al/thermal-zone
-  (car (al/stumpwm-thermal:all-thermal-zones)))
+(defvar al/all-thermal-zones
+  (al/stumpwm-thermal:all-thermal-zones))
+
+(defvar al/current-thermal-zones
+  (and al/all-thermal-zones
+       (list (car al/all-thermal-zones))))
 
 (defvar al/thermal-zones-refresh-time 6)
 
-(al/defun-with-delay
- al/thermal-zones-refresh-time al/ml-thermal-zones ()
- (al/ml-separate
-  (al/stumpwm-thermal:thermal-zones-mode-line-string al/thermal-zone)))
+(al/defun-with-delay al/thermal-zones-refresh-time al/ml-thermal-zones ()
+  (al/ml-separate
+   (format-with-on-click-id
+    (apply #'al/stumpwm-thermal:thermal-zones-mode-line-string
+           al/current-thermal-zones)
+    :al/ml-toggle-thermal-zones)))
+
+(defun al/ml-toggle-thermal-zones (&rest _)
+  (declare (ignore _))
+  (when al/all-thermal-zones
+    (setf al/current-thermal-zones
+          (if (cdr al/current-thermal-zones)
+              (list (car al/all-thermal-zones))
+              al/all-thermal-zones)
+          al/ml-thermal-zones-update t)
+    (update-all-mode-lines)))
+
+(register-ml-on-click-id :al/ml-toggle-thermal-zones
+                         #'al/ml-toggle-thermal-zones)
 
 (defun al/ml-thermal-zones-maybe ()
-  (if al/thermal-zone
+  (if al/current-thermal-zones
       (al/ml-thermal-zones)
       ""))
 
