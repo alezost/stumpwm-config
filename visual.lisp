@@ -64,40 +64,47 @@
 
 (defvar al/ml-separator " | ")
 
-(defun al/ml-separate (str)
-  "Concatenate `al/ml-separator' and STR."
-  (concat al/ml-separator str))
+(defun al/ml-separate (string)
+  "Concatenate `al/ml-separator' and STRING."
+  (concat al/ml-separator string))
 
 ;; Export to make this available in "mode-line-<…>.lisp" files.
 (export '(al/ml-string
           al/ml-zone-string))
 
-(defun al/ml-string (str &key fg bg (bright nil bright-set) reset)
-  "Make STR a mode-line string with FG and BG colors.
+(defun al/ml-string (string &key fg bg (bright nil bright-set) reset click)
+  ;; For details on the color and mode-line machinery, see
+  ;; (info "(stumpwm) Colors") and (info "(stumpwm) Mode-line Interaction").
+  "Make STRING a mode-line string with FG and BG colors.
 
 FG and BG can be nil or a string containing either a single digit (a
 number from `*colors*' list) or #XXXXXX value.
 
 If BRIGHT is set and is non-nil, use bright color.
 
-If RESET is non-nil, use \"^n\" construct and ignore other arguments."
-  ;; See (info "(stumpwm) Colors") for details on the color machinery.
-  (if reset
-      (concat "^[^n" str "^]")
-      (let ((fc (and (stringp fg)
-                     (concat "^(:fg "
-                             (if (= 1 (length fg))
-                                 fg
-                                 (concat "\"" fg "\""))
-                             ")")))
-            (bc (and (stringp bg)
-                     (concat "^(:bg "
-                             (if (= 1 (length bg))
-                                 bg
-                                 (concat "\"" bg "\""))
-                             ")"))))
-        (concat "^[" (and bright-set (if bright "^B" "^b"))
-                fc bc str "^]"))))
+If RESET is non-nil, use \"^n\" construct and ignore other arguments.
+
+CLICK should have ID or (ID [ARGS ...]) form.  It is used to make STRING
+clickable."
+  (defun color (raw)
+    (if (= 1 (length raw))
+        raw
+        (concat "\"" raw "\"")))
+
+  (let* ((str (if reset
+                  (concat "^n" string)
+                  (let ((fc (and (stringp fg)
+                                 (concat "^(:fg " (color fg) ")")))
+                        (bc (and (stringp bg)
+                                 (concat "^(:bg " (color bg) ")"))))
+                    (concat (and bright-set (if bright "^B" "^b"))
+                            fc bc string))))
+         (str (if click
+                  (apply #'format-with-on-click-id
+                         str
+                         (if (listp click) click (list click)))
+                  str)))
+    (concat "^[" str "^]")))
 
 (defun al/ml-zone-string (number &key (colors '("^B^1*" "^B^5*" "^B"))
                                    (zones '(90 60 30)) reverse
