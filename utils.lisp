@@ -418,12 +418,13 @@ program.")
 
 (defcommand al/browser (&optional args) (:rest)
   "Start browser unless it is already running, in which case focus it."
-  (let ((browser (al/current-browser)))
-    (if args
-        (progn
-          (run-shell-command (concat (car browser) " " args))
-          (al/browser))
-        (run-or-raise (car browser) `(:class ,(cdr browser))))))
+  (if args
+      (progn
+        (run-shell-command (concat (car (al/current-browser))
+                                   " " args))
+        (al/focus-class-window (cdr (al/current-browser))))
+      (unless (al/focus-class-window (mapcar #'cdr al/browsers) 'next)
+        (al/browser ""))))
 
 (defcommand al/browse (url) ((:shell "Browse URL: "))
   "Browse URL with `al/current-browser'."
@@ -433,7 +434,8 @@ program.")
 (defcommand al/browse-show (url) ((:shell "Browse URL: "))
   "Browse URL with `al/current-browser' and raise it."
   (al/browse url)
-  (al/browser))
+  (unless (al/class-window-p (cdr (al/current-browser)))
+    (al/browser)))
 
 
 ;;; Interacting with other progs
