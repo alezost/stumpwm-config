@@ -319,9 +319,24 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
              (if (al/mod-lock-on-p lock mods)
                  "^B^2" "")))
       (al/ml-separate
-       (format nil "^[~ACaps^] ^[~ANum^]"
-               (color +caps-lock+)
-               (color +num-lock+))))))
+       (al/ml-string (concat (color +caps-lock+) "Caps")
+                     :click :al/ml-toggle-caps-lock)
+       " "
+       (al/ml-string (concat (color +num-lock+) "Num")
+                     :click :al/ml-toggle-num-lock)))))
+
+(defun al/ml-toggle-caps-lock (&rest _)
+  (declare (ignore _))
+  (al/toggle-mod-lock +caps-lock+)
+  (update-all-mode-lines))
+
+(defun al/ml-toggle-num-lock (&rest _)
+  (declare (ignore _))
+  (al/toggle-mod-lock +num-lock+)
+  (update-all-mode-lines))
+
+(register-ml-on-click-id :al/ml-toggle-caps-lock #'al/ml-toggle-caps-lock)
+(register-ml-on-click-id :al/ml-toggle-num-lock #'al/ml-toggle-num-lock)
 
 (defun al/ml-layout ()
   (al/ml-separate
