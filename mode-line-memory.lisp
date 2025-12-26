@@ -26,9 +26,18 @@
   (:use :common-lisp
         :alexandria
         :stumpwm)
-  (:export #:memory-mode-line-string))
+  (:export #:memory-mode-line-type
+           #:memory-mode-line-types
+           #:memory-mode-line-string))
 
 (in-package #:al/stumpwm-memory)
+
+(defvar memory-mode-line-types '(short long)
+  "Available types for `memory-mode-line-string'.")
+
+(defvar memory-mode-line-type (car mode-line-types)
+  "Current mode line string type.
+Must be one of `memory-mode-line-types'.")
 
 (defun memory-info ()
   "Return total and available memory values."
@@ -71,23 +80,29 @@ The rest ARGS are passed to `al/ml-string'."
       ""))
 
 (defun memory-mode-line-string ()
-  "Return a string with memory info suitable for the mode-line."
+  "Return a string with memory info suitable for the mode-line.
+TYPE can be one of the following symbols: `short', `long', `next'."
   (multiple-value-bind (total available)
       (memory-info)
     (let* ((used (- total available))
            (used% (round (* 100 (/ used total))))
-           (stump-used (sb-kernel:dynamic-usage)))
+           (used-str
+             (concat (format-kilo-bytes used :fg "#e08880")
+                     (al/ml-string "(" :reset t)
+                     (al/ml-zone-string used%
+                                        :zones '(90 70 50)
+                                        :format "~2,'0D")
+                     (al/ml-string ")" :reset t))))
       (al/ml-string
-       (concat (format-kilo-bytes (/ stump-used 1e3))
-               " "
-               (format-kilo-bytes used :fg "#e08880")
-               (al/ml-string "(" :reset t)
-               (al/ml-zone-string used%
-                                  :zones '(90 70 50)
-                                  :format "~2,'0D")
-               (al/ml-string ")" :reset t)
-               " "
-               (format-kilo-bytes available :fg "#78c078"))
+       (case memory-mode-line-type
+         (short (concat " " used-str))
+         (long
+          (let (;;(stump-total (sb-ext:dynamic-space-size))
+                (stump-used (sb-kernel:dynamic-usage)))
+            (concat (format-kilo-bytes (/ stump-used 1e3))
+                    " " used-str " "
+                    (format-kilo-bytes available :fg "#78c078"))))
+         (t ""))
        :fg "7"))))
 
 ;;; mode-line-memory.lisp ends here
