@@ -679,6 +679,13 @@ I.e., without waiting for `" seconds-str "' seconds."))
                        ,next-time-var (+ now ,seconds)
                        ,last-value-var (progn ,@body)))))))))
 
+(defmacro al/run-after-sleep (seconds &rest body)
+  "Sleep for SECONDS and run BODY asynchronously."
+  `(sb-thread:make-thread
+    (lambda ()
+      (sleep ,seconds)
+      ,@body)))
+
 (defcommand al/cleanup-memory () ()
   "Clean up memory occupied by StumpWM."
   (sb-ext:gc :full t)
