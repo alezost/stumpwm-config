@@ -26,40 +26,50 @@
    al/next-list-element
    al/mapconcat))
 
-(defmacro al/defun-with-delay (seconds name args &rest body)
+(defmacro al/defun-with-delay (delay name args &rest body)
   "Define NAME function with ARGS and BODY.
+
 It is like a usual `defun', except when the function is called, it is
-evaluated only if the number of SECONDS has already been passed since
-the last call.  If this time has not been passed yet, the previous value
-of the function is returned without evaluation.
+evaluated only if the number of seconds, DELAY, has already been passed
+since the last call.  If this time has not been passed yet, the previous
+value of the function is returned without evaluation.
 
 For example, the following `delayed-time' function will return a new
 time string only every 10 seconds:
 
   (al/defun-with-delay 10 delayed-time ()
     (time-format \"%H:%M:%S\"))
-"
+
+If DELAY is nil, execute BODY only once, and return the resulting value
+on the successive NAME calls.
+
+This macro also creates `NAME-update' variable.  If it is set to t, the
+next NAME call will be executed no matter what the DELAY is."
   (let* ((next-time-var  (make-symbol "next-time"))
          (last-value-var (make-symbol "last-value"))
-         (seconds-str (write-to-string seconds))
+         (delay-var      (make-symbol "delay"))
          (name-str (symbol-name name))
          (var-name (intern (concat name-str "-UPDATE"))))
     `(progn
        (defvar ,var-name nil
-         ,(concat "If non-nil, `" name-str "' evaluates its body immediately.
-I.e., without waiting for `" seconds-str "' seconds."))
-       (let ((,next-time-var 0)
-             ,last-value-var)
+         ,(concat "If non-nil, `" name-str
+                  "' evaluates its body on the next call."))
+       (let ((,next-time-var nil)
+             (,last-value-var nil)
+             (,delay-var ,delay))
          (defun ,name ,args
            ,(when (stringp (car body))
               (pop body))
-           (let ((now (get-universal-time)))
-             (if (and (null ,var-name)
-                      (< now ,next-time-var))
-                 ,last-value-var
+           (let ((now (and ,delay-var (get-universal-time))))
+             (if (or (null ,next-time-var)
+                     ,var-name
+                     (and ,delay-var (>= now ,next-time-var)))
                  (setf ,var-name nil
-                       ,next-time-var (+ now ,seconds)
-                       ,last-value-var (progn ,@body)))))))))
+                       ,next-time-var (if ,delay-var
+                                          (+ now ,delay-var)
+                                          0)
+                       ,last-value-var (progn ,@body))
+                 ,last-value-var)))))))
 
 (defmacro al/run-after-sleep (seconds &rest body)
   "Sleep for SECONDS and run BODY asynchronously."
