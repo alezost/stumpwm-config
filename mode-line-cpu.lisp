@@ -30,9 +30,18 @@
 (defpackage #:al/stumpwm-cpu
   (:use :common-lisp
         :stumpwm)
-  (:export #:cpu-mode-line-string))
+  (:export #:cpu-mode-line-type
+           #:cpu-mode-line-types
+           #:cpu-mode-line-string))
 
 (in-package #:al/stumpwm-cpu)
+
+(defvar cpu-mode-line-types '(short long)
+  "Available types for `cpu-mode-line-string'.")
+
+(defvar cpu-mode-line-type (car cpu-mode-line-types)
+  "Current mode line string type.
+Must be one of `cpu-mode-line-types'.")
 
 (defvar last-user-time 0)
 (defvar last-system-time 0)
@@ -81,21 +90,26 @@
 
 (defun cpu-mode-line-string ()
   "Return a string with CPU info suitable for the mode-line."
-  (defun d (float)
-    (round (* 100 float)))
   (multiple-value-bind (cpu user system io irq)
       (current-cpu-usage)
-    (let ((cpu    (d cpu))
-          (user   (d user))
-          (system (d system))
-          (io     (d io))
-          (irq    (d irq)))
-      (al/ml-string
-       (concat (al/ml-zone-string cpu)
-               (al/ml-string "(" :reset t)
-               (format nil "~2,'0D ~2,'0D ~D ~D"
-                       user system io irq)
-               (al/ml-string ")" :reset t))
-       :fg "7"))))
+    (flet ((d (float)
+             (round (* 100 float))))
+      (let* ((cpu (d cpu))
+             (cpu-str (al/ml-zone-string cpu)))
+        (al/ml-string
+         (case cpu-mode-line-type
+           (short cpu-str)
+           (long
+            (let ((user   (d user))
+                  (system (d system))
+                  (io     (d io))
+                  (irq    (d irq)))
+              (concat cpu-str
+                      (al/ml-string "(" :reset t)
+                      (format nil "~2,'0D ~2,'0D ~D ~D"
+                              user system io irq)
+                      (al/ml-string ")" :reset t))))
+           (t ""))
+         :fg "7")))))
 
 ;;; mode-line-cpu.lisp ends here
