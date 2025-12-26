@@ -675,4 +675,9 @@ I.e., without waiting for `" seconds-str "' seconds."))
                      ,next-time-var (+ now ,seconds)
                      ,last-value-var (progn ,@body))))))))
 
+(defcommand al/cleanup-memory () ()
+  "Clean up memory occupied by StumpWM."
+  (sb-ext:gc :full t)
+  (message "Garbage collected."))
+
 ;;; utils.lisp ends here
