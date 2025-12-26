@@ -667,6 +667,8 @@ time string only every 10 seconds:
          ,(concat "If non-nil, `" name-str "' evaluates its body immediately.
 I.e., without waiting for `" seconds-str "' seconds."))
        (defun ,name ,args
+         ,(when (stringp (car body))
+            (pop body))
          (let ((now (get-universal-time)))
            (if (and (null ,var-name)
                     (< now ,next-time-var))
