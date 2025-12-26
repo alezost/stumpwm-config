@@ -30,18 +30,10 @@
 (defpackage #:al/stumpwm-cpu
   (:use :common-lisp
         :stumpwm)
-  (:export #:cpu-mode-line-type
-           #:cpu-mode-line-types
+  (:export #:cpu-mode-line-next-type
            #:cpu-mode-line-string))
 
 (in-package #:al/stumpwm-cpu)
-
-(defvar cpu-mode-line-types '(short long)
-  "Available types for `cpu-mode-line-string'.")
-
-(defvar cpu-mode-line-type (car cpu-mode-line-types)
-  "Current mode line string type.
-Must be one of `cpu-mode-line-types'.")
 
 (defvar last-user-time 0)
 (defvar last-system-time 0)
@@ -87,6 +79,22 @@ Must be one of `cpu-mode-line-types'.")
                 last-iowait-time cur-iowait-time
                 last-irq-time    cur-irq-time))))
     (values cpu% user% system% io% irq%)))
+
+
+;;; mode-line string
+
+(defvar cpu-mode-line-types '(short long)
+  "Available types for `cpu-mode-line-string'.")
+
+(defvar cpu-mode-line-type (car cpu-mode-line-types)
+  "Current mode line string type.
+Must be one of `cpu-mode-line-types'.")
+
+(defun cpu-mode-line-next-type ()
+  "Set `cpu-mode-line-type' to the next available type."
+  (setf cpu-mode-line-type
+        (al/next-list-element cpu-mode-line-types
+                              cpu-mode-line-type)))
 
 (defun cpu-mode-line-string ()
   "Return a string with CPU info suitable for the mode-line."

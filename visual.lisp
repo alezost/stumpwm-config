@@ -155,10 +155,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defun al/ml-toggle-cpu (&rest _)
   (declare (ignore _))
-  (setf al/stumpwm-cpu:cpu-mode-line-type
-        (al/next-list-element al/stumpwm-cpu:cpu-mode-line-types
-                              al/stumpwm-cpu:cpu-mode-line-type)
-        al/ml-cpu-update t)
+  (al/stumpwm-cpu:cpu-mode-line-next-type)
+  (setf al/ml-cpu-update t)
   (update-all-mode-lines))
 
 (register-ml-on-click-id :al/ml-toggle-cpu #'al/ml-toggle-cpu)

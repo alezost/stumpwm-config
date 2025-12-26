@@ -23,6 +23,7 @@
 (export
  '(al/read-sys-file
    al/file-readable?
+   al/next-list-element
    al/mapconcat))
 
 (defun al/executable-exists? (name)
