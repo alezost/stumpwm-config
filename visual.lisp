@@ -145,9 +145,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/load "mode-line-cpu")
 
-(defvar al/cpu-refresh-time 3)
-
-(al/defun-with-delay al/cpu-refresh-time al/ml-cpu ()
+(al/defun-with-delay 5 al/ml-cpu ()
   (al/ml-separate
    (al/ml-title-string "CPU")
    (format-with-on-click-id (al/stumpwm-cpu:cpu-mode-line-string)
@@ -166,9 +164,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/load "mode-line-memory")
 
-(defvar al/memory-refresh-time 8)
-
-(al/defun-with-delay al/memory-refresh-time al/ml-memory ()
+(al/defun-with-delay 8 al/ml-memory ()
   (al/ml-separate
    (format-with-on-click-id (al/ml-title-string "Mem")
                             :al/ml-show-memory)
@@ -203,9 +199,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
   (and al/all-thermal-zones
        (list (car al/all-thermal-zones))))
 
-(defvar al/thermal-zones-refresh-time 6)
-
-(al/defun-with-delay al/thermal-zones-refresh-time al/ml-thermal-zones ()
+(al/defun-with-delay 6 al/ml-thermal-zones ()
   (al/ml-separate
    (format-with-on-click-id
     (apply #'al/stumpwm-thermal:thermal-zones-mode-line-string
@@ -235,9 +229,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/load "mode-line-net")
 
-(defvar al/net-refresh-time 6)
-
-(al/defun-with-delay al/net-refresh-time al/ml-net ()
+(al/defun-with-delay 6 al/ml-net ()
   (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
 
 (defcommand al/mode-line-next-net-device () ()
@@ -253,9 +245,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defvar al/battery (car (al/stumpwm-battery:all-batteries)))
 
-(defvar al/battery-refresh-time 60)
-
-(al/defun-with-delay al/battery-refresh-time al/ml-battery ()
+(al/defun-with-delay 60 al/ml-battery ()
   (al/ml-separate
    (al/ml-title-string "Bat ")
    (al/stumpwm-battery:battery-mode-line-string al/battery)))
