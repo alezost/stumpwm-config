@@ -661,21 +661,22 @@ time string only every 10 seconds:
          (seconds-str (write-to-string seconds))
          (name-str (symbol-name name))
          (var-name (intern (concat name-str "-UPDATE"))))
-    `(let ((,next-time-var 0)
-           ,last-value-var)
+    `(progn
        (defvar ,var-name nil
          ,(concat "If non-nil, `" name-str "' evaluates its body immediately.
 I.e., without waiting for `" seconds-str "' seconds."))
-       (defun ,name ,args
-         ,(when (stringp (car body))
-            (pop body))
-         (let ((now (get-universal-time)))
-           (if (and (null ,var-name)
-                    (< now ,next-time-var))
-               ,last-value-var
-               (setf ,var-name nil
-                     ,next-time-var (+ now ,seconds)
-                     ,last-value-var (progn ,@body))))))))
+       (let ((,next-time-var 0)
+             ,last-value-var)
+         (defun ,name ,args
+           ,(when (stringp (car body))
+              (pop body))
+           (let ((now (get-universal-time)))
+             (if (and (null ,var-name)
+                      (< now ,next-time-var))
+                 ,last-value-var
+                 (setf ,var-name nil
+                       ,next-time-var (+ now ,seconds)
+                       ,last-value-var (progn ,@body)))))))))
 
 (defcommand al/cleanup-memory () ()
   "Clean up memory occupied by StumpWM."
