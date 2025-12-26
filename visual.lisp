@@ -298,9 +298,6 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 ;;; mode-line sound
 
-(defvar al/ml-sound nil)
-(defvar al/sound-refresh-time 30)
-
 (defun al/ml-sound-string (vol &optional (vol-on t))
   (and (stringp vol)
        (not (string= "" vol))
@@ -309,32 +306,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
         (al/ml-string vol :fg (if vol-on "#50e050" "#fa3333")))))
 
 (defun al/ml-sound ()
-  (when (null al/sound-volume)
-    (al/sound-update-volume))
-  (let ((vol-time (first  al/sound-volume))
-        (vol      (second al/sound-volume))
-        (ml-time  (cdr al/ml-sound))
-        (now      (get-universal-time)))
-    (if (or (and (null vol)
-                 ;; Do not refresh mode-line for 2 seconds after the
-                 ;; latest sound update.
-                 (> now (+ 2 vol-time)))
-            (and ml-time
-                 (> (get-universal-time)
-                    (+ ml-time al/sound-refresh-time))))
-        (progn
-          (al/sound-update-volume)
-          (setf al/ml-sound
-                (cons (al/ml-sound-string (second al/sound-volume)
-                                          (third al/sound-volume))
-                      (first al/sound-volume))))
-        (when (and vol
-                   (or (null ml-time)
-                       (> vol-time ml-time)))
-          (setf al/ml-sound
-                (cons (al/ml-sound-string vol (third al/sound-volume))
-                      vol-time)))))
-  (car al/ml-sound))
+  (apply #'al/ml-sound-string (al/sound-volume)))
 
 
 ;;; mode-line keyboard

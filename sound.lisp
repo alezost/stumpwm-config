@@ -39,28 +39,36 @@
 (defvar al/sound-scontrols '("Master" "Line")
   "List of simple controls for managing.")
 
-(defvar al/sound-current-scontrol-num 0
-  "The number of the currently used simple control.")
+(defvar al/sound-scontrol (car al/sound-scontrols)
+  "Currently used simple control.")
 
-(defvar al/sound-volume nil
-  "Sound volume of the current simple control.
-This variable should have (TIME VOLUME ON) value, where TIME is the
-time (seconds since epoch) of the latest update, VOLUME is the latest
+(al/defun-with-delay 60 al/sound-volume (&optional (scontrol al/sound-scontrol))
+  "Return sound value for SCONTROL.
+This function checks sound only if more than 60 seconds passed since the
+last call.  If you wish to force the update, set `al/sound-volume-update'
+variable to t.
+
+Returned value is (VOLUME ON) list, VOLUME is a string with numeric
 value of the sound volume and ON is a boolean value showing if the sound
-is on or off (muted).")
+is on or off (muted)."
+  (let* ((cmd (concat "amixer sget "
+                      scontrol
+                      " | sed -rn '$s/[^[]+\\[([0-9]+)%\\].+\\[([a-z]+)\\].*/\\1 \\2/p'"))
+         (output (run-shell-command cmd t))
+         (res (first (split-string output '(#\newline))))
+         (res (split-string res " "))
+         (vol (first res))
+         (on  (string= "on" (second res))))
+    (list vol on)))
 
-(defun al/sound-get-current-scontrol ()
-  "Return the current simple control from `al/sound-scontrols'."
-  (nth al/sound-current-scontrol-num al/sound-scontrols))
-
-(defun al/sound-get-next-scontrol ()
-  "Return next simple control from `al/sound-scontrols'."
-  (setf al/sound-current-scontrol-num
-        (if (>= al/sound-current-scontrol-num
-                (- (length al/sound-scontrols) 1))
-            0
-            (+ 1 al/sound-current-scontrol-num)))
-  (al/sound-get-current-scontrol))
+(defun al/sound-update-soon ()
+  "Update mode line after some delay.
+This delay is needed after calling `al/sound-call' to give the sound
+machinery some time to be really set."
+  (unless al/sound-volume-update
+    (al/run-after-sleep 2
+      (setf al/sound-volume-update t)
+      (update-all-mode-lines))))
 
 (defun al/sound-call (&rest args)
   "Execute `al/sound-program' using amixer ARGS."
@@ -70,29 +78,19 @@ is on or off (muted).")
 (defcommand al/sound-set-current-scontrol (&rest args) (:rest)
   "Set sound value for the current simple control.
 ARGS are the rest amixer arguments after 'sset CONTROL'."
-  (apply #'al/sound-call "sset" (al/sound-get-current-scontrol) args)
-  (setf al/sound-volume (list (get-universal-time) nil nil)))
+  (apply #'al/sound-call "sset" al/sound-scontrol args)
+  (al/sound-update-soon))
 
 (defcommand al/sound-current-scontrol () ()
   "Show sound value of the current simple control."
-  (al/sound-call "sget" (al/sound-get-current-scontrol)))
+  (al/sound-call "sget" al/sound-scontrol))
 
 (defcommand al/sound-next-scontrol () ()
   "Switch simple control and show its sound value."
-  (al/sound-call "sget" (al/sound-get-next-scontrol))
-  (setf al/sound-volume (list (get-universal-time) nil nil)))
-
-(defun al/sound-update-volume (&optional scontrol)
-  "Update `al/sound-volume' with SCONTROL (\"Master\" by default)."
-  (let* ((cmd (concat "amixer sget "
-                      (or scontrol (al/sound-get-current-scontrol))
-                      " | sed -rn '$s/[^[]+\\[([0-9]+)%\\].+\\[([a-z]+)\\].*/\\1 \\2/p'"))
-         (output (run-shell-command cmd t))
-         (res (first (split-string output '(#\newline))))
-         (res (split-string res " "))
-         (vol (first res))
-         (on  (string= "on" (second res))))
-    (setf al/sound-volume
-          (list (get-universal-time) vol on))))
+  (al/sound-call "sget"
+                 (setf al/sound-scontrol
+                       (al/next-list-element al/sound-scontrols
+                                             al/sound-scontrol)))
+  (setf al/sound-volume-update t))
 
 ;;; sound.lisp ends here
