@@ -19,14 +19,14 @@
 
 ;; This file provides a couple of commands to set sound parameters
 ;; (volume and muteness).  It looks mostly like a wrapper around
-;; 'amixer' command, except that 'osd-sound' is called instead.
+;; `amixer' command, except that `osd-sound' is called instead.
 ;;
-;; This 'osd-sound' is a simple shell script that sends some Guile
+;; This `osd-sound' is a simple shell script that sends some Guile
 ;; expression to Guile-Daemon <https://github.com/alezost/guile-daemon>.
 ;; 2 things eventually happen: amixer is called and the sound value is
 ;; displayed in OSD.
 ;;
-;; 'osd-sound' script can be found in my Guile-Daemon config:
+;; `osd-sound' script can be found in my Guile-Daemon config:
 ;; <https://github.com/alezost/guile-daemon-config/blob/master/scripts/osd-sound>.
 
 ;;; Code:
@@ -42,10 +42,11 @@
 (defvar al/sound-scontrol (car al/sound-scontrols)
   "Currently used simple control.")
 
-(al/defun-with-delay 60 al/sound-volume (&optional (scontrol al/sound-scontrol))
+(al/defun-with-delay nil al/sound-volume (&optional (scontrol al/sound-scontrol))
   "Return sound value for SCONTROL.
-This function checks sound only if more than 60 seconds passed since the
-last call.  If you wish to force the update, set `al/sound-volume-update'
+
+This function checks sound only once and uses this value on successive
+calls.  If you wish to force the update, set `al/sound-volume-update'
 variable to t.
 
 Returned value is (VOLUME ON) list, VOLUME is a string with numeric
