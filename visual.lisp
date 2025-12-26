@@ -258,8 +258,6 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 ;;; mode-line backlight
 
-(defvar al/ml-backlight nil)
-
 (defun al/ml-backlight-string (bl)
   (and (stringp bl)
        (not (string= "" bl))
@@ -268,22 +266,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
         (al/ml-string bl :fg "#66bbff"))))
 
 (defun al/ml-backlight ()
-  (when (null al/backlight)
-    (al/update-backlight))
-  (let ((bl      (car al/backlight))
-        (bl-time (cdr al/backlight))
-        (ml-time (cdr al/ml-backlight)))
-    (if bl
-        (when (or (null ml-time) (> bl-time ml-time))
-          (setf al/ml-backlight
-                (cons (al/ml-backlight-string bl) bl-time)))
-        ;; Do not refresh mode-line for 2 seconds after the backlight update.
-        (when (> (get-universal-time) (+ 2 bl-time))
-          (al/update-backlight)
-          (setf al/ml-backlight
-                (cons (al/ml-backlight-string (car al/backlight))
-                      (cdr al/backlight))))))
-  (car al/ml-backlight))
+  (al/ml-backlight-string (al/backlight)))
 
 
 ;;; mode-line sound

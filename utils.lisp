@@ -509,33 +509,41 @@ program.")
 
 ;;; Backlight brightness
 
-(defvar al/backlight nil
-  "Backlight brightness of the current display.
-This variable should have (STRING . TIME) value, where STRING is the
-latest value of the backlight, and TIME is the time (seconds since epoch)
-of the latest update.")
+(defvar al/backlight-program
+  (and (al/executable-exists? "xbacklight")
+       "xbacklight")
+  "Executable to get/set display backlight.
+If nil, do not run any backlight code.")
 
-(defun al/update-backlight ()
-  "Update `al/backlight'."
-  (let ((backlight
-          (and (al/executable-exists? "xbacklight")
-               (let* ((output (run-shell-command "xbacklight -get" t))
-                      (strings (split-string output '(#\newline)))
-                      (backlights (mapcar (lambda (str)
-                                            (and (not (string= "" str)) str))
-                                          strings))
-                      (backlight (first (delete nil backlights)))
-                      ;; Convert string to number.
-                      (backlight (read-from-string backlight)))
-                 ;; Round it and convert back to string.
-                 (write-to-string (round backlight))))))
-    (setf al/backlight
-          (cons backlight
-                (if backlight
-                    (get-universal-time)
-                    ;; If backlight is not available, do not update it
-                    ;; for a day.
-                    (+ (get-universal-time) (* 24 3600)))))))
+(al/defun-with-delay nil al/backlight ()
+  "Return backlight brightness.
+
+Return nil if backlight is not available.
+
+This function checks backlight only once and uses this value on
+successive calls.  If you wish to force the update, set
+`al/backlight-update' variable to t."
+  (and al/backlight-program
+       (let* ((output (run-shell-command
+                       (concat al/backlight-program " -get")
+                       t))
+              (strings (split-string output '(#\newline)))
+              (backlights (mapcar (lambda (str)
+                                    (and (not (string= "" str)) str))
+                                  strings))
+              (backlight (first (delete nil backlights)))
+              ;; Convert string to number.
+              (backlight (read-from-string backlight)))
+         ;; Round it and convert back to string.
+         (write-to-string (round backlight)))))
+
+(defun al/backlight-update-soon ()
+  "Update mode line after some delay."
+  (when (and al/backlight-program
+             (null al/backlight-update))
+    (al/run-after-sleep 2
+      (setf al/backlight-update t)
+      (update-all-mode-lines))))
 
 (defcommand al/set-backlight (&rest args) (:rest)
   "Set backlight brightness of the current display.
@@ -545,7 +553,7 @@ Pass ARGS as arguments to 'xbacklight' shell command."
   ;; command.
   ;;(run-prog "osd-backlight" :args args :wait t :search t)
   (run-shell-command (format nil "osd-backlight ~{~A~^ ~}" args))
-  (setf al/backlight (cons nil (get-universal-time))))
+  (al/backlight-update-soon))
 
 
 ;;; Mode line
