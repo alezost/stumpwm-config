@@ -303,10 +303,17 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
        (not (string= "" vol))
        (al/ml-separate
         (al/ml-title-string "Snd ")
-        (al/ml-string vol :fg (if vol-on "#50e050" "#fa3333")))))
+        (al/ml-string vol :fg (if vol-on "#50e050" "#fa3333")
+                      :click :al/ml-toggle-sound))))
 
 (defun al/ml-sound ()
   (apply #'al/ml-sound-string (al/sound-volume)))
+
+(defun al/ml-toggle-sound (&rest _)
+  (declare (ignore _))
+  (al/sound-set-current-scontrol "toggle"))
+
+(register-ml-on-click-id :al/ml-toggle-sound #'al/ml-toggle-sound)
 
 
 ;;; mode-line keyboard
