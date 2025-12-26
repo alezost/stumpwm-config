@@ -35,7 +35,7 @@
 (defvar memory-mode-line-types '(short long)
   "Available types for `memory-mode-line-string'.")
 
-(defvar memory-mode-line-type (car mode-line-types)
+(defvar memory-mode-line-type (car memory-mode-line-types)
   "Current mode line string type.
 Must be one of `memory-mode-line-types'.")
 
