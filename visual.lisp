@@ -161,9 +161,17 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (al/defun-with-delay al/memory-refresh-time al/ml-memory ()
   (al/ml-separate
-   (al/ml-title-string "Mem")
+   (format-with-on-click-id (al/ml-title-string "Mem")
+                            :al/ml-show-memory)
    (format-with-on-click-id (al/stumpwm-memory:memory-mode-line-string)
                             :al/ml-toggle-memory)))
+
+(defun al/ml-show-memory (&rest _)
+  (declare (ignore _))
+  (al/mode-line-message
+   (with-output-to-string (*standard-output*)
+     (room))
+   :center))
 
 (defun al/ml-toggle-memory (&rest _)
   (declare (ignore _))
@@ -173,6 +181,7 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
         al/ml-memory-update t)
   (update-all-mode-lines))
 
+(register-ml-on-click-id :al/ml-show-memory #'al/ml-show-memory)
 (register-ml-on-click-id :al/ml-toggle-memory #'al/ml-toggle-memory)
 
 
