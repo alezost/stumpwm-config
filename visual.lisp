@@ -184,10 +184,8 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 (defun al/ml-toggle-memory (&rest _)
   (declare (ignore _))
-  (setf al/stumpwm-memory:memory-mode-line-type
-        (al/next-list-element al/stumpwm-memory:memory-mode-line-types
-                              al/stumpwm-memory:memory-mode-line-type)
-        al/ml-memory-update t)
+  (al/stumpwm-memory:memory-mode-line-next-type)
+  (setf al/ml-memory-update t)
   (update-all-mode-lines))
 
 (register-ml-on-click-id :al/ml-show-memory #'al/ml-show-memory)

@@ -26,18 +26,10 @@
   (:use :common-lisp
         :alexandria
         :stumpwm)
-  (:export #:memory-mode-line-type
-           #:memory-mode-line-types
+  (:export #:memory-mode-line-next-type
            #:memory-mode-line-string))
 
 (in-package #:al/stumpwm-memory)
-
-(defvar memory-mode-line-types '(short long)
-  "Available types for `memory-mode-line-string'.")
-
-(defvar memory-mode-line-type (car memory-mode-line-types)
-  "Current mode line string type.
-Must be one of `memory-mode-line-types'.")
 
 (defun memory-info ()
   "Return total and available memory values."
@@ -58,6 +50,22 @@ Must be one of `memory-mode-line-types'.")
              (setf total (read-from-string value)))
             ((string= key "MemAvailable")
              (setf available (read-from-string value)))))))))
+
+
+;;; mode-line string
+
+(defvar memory-mode-line-types '(short long)
+  "Available types for `memory-mode-line-string'.")
+
+(defvar memory-mode-line-type (car memory-mode-line-types)
+  "Current mode line string type.
+Must be one of `memory-mode-line-types'.")
+
+(defun memory-mode-line-next-type ()
+  "Set `memory-mode-line-type' to the next available type."
+  (setf memory-mode-line-type
+        (al/next-list-element memory-mode-line-types
+                              memory-mode-line-type)))
 
 (defun format-float (num)
   "Return formatted string from the floating number NUM."
