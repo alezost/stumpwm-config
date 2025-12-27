@@ -378,14 +378,24 @@ CLASS is a window class; NUM is the number of windows of this class.")
             assoc
           (concat
            (if (string= class al/current-window)
-               (al/ml-window-class (concat " " class " "))
+               (format-with-on-click-id
+                (al/ml-window-class (concat " " class " "))
+                :al/ml-toggle-window class)
                (al/ml-string (concat " " class " ")
-                             :fg "#a0a0a0" :bg "#555555"))
+                             :fg "#a0a0a0" :bg "#555555"
+                             :click (list :al/ml-toggle-window
+                                          class)))
            (and num
                 (al/ml-string (concat " " (write-to-string num) " ")
                               :fg "7" :bg "#407777")))))
       al/window-alist
       " "))))
+
+(defun al/ml-toggle-window (_code class &rest _rest)
+  (declare (ignore _code _rest))
+  (al/focus-class-window class 'next))
+
+(register-ml-on-click-id :al/ml-toggle-window #'al/ml-toggle-window)
 
 
 ;;; mode-line time
