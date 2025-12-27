@@ -32,6 +32,14 @@
 
 (in-package :stumpwm)
 
+(defvar al/init-directory
+  (directory-namestring
+   (truename (merge-pathnames (user-homedir-pathname)
+                              ".stumpwmrc")))
+  "Directory with stumpwm config files.")
+
+(redirect-all-output (merge-pathnames "log" al/init-directory))
+
 (defvar al/display-number
   (multiple-value-bind (_ array)
       (cl-ppcre:scan-to-strings ":([0-9]+)" (getenv "DISPLAY"))
@@ -47,12 +55,6 @@
 
 
 ;;; Loading additional rc files
-
-(defvar al/init-directory
-  (directory-namestring
-   (truename (merge-pathnames (user-homedir-pathname)
-                              ".stumpwmrc")))
-  "A directory with initially loaded files.")
 
 (defun al/load (filename)
   "Load a file FILENAME (without extension) from `al/init-directory'."
@@ -71,8 +73,6 @@ instead of any error."
     (and module
          (progn (asdf:operate 'asdf:load-op module)
                 t))))
-
-(redirect-all-output (merge-pathnames "log" al/init-directory))
 
 (set-module-dir
  (pathname-as-directory (concat (getenv "HOME")
