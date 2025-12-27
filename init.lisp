@@ -17,16 +17,30 @@
 
 ;;; Commentary:
 
-;; This file should be symlinked by "~/.stumpwmrc".
+;; This file should be symlinked by "~/.stumpwmrc".  In the past, this
+;; file loaded the rest config files directly, using the following
+;; function:
 ;;
+;; (defun al/load (filename)
+;;   "Load a file FILENAME (without extension) from `al/init-directory'."
+;;   (let ((file (merge-pathnames (concat filename ".lisp")
+;;                                al/init-directory)))
+;;     (if (probe-file file)
+;;         (load file)
+;;         (format *error-output* "File '~a' doesn't exist." file))))
+;;
+;; Nowadays, I use `asdf:load-system' to load "al-stumpwm-config.asd"
+;; which specifies the rest config files.
+
 ;; My config depends on `swank' and `xkeyboard' CL packages (installed
-;; with Quicklisp).  I compile stumpwm image with them, so I do not load
-;; these packages here.  To compile stumpwm, I add the following lines:
+;; with Quicklisp).  I compile stumpwm image with these packages.
+;; To do it, I add the following lines:
 ;;
 ;;   (require 'swank)
 ;;   (require 'xkeyboard)
 ;;
-;; to "load-stumpwm.lisp.in" file (then, "./configure" and "make" will do it).
+;; to "load-stumpwm.lisp.in" file (then, "./configure" and "make" will
+;; do it).
 
 ;;; Code:
 
@@ -53,29 +67,8 @@
  :dont-close t
  :port (+ swank::default-server-port al/display-number))
 
-
-;;; Loading additional rc files
-
-(defun al/load (filename)
-  "Load a file FILENAME (without extension) from `al/init-directory'."
-  (let ((file (merge-pathnames (concat filename ".lisp")
-                               al/init-directory)))
-    (if (probe-file file)
-        (load file)
-        (format *error-output* "File '~a' doesn't exist." file))))
-
-(al/load "keys")
-(al/load "utils")
-(al/load "xkb")
-(al/load "sound")
-(al/load "settings")
-(al/load "mode-line")
-(al/load "mode-line-cpu")
-(al/load "mode-line-memory")
-(al/load "mode-line-thermal")
-(al/load "mode-line-net")
-(al/load "mode-line-battery")
-(al/load "visual")
+(push al/init-directory asdf:*central-registry*)
+(asdf:load-system "al-stumpwm-config")
 
 ;; This is needed to have SSH prompt (via GnuPG) in the current X session.
 ;; See "man gpg-agent" for details.
