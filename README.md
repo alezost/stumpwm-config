@@ -18,43 +18,34 @@ My time message (`time` command customized with
 
 ## Files
 
-- `init.lisp` – The main file for loading the other ones (`~/.stumpwmrc` is a
-  symlink to this file).
+- `init.lisp`: The main file for loading the other ones (`~/.stumpwmrc`
+  is a symlink to this file).
 
-- `keys.lisp` – All my keybindings (I use dvorak layout, so some of them
+- `keys.lisp`: All my keybindings (I use dvorak layout, so some of them
   may look weird).
 
-- `xkb.lisp` – Configuration for [clx-xkeyboard
+- `xkb.lisp`: Configuration for [clx-xkeyboard
   extension](https://github.com/filonenko-mikhail/clx-xkeyboard).  I use
   it to switch keyboard layout and to get/set the state of CapsLock and
   NumLock keys.
 
-- `sound.lisp` – An interface for setting sound volume and showing it in
+- `sound.lisp`: An interface for setting sound volume and showing it in
   OSD.  I use [Guile-Daemon](https://github.com/alezost/guile-daemon) and
   [Guile-XOSD](https://github.com/alezost/guile-xosd) to do this.  See
   [my Guile-Daemon config](https://github.com/alezost/guile-daemon-config)
   for details.
 
-- `utils.lisp` – Additional functions and commands I use.
+- `utils.lisp`: Additional functions and commands I use.
 
-- `settings.lisp` – General stumpwm settings.
+- `settings.lisp`: General stumpwm settings.
 
-- `visual.lisp` – Visual settings: colors, mode-line and other visual
-  appearance.  This file loads the following `mode-line-` files that
-  provide additional features for my stumpwm mode line.
+- `mode-line-*.lisp`: modules to get various info for the mode line.  I
+  use these files instead of
+  [contrib](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/)
+  stumpwm modules.
 
-- `mode-line-cpu.lisp` and `mode-line-thermal.lisp` – modules to get CPU
-  usage and temperature.  I use these files instead of
-  [cpu](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/cpu)
-  contributed stumpwm module.
-
-- `mode-line-battery.lisp` – module to get battery info.  I use it instead of
-  [battery-portable](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/battery-portable)
-  contributed stumpwm module.
-
-- `mode-line-net.lisp` – module to get battery info.  I use it instead of
-  [net](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/net)
-  contributed stumpwm module.
+- `visual.lisp`: Visual settings: colors, mode-line and other visual
+  appearance.
 
 - `unused` directory contains some old and unused code.
 

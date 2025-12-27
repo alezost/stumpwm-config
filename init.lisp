@@ -83,6 +83,12 @@ instead of any error."
 (al/load "xkb")
 (al/load "sound")
 (al/load "settings")
+(al/load "mode-line")
+(al/load "mode-line-cpu")
+(al/load "mode-line-memory")
+(al/load "mode-line-thermal")
+(al/load "mode-line-net")
+(al/load "mode-line-battery")
 (al/load "visual")
 
 ;; This is needed to have SSH prompt (via GnuPG) in the current X session.

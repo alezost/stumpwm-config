@@ -60,90 +60,7 @@
  *grab-pointer-background* (hex-to-xlib-color "#2c53ca"))
 
 
-;;; mode-line auxiliary code
-
-(defvar al/ml-separator " | ")
-
-(defun al/ml-separate (&rest strings)
-  "Concatenate `al/ml-separator' and STRINGS."
-  (apply #'concat al/ml-separator strings))
-
-;; Export to make this available in "mode-line-<…>.lisp" files.
-(export '(al/ml-string
-          al/ml-zone-string))
-
-(defun al/ml-string (string &key fg bg (bright nil bright-set) reset click)
-  ;; For details on the color and mode-line machinery, see
-  ;; (info "(stumpwm) Colors") and (info "(stumpwm) Mode-line Interaction").
-  "Make STRING a mode-line string with FG and BG colors.
-
-FG and BG can be nil or a string containing either a single digit (a
-number from `*colors*' list) or #XXXXXX value.
-
-If BRIGHT is set and is non-nil, use bright color.
-
-If RESET is non-nil, use \"^n\" construct and ignore other arguments.
-
-CLICK should have ID or (ID [ARGS ...]) form.  It is used to make STRING
-clickable."
-  (defun color (raw)
-    (if (= 1 (length raw))
-        raw
-        (concat "\"" raw "\"")))
-
-  (let* ((str (if reset
-                  (concat "^n" string)
-                  (let ((fc (and (stringp fg)
-                                 (concat "^(:fg " (color fg) ")")))
-                        (bc (and (stringp bg)
-                                 (concat "^(:bg " (color bg) ")"))))
-                    (concat (and bright-set (if bright "^B" "^b"))
-                            fc bc string))))
-         (str (if click
-                  (apply #'format-with-on-click-id
-                         str
-                         (if (listp click) click (list click)))
-                  str)))
-    (concat "^[" str "^]")))
-
-(defun al/ml-zone-string (number &key (colors '("^B^1*" "^B^5*" "^B"))
-                                   (zones '(90 60 30)) reverse
-                                   (format "~3D") (ending "%%"))
-  ;; This is a replacement for `bar-zone-color'.
-  "Format NUMBER with FORMAT string, make it colored, and add ENDING to it.
-
-ZONES is a descending list of integers that is compared to NUMBER.
-COLORS is a list of respecting color specifications.
-ZONES and COLORS lists must have the same length.
-
-If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
-  (let ((compare (if reverse #'<= #'>=))
-        (num-str (format nil format number))
-        (color nil))
-    (do ((zones (if reverse (reverse zones) zones)
-                (cdr zones))
-         (colors colors (cdr colors)))
-        ((or color (null zones))
-         color)
-      (when (funcall compare number (car zones))
-        (setf color (car colors))))
-    (concat (if color
-                (al/ml-string (concat color num-str))
-                num-str)
-            ending)))
-
-(defun al/ml-title-string (str)
-  "Make STR a title string."
-  (al/ml-string str :fg "#a0aa98"))
-
-(defun al/ml-window-class (&optional (str " %c "))
-  "Window class color construct for mode-line and window list."
-  (al/ml-string str :fg "#d8d844" :bg "#3838a0"))
-
-
 ;;; mode-line cpu
-
-(al/load "mode-line-cpu")
 
 (al/defun-with-delay 5 al/ml-cpu ()
   (al/ml-separate
@@ -161,8 +78,6 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 
 ;;; mode-line memory
-
-(al/load "mode-line-memory")
 
 (al/defun-with-delay 8 al/ml-memory ()
   (al/ml-separate
@@ -189,8 +104,6 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 
 ;;; mode-line thermal
-
-(al/load "mode-line-thermal")
 
 (defvar al/all-thermal-zones
   (al/stumpwm-thermal:all-thermal-zones))
@@ -227,8 +140,6 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 ;;; mode-line net
 
-(al/load "mode-line-net")
-
 (al/defun-with-delay 6 al/ml-net ()
   (al/ml-separate
    (format-with-on-click-id (al/stumpwm-net:net-mode-line-string)
@@ -245,8 +156,6 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 
 
 ;;; mode-line battery
-
-(al/load "mode-line-battery")
 
 (defvar al/battery (car (al/stumpwm-battery:all-batteries)))
 
@@ -368,6 +277,10 @@ CLASS is a window class; NUM is the number of windows of this class.")
 (add-hook *focus-window-hook*   'al/update-current-window)
 (add-hook *new-window-hook*     'al/update-window-alist)
 (add-hook *destroy-window-hook* 'al/update-window-alist)
+
+(defun al/ml-window-class (&optional (str " %c "))
+  "Window class color construct for mode-line and window list."
+  (al/ml-string str :fg "#d8d844" :bg "#3838a0"))
 
 (defun al/ml-windows ()
   (when (and al/window-alist al/current-window)
