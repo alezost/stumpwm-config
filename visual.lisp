@@ -230,7 +230,18 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 (al/load "mode-line-net")
 
 (al/defun-with-delay 6 al/ml-net ()
-  (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
+  (al/ml-separate
+   (format-with-on-click-id (al/stumpwm-net:net-mode-line-string)
+                            :al/ml-toggle-net-device)))
+
+(defun al/ml-toggle-net-device (&rest _)
+  (declare (ignore _))
+  (al/stumpwm-net:net-next-device)
+  (setf al/ml-net-update t)
+  (update-all-mode-lines))
+
+(register-ml-on-click-id :al/ml-toggle-net-device
+                         #'al/ml-toggle-net-device)
 
 
 ;;; mode-line battery
