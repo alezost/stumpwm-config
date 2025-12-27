@@ -232,12 +232,6 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
 (al/defun-with-delay 6 al/ml-net ()
   (al/ml-separate (al/stumpwm-net:net-mode-line-string)))
 
-(defcommand al/mode-line-next-net-device () ()
-  "Set next net device in the mode-line."
-  (setf al/stumpwm-net:net-device
-        (al/next-list-element al/stumpwm-net:net-devices
-                              al/stumpwm-net:net-device)))
-
 
 ;;; mode-line battery
 

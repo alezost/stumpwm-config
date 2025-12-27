@@ -34,8 +34,7 @@
   (:use :common-lisp
         :alexandria
         :stumpwm)
-  (:export #:net-devices
-           #:net-device
+  (:export #:net-next-device
            #:net-mode-line-string))
 
 (in-package #:al/stumpwm-net)
@@ -56,6 +55,11 @@
       (find-if (lambda (name) (ppcre:scan "^e" name))
                net-devices))
   "Currently used network device.")
+
+(defcommand net-next-device () ()
+  "Set `net-device' to the next net device."
+  (setf net-device
+        (al/next-list-element net-devices net-device)))
 
 (defun net-device-file-name (&optional (device net-device))
   "Return sysfs file name of the DEVICE."
