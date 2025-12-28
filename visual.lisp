@@ -323,22 +323,11 @@ CLASS is a window class; NUM is the number of windows of this class.")
 
 ;;; mode-line group
 
-(al/defun-with-delay nil al/ml-group ()
-  (let* ((screen (current-screen))
-         (groups (sort-groups screen))
-         (cur-group (screen-current-group screen))
-         (next-group (al/next-list-element groups cur-group #'eq)))
-    (al/ml-string (group-name cur-group)
-                  :fg "2"
-                  :click (list :ml-on-click-switch-to-group
-                               (group-name next-group)))))
-
-(defun al/ml-group-update (&rest _)
+(defun al/ml-next-group (&rest _)
   (declare (ignore _))
-  (setf al/ml-group-update t)
-  (update-all-mode-lines))
+  (gnext))
 
-(add-hook *focus-group-hook* 'al/ml-group-update)
+(register-ml-on-click-id :al/ml-next-group #'al/ml-next-group)
 
 
 ;;; Visual appearance and mode-line settings
@@ -356,7 +345,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
  *screen-mode-line-format*
  `(,(al/ml-string "%d" :fg "5" :click :al/ml-show-time)
    " "
-   (:eval (al/ml-group))
+   ,(al/ml-string "%n" :fg "2" :click :al/ml-next-group)
    (:eval (al/ml-cpu))
    (:eval (al/ml-memory))
    (:eval (al/ml-thermal-zones-maybe))
