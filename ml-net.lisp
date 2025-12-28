@@ -30,16 +30,16 @@
 
 ;;; Code:
 
-(defpackage #:al/stumpwm-net
+(defpackage #:al/ml-net
   (:use :common-lisp
         :alexandria
         :stumpwm)
-  (:export #:net-next-device
-           #:net-mode-line-string))
+  (:export #:next-device
+           #:ml-string))
 
-(in-package #:al/stumpwm-net)
+(in-package #:al/ml-net)
 
-(defvar net-devices
+(defvar *devices*
   (delete "lo"
           (mapcar (lambda (dir)
                     ;; Is there a better way to do this?
@@ -48,62 +48,59 @@
           :test #'equal)
   "List of available network devices (interfaces).")
 
-(defvar net-device
+(defvar *device*
   ;; At first, search for "wlp*" (wlan), then for "enp*" (eth).
   (or (find-if (lambda (name) (ppcre:scan "^w" name))
-               net-devices)
+               *devices*)
       (find-if (lambda (name) (ppcre:scan "^e" name))
-               net-devices))
+               *devices*))
   "Currently used network device.")
 
-(defcommand net-next-device () ()
-  "Set `net-device' to the next net device."
-  (setf net-device
-        (al/next-list-element net-devices net-device)))
+(defcommand next-device () ()
+  "Set `*device*' to the next net device."
+  (setf *device*
+        (al/next-list-element *devices* *device*)))
 
-(defun net-device-file-name (&optional (device net-device))
+(defun device-file-name (&optional (device *device*))
   "Return sysfs file name of the DEVICE."
   (concat "/sys/class/net/" device))
 
-(defun net-device-parameter (file-name &key (device net-device)
-                                            to-number)
+(defun device-parameter (file-name &key (device *device*) to-number)
   "Return a line (string) from '/sys/class/net/DEVICE/FILE-NAME'.
-If DEVICE is nil, use `net-device'.
 If TO-NUMBER is non-nil, convert this string into a number.
 Return nil in case of any error."
   (al/read-sys-file
-   (concat (net-device-file-name device) "/" file-name)
+   (concat (device-file-name device) "/" file-name)
    to-number))
 
-(defvar net-rfkill-dirs nil
+(defvar *rfkill-dirs* nil
   "Alist of (DEVICE . RFKILL-DIR) pairs.")
 
-(defun net-rfkill-dir (device)
+(defun rfkill-dir (device)
   "Return the sysfs rfkill directory for the network DEVICE."
-  (if-let ((assoc (assoc device net-rfkill-dirs)))
+  (if-let ((assoc (assoc device *rfkill-dirs*)))
     (cdr assoc)
-    (let ((dir (car (directory (concat (net-device-file-name device)
+    (let ((dir (car (directory (concat (device-file-name device)
                                        "/phy*/rfkill*")))))
-      (push (cons device dir) net-rfkill-dirs)
+      (push (cons device dir) *rfkill-dirs*)
       dir)))
 
-(defun net-rfkill-state (&optional (device net-device))
+(defun rfkill-state (&optional (device *device*))
   "Return the current rfkill state of the network DEVICE.
 If the interface is blocked, return `:hard' or `:soft'.
 Otherwise, return nil."
-  (let ((dir (net-rfkill-dir device)))
-    (defun blocked? (type)
-      (not (zerop (al/read-sys-file
-                   (merge-pathnames dir type) t))))
-    (and dir
-         (or (and (blocked? "hard") :hard)
-             (and (blocked? "soft") :soft)))))
+  (when-let ((dir (rfkill-dir device)))
+    (flet ((blocked? (type)
+             (not (zerop (al/read-sys-file
+                          (merge-pathnames dir type) t)))))
+      (or (and (blocked? "hard") :hard)
+          (and (blocked? "soft") :soft)))))
 
-(defvar last-rx 0)
-(defvar last-tx 0)
-(defvar last-time 0)
+(defvar *last-rx* 0)
+(defvar *last-tx* 0)
+(defvar *last-time* 0)
 
-(defun net-state (&optional (device net-device))
+(defun net-state (&optional (device *device*))
   "Return values for the current state of the network DEVICE.
 
 If the interface is 'rfkill'-ed, return `:soft' or `:hard'.
@@ -113,27 +110,27 @@ If the interface is down, return `:down'.
 If the interface is up, return `:up download-speed upload-speed' values.
 
 Otherwise, return `:unknown' value."
-  (or (net-rfkill-state device)
-      (let ((state (net-device-parameter "operstate"
-                                         :device device)))
+  (or (rfkill-state device)
+      (let ((state (device-parameter "operstate"
+                                     :device device)))
         (cond
           ((string= state "down")
            :down)
           ((string= state "up")
            (let* ((now (/ (get-internal-real-time)
                           internal-time-units-per-second))
-	          (rx (net-device-parameter "statistics/rx_bytes"
-                                            :device device
-                                            :to-number t))
-	          (tx (net-device-parameter "statistics/tx_bytes"
-                                            :device device
-                                            :to-number t))
-                  (dt (- now last-time))
-                  (drx (- rx last-rx))
-                  (dtx (- tx last-tx)))
-             (setq last-rx rx
-	           last-tx tx
-	           last-time now)
+	          (rx (device-parameter "statistics/rx_bytes"
+                                        :device device
+                                        :to-number t))
+	          (tx (device-parameter "statistics/tx_bytes"
+                                        :device device
+                                        :to-number t))
+                  (dt (- now *last-time*))
+                  (drx (- rx *last-rx*))
+                  (dtx (- tx *last-tx*)))
+             (setq *last-rx* rx
+	           *last-tx* tx
+	           *last-time* now)
              (values :up
                      (round (/ drx dt))
 	             (round (/ dtx dt)))))
@@ -160,10 +157,10 @@ Otherwise, return `:unknown' value."
                     (al/ml-string "k" :reset t))))
       ""))
 
-(defun net-mode-line-string ()
+(defun ml-string ()
   "Return a string with NET info suitable for the mode-line."
   (multiple-value-bind (state down up)
-      (net-state net-device)
+      (net-state *device*)
     (let ((color (ecase state
                    (:up      "^b^6*")
                    (:down    "^B^5*")
@@ -171,7 +168,7 @@ Otherwise, return `:unknown' value."
                    (:hard    "")
                    (:unknown "^B^1*"))))
       (concat
-       (al/ml-string (concat color net-device))
+       (al/ml-string (concat color *device*))
        (and down up
             (al/ml-string (concat " " (format-bytes down)
                                   " " (format-bytes up))

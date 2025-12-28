@@ -142,12 +142,12 @@
 
 (al/defun-with-delay 6 al/ml-net ()
   (al/ml-separate
-   (format-with-on-click-id (al/stumpwm-net:net-mode-line-string)
+   (format-with-on-click-id (al/ml-net:ml-string)
                             :al/ml-toggle-net-device)))
 
 (defun al/ml-toggle-net-device (&rest _)
   (declare (ignore _))
-  (al/stumpwm-net:net-next-device)
+  (al/ml-net:next-device)
   (setf al/ml-net-update t)
   (update-all-mode-lines))
 
