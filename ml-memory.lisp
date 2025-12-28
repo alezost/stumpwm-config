@@ -22,14 +22,14 @@
 
 ;;; Code:
 
-(defpackage #:al/stumpwm-memory
+(defpackage #:al/ml-memory
   (:use :common-lisp
         :alexandria
         :stumpwm)
-  (:export #:memory-mode-line-next-type
-           #:memory-mode-line-string))
+  (:export #:ml-next-type
+           #:ml-string))
 
-(in-package #:al/stumpwm-memory)
+(in-package #:al/ml-memory)
 
 (defun memory-info ()
   "Return total and available memory values."
@@ -54,18 +54,17 @@
 
 ;;; mode-line string
 
-(defvar memory-mode-line-types '(short long)
-  "Available types for `memory-mode-line-string'.")
+(defvar *ml-types* '(short long)
+  "Available types for `ml-string'.")
 
-(defvar memory-mode-line-type (car memory-mode-line-types)
+(defvar *ml-type* (car *ml-types*)
   "Current mode line string type.
-Must be one of `memory-mode-line-types'.")
+Must be one of `*ml-types*'.")
 
-(defun memory-mode-line-next-type ()
-  "Set `memory-mode-line-type' to the next available type."
-  (setf memory-mode-line-type
-        (al/next-list-element memory-mode-line-types
-                              memory-mode-line-type)))
+(defun ml-next-type ()
+  "Set `*ml-type*' to the next available type."
+  (setf *ml-type*
+        (al/next-list-element *ml-types* *ml-type*)))
 
 (defun format-float (num)
   "Return formatted string from the floating number NUM."
@@ -87,7 +86,7 @@ The rest ARGS are passed to `al/ml-string'."
                     "M")))
       ""))
 
-(defun memory-mode-line-string ()
+(defun ml-string ()
   "Return a string with memory info suitable for the mode-line.
 TYPE can be one of the following symbols: `short', `long', `next'."
   (multiple-value-bind (total available)
@@ -102,7 +101,7 @@ TYPE can be one of the following symbols: `short', `long', `next'."
                                         :format "~2,'0D")
                      (al/ml-string ")" :reset t))))
       (al/ml-string
-       (case memory-mode-line-type
+       (case *ml-type*
          (short (concat " " used-str))
          (long
           (let (;;(stump-total (sb-ext:dynamic-space-size))

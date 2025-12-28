@@ -83,7 +83,7 @@
   (al/ml-separate
    (format-with-on-click-id (al/ml-title-string "Mem")
                             :al/ml-show-memory)
-   (format-with-on-click-id (al/stumpwm-memory:memory-mode-line-string)
+   (format-with-on-click-id (al/ml-memory:ml-string)
                             :al/ml-toggle-memory)))
 
 (defun al/ml-show-memory (&rest _)
@@ -95,7 +95,7 @@
 
 (defun al/ml-toggle-memory (&rest _)
   (declare (ignore _))
-  (al/stumpwm-memory:memory-mode-line-next-type)
+  (al/ml-memory:ml-next-type)
   (setf al/ml-memory-update t)
   (update-all-mode-lines))
 
