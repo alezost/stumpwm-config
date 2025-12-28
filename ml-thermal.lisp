@@ -26,13 +26,13 @@
 
 ;;; Code:
 
-(defpackage #:al/stumpwm-thermal
+(defpackage #:al/ml-thermal
   (:use :common-lisp
         :stumpwm)
   (:export #:all-thermal-zones
-           #:thermal-zones-mode-line-string))
+           #:ml-string))
 
-(in-package #:al/stumpwm-thermal)
+(in-package #:al/ml-thermal)
 
 (defun all-thermal-zones ()
   "Return a list of files of all thermal zones."
@@ -51,20 +51,19 @@
   (round (/ (al/read-sys-file zone t)
             1000)))
 
-(defun thermal-zones-mode-line-string (&rest zones)
+(defun ml-string (&rest zones)
   "Return a string with thermal ZONES info suitable for the mode-line."
-  (defun temp (zone)
-    (al/ml-zone-string (thermal-zone-temperature zone)
-                       :zones '(70 60 50)
-                       :format "~2D"
-                       :ending ""))
-
   (if (null zones)
       ""
-      (al/ml-string
-       (if (cdr zones)
-           (concat "°C: " (al/mapconcat #'temp zones " "))
-           (concat (temp (car zones)) "°C"))
-       :fg "7")))
+      (flet ((temp (zone)
+               (al/ml-zone-string (thermal-zone-temperature zone)
+                                  :zones '(70 60 50)
+                                  :format "~2D"
+                                  :ending "")))
+        (al/ml-string
+         (if (cdr zones)
+             (concat "°C: " (al/mapconcat #'temp zones " "))
+             (concat (temp (car zones)) "°C"))
+         :fg "7"))))
 
 ;;; ml-thermal.lisp ends here

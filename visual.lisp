@@ -106,7 +106,7 @@
 ;;; mode-line thermal
 
 (defvar al/all-thermal-zones
-  (al/stumpwm-thermal:all-thermal-zones))
+  (al/ml-thermal:all-thermal-zones))
 
 (defvar al/current-thermal-zones
   (and al/all-thermal-zones
@@ -115,7 +115,7 @@
 (al/defun-with-delay 6 al/ml-thermal-zones ()
   (al/ml-separate
    (format-with-on-click-id
-    (apply #'al/stumpwm-thermal:thermal-zones-mode-line-string
+    (apply #'al/ml-thermal:ml-string
            al/current-thermal-zones)
     :al/ml-toggle-thermal-zones)))
 
