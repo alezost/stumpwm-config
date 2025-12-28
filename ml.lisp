@@ -1,4 +1,4 @@
-;;; mode-line.lisp --- Utils for mode-line
+;;; ml.lisp --- Utils for the mode line
 
 ;; Copyright © 2019–2025 Alex Kost <alezost@gmail.com>
 
@@ -19,7 +19,7 @@
 
 (in-package :stumpwm)
 
-;; These symbols are used in "mode-line-*.lisp" files.
+;; Symbols used by "ml-*.lisp" files.
 (export '(al/ml-string
           al/ml-zone-string))
 
@@ -92,4 +92,4 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
   "Make STRING a title string."
   (al/ml-string string :fg "#a0aa98"))
 
-;;; mode-line.lisp ends here
+;;; ml.lisp ends here

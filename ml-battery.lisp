@@ -1,4 +1,4 @@
-;;; mode-line-battery.lisp --- Battery info for the mode line
+;;; ml-battery.lisp --- Battery info for the mode line
 
 ;; Copyright © 2008 Julian Stecklina
 ;; Copyright © 2018–2025 Alex Kost <alezost@gmail.com>
@@ -120,4 +120,4 @@ TIME is a floating number of hours."
                 (format-hours time))))
      :fg "7")))
 
-;;; mode-line-battery.lisp ends here
+;;; ml-battery.lisp ends here

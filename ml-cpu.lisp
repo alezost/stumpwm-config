@@ -1,4 +1,4 @@
-;;; mode-line-cpu.lisp --- CPU info for the mode line
+;;; ml-cpu.lisp --- CPU info for the mode line
 
 ;; Copyright © 2007 Anonymous Coward, Jonathan Moore Liles
 ;; Copyright © 2019–2025 Alex Kost <alezost@gmail.com>
@@ -120,4 +120,4 @@ Must be one of `cpu-mode-line-types'.")
            (t ""))
          :fg "7")))))
 
-;;; mode-line-cpu.lisp ends here
+;;; ml-cpu.lisp ends here

@@ -1,4 +1,4 @@
-;;; mode-line-memory.lisp --- Memory info for the mode line
+;;; ml-memory.lisp --- Memory info for the mode line
 
 ;; Copyright © 2025 Alex Kost <alezost@gmail.com>
 
@@ -113,4 +113,4 @@ TYPE can be one of the following symbols: `short', `long', `next'."
          (t ""))
        :fg "7"))))
 
-;;; mode-line-memory.lisp ends here
+;;; ml-memory.lisp ends here

@@ -19,7 +19,7 @@
 
 (in-package :stumpwm)
 
-;; These symbols are used in "mode-line-*.lisp" files.
+;; Symbols used by "ml-*.lisp" files.
 (export
  '(al/read-sys-file
    al/file-readable?

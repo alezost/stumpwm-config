@@ -1,4 +1,4 @@
-;;; mode-line-thermal.lisp --- Thermal zones info for the mode line
+;;; ml-thermal.lisp --- Thermal zones info for the mode line
 
 ;; Copyright © 2007 Anonymous Coward, Jonathan Moore Liles
 ;; Copyright © 2019–2025 Alex Kost <alezost@gmail.com>
@@ -67,4 +67,4 @@
            (concat (temp (car zones)) "°C"))
        :fg "7")))
 
-;;; mode-line-thermal.lisp ends here
+;;; ml-thermal.lisp ends here

@@ -1,4 +1,4 @@
-;;; mode-line-net.lisp --- Network info for the mode line
+;;; ml-net.lisp --- Network info for the mode line
 
 ;; Copyright © 2009 Vitaly Mayatskikh
 ;; Copyright © 2019–2025 Alex Kost <alezost@gmail.com>
@@ -177,4 +177,4 @@ Otherwise, return `:unknown' value."
                                   " " (format-bytes up))
                           :fg "7"))))))
 
-;;; mode-line-net.lisp ends here
+;;; ml-net.lisp ends here
