@@ -24,7 +24,7 @@
 ;; (defun al/load (filename)
 ;;   "Load a file FILENAME (without extension) from `al/init-directory'."
 ;;   (let ((file (merge-pathnames (concat filename ".lisp")
-;;                                al/init-directory)))
+;;                                *al/init-directory*)))
 ;;     (if (probe-file file)
 ;;         (load file)
 ;;         (format *error-output* "File '~a' doesn't exist." file))))
@@ -46,16 +46,17 @@
 
 (in-package :stumpwm)
 
-(defvar al/init-directory
+(defvar *al/init-directory*
   (directory-namestring
    (truename (merge-pathnames (user-homedir-pathname)
                               ".stumpwmrc")))
   "Directory with stumpwm config files.")
 
-(redirect-all-output (merge-pathnames "log" al/init-directory))
+;; Log StumpWM messages.
+(redirect-all-output (merge-pathnames "log" *al/init-directory*))
 
-;; Loading the rest config.
-(push al/init-directory asdf:*central-registry*)
+;; Load the rest config.
+(push *al/init-directory* asdf:*central-registry*)
 (asdf:load-system "al-stumpwm-config")
 
 ;; This is needed to have SSH prompt (via GnuPG) in the current X session.
