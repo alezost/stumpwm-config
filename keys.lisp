@@ -354,7 +354,6 @@ additional key."
 (al/define-key al/mode-line-map "t" "mode-line")
 (al/define-key al/mode-line-map "." "al/mode-line-top")
 (al/define-key al/mode-line-map "e" "al/mode-line-bottom")
-(al/define-key al/mode-line-map "n" "net-next-device")
 
 
 ;;; Mana
