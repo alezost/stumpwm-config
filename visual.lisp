@@ -157,12 +157,12 @@
 
 ;;; mode-line battery
 
-(defvar al/battery (car (al/stumpwm-battery:all-batteries)))
+(defvar al/battery (car (al/ml-battery:all-batteries)))
 
 (al/defun-with-delay 60 al/ml-battery ()
   (al/ml-separate
    (al/ml-title-string "Bat ")
-   (al/stumpwm-battery:battery-mode-line-string al/battery)))
+   (al/ml-battery:ml-string al/battery)))
 
 (defun al/ml-battery-maybe ()
   (if al/battery

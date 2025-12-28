@@ -28,13 +28,13 @@
 
 ;;; Code:
 
-(defpackage #:al/stumpwm-battery
+(defpackage #:al/ml-battery
   (:use :common-lisp
         :stumpwm)
   (:export #:all-batteries
-           #:battery-mode-line-string))
+           #:ml-string))
 
-(in-package #:al/stumpwm-battery)
+(in-package #:al/ml-battery)
 
 (defun power-supply-parameter (path name &optional to-number)
   "Return a line (string) from 'PATH/NAME' sysfs file.
@@ -104,7 +104,7 @@ TIME is a floating number of hours."
         (format nil "~D:~2,'0D" hours (floor (* rem 60))))
       ""))
 
-(defun battery-mode-line-string (battery)
+(defun ml-string (battery)
   "Return a string with BATTERY info suitable for the mode-line."
   (multiple-value-bind (state percent time)
       (battery-state battery)
