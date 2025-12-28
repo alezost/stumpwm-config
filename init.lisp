@@ -54,19 +54,7 @@
 
 (redirect-all-output (merge-pathnames "log" al/init-directory))
 
-(defvar al/display-number
-  (multiple-value-bind (_ array)
-      (cl-ppcre:scan-to-strings ":([0-9]+)" (getenv "DISPLAY"))
-    (declare (ignore _))
-    (if (vectorp array)
-        (parse-integer (aref array 0))
-        0))
-  "The number of the current DISPLAY.")
-
-(swank:create-server
- :dont-close t
- :port (+ swank::default-server-port al/display-number))
-
+;; Loading the rest config.
 (push al/init-directory asdf:*central-registry*)
 (asdf:load-system "al-stumpwm-config")
 
