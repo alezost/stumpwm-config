@@ -65,12 +65,12 @@
 (al/defun-with-delay 5 al/ml-cpu ()
   (al/ml-separate
    (al/ml-title-string "CPU")
-   (format-with-on-click-id (al/stumpwm-cpu:cpu-mode-line-string)
+   (format-with-on-click-id (al/ml-cpu:ml-string)
                             :al/ml-toggle-cpu)))
 
 (defun al/ml-toggle-cpu (&rest _)
   (declare (ignore _))
-  (al/stumpwm-cpu:cpu-mode-line-next-type)
+  (al/ml-cpu:ml-next-type)
   (setf al/ml-cpu-update t)
   (update-all-mode-lines))
 

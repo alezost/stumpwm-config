@@ -27,19 +27,19 @@
 
 ;;; Code:
 
-(defpackage #:al/stumpwm-cpu
+(defpackage #:al/ml-cpu
   (:use :common-lisp
         :stumpwm)
-  (:export #:cpu-mode-line-next-type
-           #:cpu-mode-line-string))
+  (:export #:ml-next-type
+           #:ml-string))
 
-(in-package #:al/stumpwm-cpu)
+(in-package #:al/ml-cpu)
 
-(defvar last-user-time 0)
-(defvar last-system-time 0)
-(defvar last-idle-time 0)
-(defvar last-iowait-time 0)
-(defvar last-irq-time 0)
+(defvar *last-user-time* 0)
+(defvar *last-system-time* 0)
+(defvar *last-idle-time* 0)
+(defvar *last-iowait-time* 0)
+(defvar *last-irq-time* 0)
 
 (defun current-cpu-usage ()
   "Return the average CPU usage since the last call.
@@ -60,11 +60,11 @@
              (cur-idle-time   (read stat))
              (cur-iowait-time (read stat))
              (cur-irq-time    (+ (read stat) (read stat)))
-             (user-time       (- cur-user-time   last-user-time))
-             (system-time     (- cur-system-time last-system-time))
-             (idle-time       (- cur-idle-time   last-idle-time))
-             (iowait-time     (- cur-iowait-time last-iowait-time))
-             (irq-time        (- cur-irq-time    last-irq-time))
+             (user-time       (- cur-user-time   *last-user-time*))
+             (system-time     (- cur-system-time *last-system-time*))
+             (idle-time       (- cur-idle-time   *last-idle-time*))
+             (iowait-time     (- cur-iowait-time *last-iowait-time*))
+             (irq-time        (- cur-irq-time    *last-irq-time*))
              (cpu-time        (+ user-time system-time iowait-time irq-time))
              (total-time      (+ cpu-time idle-time)))
         (unless (zerop total-time)
@@ -73,30 +73,29 @@
                 system% (/ system-time total-time)
                 io%     (/ iowait-time total-time)
                 irq%    (/ irq-time    total-time)
-                last-user-time   cur-user-time
-                last-system-time cur-system-time
-                last-idle-time   cur-idle-time
-                last-iowait-time cur-iowait-time
-                last-irq-time    cur-irq-time))))
+                *last-user-time*   cur-user-time
+                *last-system-time* cur-system-time
+                *last-idle-time*   cur-idle-time
+                *last-iowait-time* cur-iowait-time
+                *last-irq-time*    cur-irq-time))))
     (values cpu% user% system% io% irq%)))
 
 
 ;;; mode-line string
 
-(defvar cpu-mode-line-types '(short long)
-  "Available types for `cpu-mode-line-string'.")
+(defvar *ml-types* '(short long)
+  "Available types for `ml-string'.")
 
-(defvar cpu-mode-line-type (car cpu-mode-line-types)
+(defvar *ml-type* (car *ml-types*)
   "Current mode line string type.
-Must be one of `cpu-mode-line-types'.")
+Must be one of `*ml-types*'.")
 
-(defun cpu-mode-line-next-type ()
-  "Set `cpu-mode-line-type' to the next available type."
-  (setf cpu-mode-line-type
-        (al/next-list-element cpu-mode-line-types
-                              cpu-mode-line-type)))
+(defun ml-next-type ()
+  "Set `*ml-type*' to the next available type."
+  (setf *ml-type*
+        (al/next-list-element *ml-types* *ml-type* #'eq)))
 
-(defun cpu-mode-line-string ()
+(defun ml-string ()
   "Return a string with CPU info suitable for the mode-line."
   (multiple-value-bind (cpu user system io irq)
       (current-cpu-usage)
@@ -105,7 +104,7 @@ Must be one of `cpu-mode-line-types'.")
       (let* ((cpu (d cpu))
              (cpu-str (al/ml-zone-string cpu)))
         (al/ml-string
-         (case cpu-mode-line-type
+         (case *ml-type*
            (short cpu-str)
            (long
             (let ((user   (d user))
