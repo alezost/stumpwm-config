@@ -8,18 +8,20 @@ All symbols (commands, functions, macros, variables) in my config have
 `al/` prefix to make sure they will not conflict with symbols from
 `:stumpwm` module.
 
-My mode line (customized with `*screen-mode-line-format*` variable):
+My mode line is clickable almost everywhere.  Here is the difference
+between my default mode line and after clicking on some of its parts:
 
-![mode-line](screenshots/mode-line.png)
+![mode-line1](screenshots/mode-line1.png)
 
-My time message (`time` command customized with
-`*time-format-string-default*` variable):
-![time](screenshots/time.png)
+![mode-line2](screenshots/mode-line2.png)
 
 ## Files
 
-- `init.lisp`: The main file for loading the other ones (`~/.stumpwmrc`
-  is a symlink to this file).
+- `al-stumpwm-config.asd`: File providing ASDF system.  Used by
+  `init.lisp` to load the rest config files.
+
+- `init.lisp`: The main file for loading the rest config files
+  (`~/.stumpwmrc` is a symlink to this file).
 
 - `keys.lisp`: All my keybindings (I use dvorak layout, so some of them
   may look weird).
@@ -35,12 +37,12 @@ My time message (`time` command customized with
   [my Guile-Daemon config](https://github.com/alezost/guile-daemon-config)
   for details.
 
-- `utils.lisp`: Additional functions and commands I use.
+- `utils.lisp`: Additional functions and commands used by the rest config.
 
 - `settings.lisp`: General stumpwm settings.
 
-- `mode-line-*.lisp`: modules to get various info for the mode line.  I
-  use these files instead of
+- `ml-*.lisp`: Modules to get various info for the mode line.  I use
+  these files instead of
   [contrib](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/)
   stumpwm modules.
 
