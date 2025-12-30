@@ -255,6 +255,9 @@ CLASS is a window class; NUM is the number of windows of this class.")
 (defvar al/current-window nil
   "Class of the current window.")
 
+(defvar al/previous-window nil
+  "Class of the previous window.")
+
 (defun al/update-window-alist (&rest _)
   "Refresh the value of `al/window-alist'."
   (declare (ignore _))
@@ -268,41 +271,53 @@ CLASS is a window class; NUM is the number of windows of this class.")
                 (push (list wc) al/window-alist))))
         (screen-windows (current-screen))))
 
-(defun al/update-current-window (&rest _)
-  "Refresh the value of `al/current-window'."
-  (declare (ignore _))
-  (setf al/current-window
-        (window-class (current-window))))
+(defun al/update-current-window (current previous)
+  "Refresh the value of `al/current-window' and `al/previous-window'."
+  (flet ((class (win)
+           (and win (window-class win))))
+    (setf al/current-window  (class (or current (current-window)))
+          al/previous-window (class previous))))
 
 (add-hook *focus-window-hook*   'al/update-current-window)
 (add-hook *new-window-hook*     'al/update-window-alist)
 (add-hook *destroy-window-hook* 'al/update-window-alist)
 
-(defun al/ml-window-class (&optional (str " %c "))
+(defvar al/ml-class-type-alist
+  '((current  "#d8d844" "#3838a0")
+    (previous "#b0b0b0" "#505078")
+    (nil      "#a0a0a0" "#555555")))
+
+(defun al/ml-window-class (&optional (string "%c") (type 'current))
   "Window class color construct for mode-line and window list."
-  (al/ml-string str :fg "#d8d844" :bg "#3838a0"))
+  (if-let ((assoc (assoc type al/ml-class-type-alist)))
+    (al/ml-string (concat " " string " ")
+                  :fg (second assoc)
+                  :bg (third assoc))
+    string))
 
 (defun al/ml-windows ()
-  (when (and al/window-alist al/current-window)
-    (al/ml-separate
-     (al/mapconcat
-      (lambda (assoc)
-        (destructuring-bind (class . num)
-            assoc
-          (concat
-           (if (string= class al/current-window)
-               (format-with-on-click-id
-                (al/ml-window-class (concat " " class " "))
-                :al/ml-toggle-window class)
-               (al/ml-string (concat " " class " ")
-                             :fg "#a0a0a0" :bg "#555555"
-                             :click (list :al/ml-toggle-window
-                                          class)))
-           (and num
-                (al/ml-string (concat " " (write-to-string num) " ")
-                              :fg "7" :bg "#407777")))))
-      al/window-alist
-      " "))))
+  (when al/window-alist
+    (flet ((window= (class1 class2)
+             (and class1 class2
+                  (string= class1 class2))))
+      (al/ml-separate
+       (al/mapconcat
+        (lambda (assoc)
+          (destructuring-bind (class . num)
+              assoc
+            (concat (format-with-on-click-id
+                     (al/ml-window-class
+                      (or class "")
+                      (cond ((window= class al/current-window)
+                             'current)
+                            ((window= class al/previous-window)
+                             'previous)))
+                     :al/ml-toggle-window class)
+                    (and num
+                         (al/ml-string (concat " " (write-to-string num) " ")
+                                       :fg "7" :bg "#407777")))))
+        al/window-alist
+        " ")))))
 
 (defun al/ml-toggle-window (_code class &rest _rest)
   (declare (ignore _code _rest))
