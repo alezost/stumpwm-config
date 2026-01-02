@@ -1,6 +1,6 @@
 ;;; init.lisp --- Vital settings and loading other files
 
-;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2026 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@
 
 ;; Log StumpWM messages.
 (redirect-all-output (merge-pathnames "log" *al/init-directory*))
+(format t "~%~C~%~A~%~%" #\Page (time-format "%Y-%m-%d %H:%M:%S"))
 
 ;; Load the rest config.
 (push *al/init-directory* asdf:*central-registry*)
