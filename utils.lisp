@@ -1,6 +1,6 @@
 ;;; utils.lisp --- Additional variables, functions and commands
 
-;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2026 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -649,7 +649,9 @@ each pair of the result."
 
 (defcommand al/yank-primary () ()
   "Insert X primary selection into the current window."
-  (window-send-string (get-x-selection)))
+  (if (al/emacs-window-p)
+    (al/send-key (kbd "H-y"))
+    (window-send-string (get-x-selection))))
 
 (defvar al/ignore-emacs nil
   "If non-nil, do not treat Emacs specially by `al/switch-frame-or-window'.")
