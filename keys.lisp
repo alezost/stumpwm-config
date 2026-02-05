@@ -1,6 +1,6 @@
 ;;; keys.lisp --- Key bindings (Dvorak layout)
 
-;; Copyright © 2013–2025 Alex Kost <alezost@gmail.com>
+;; Copyright © 2013–2026 Alex Kost <alezost@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -84,8 +84,8 @@ additional key."
 (al/define-key *top-map* "H-w"   "al/emacs")
 
 (al/define-key *tile-group-root-map* "s-f" "fullscreen")
-(al/define-key *tile-group-top-map* "s-z" "hsplit")
-(al/define-key *tile-group-top-map* "M-s-z" "vsplit")
+(al/define-key *tile-group-root-map* "s-z" "hsplit")
+(al/define-key *tile-group-root-map* "s-v" "vsplit")
 (al/define-key *tile-group-top-map* "s-x" "only")
 
 ;;; Focusing windows
