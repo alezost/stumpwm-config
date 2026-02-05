@@ -237,6 +237,7 @@ additional key."
 (al/define-key *top-map* "s-i" "info")
 (al/define-key *top-map* "s-l" "lastmsg")
 (al/define-key *top-map* "s-d" "al/send-key-to-emacs XF86Spell")
+(al/define-key *top-map* "s-z" "al/send-key-to-emacs C-z")
 (al/define-key *top-map* "XF86Documents"    "al/emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
 (al/define-key *top-map* "C-XF86Documents"  "al/emacs-eval-show (org-capture 1 \"n\")")
 (al/define-key *top-map* "M-XF86Documents"  "al/emacs-eval-show (find-file \"~/notes/tasks.org\")")
