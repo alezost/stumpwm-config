@@ -173,14 +173,27 @@
 ;;; mode-line backlight
 
 (defun al/ml-backlight-string (bl)
-  (and (stringp bl)
-       (not (string= "" bl))
-       (al/ml-separate
-        (al/ml-title-string "BL ")
-        (al/ml-string bl :fg "#66bbff"))))
+  (when bl
+    (al/ml-separate
+     (al/ml-title-string "BL ")
+     (al/ml-string (princ-to-string bl)
+                   :fg "#66bbff"
+                   :click :al/ml-update-backlight))))
 
-(defun al/ml-backlight ()
+(al/defun-with-delay nil al/ml-backlight ()
   (al/ml-backlight-string (al/backlight)))
+
+(defcommand al/backlight* (&rest args) (:rest)
+  "Call `al/backlight' and update backlight value in the mode-line."
+  (apply #'al/backlight args)
+  (setf al/ml-backlight-update t)
+  (update-all-mode-lines))
+
+(defun al/ml-update-backlight (&rest _)
+  (declare (ignore _))
+  (al/backlight* "get"))
+
+(register-ml-on-click-id :al/ml-update-backlight #'al/ml-update-backlight)
 
 
 ;;; mode-line sound

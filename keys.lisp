@@ -170,12 +170,14 @@ additional key."
 
 ;;; Controlling brightness
 
-(al/define-key *top-map* "XF86MonBrightnessUp"      "al/set-backlight -inc 3")
-(al/define-key *top-map* "XF86MonBrightnessDown"    "al/set-backlight -dec 3")
-(al/define-key *top-map* "C-XF86MonBrightnessUp"    "al/set-backlight -inc 1")
-(al/define-key *top-map* "C-XF86MonBrightnessDown"  "al/set-backlight -dec 1")
-(al/define-key *top-map* "M-XF86MonBrightnessUp"    "al/set-backlight -inc 10")
-(al/define-key *top-map* "M-XF86MonBrightnessDown"  "al/set-backlight -dec 10")
+(al/define-key *top-map* "XF86MonBrightnessUp"       "al/backlight* set +3")
+(al/define-key *top-map* "XF86MonBrightnessDown"     "al/backlight* set -3")
+(al/define-key *top-map* "C-XF86MonBrightnessUp"     "al/backlight* set +1")
+(al/define-key *top-map* "C-XF86MonBrightnessDown"   "al/backlight* set -1")
+(al/define-key *top-map* "M-XF86MonBrightnessUp"     "al/backlight* set +10")
+(al/define-key *top-map* "M-XF86MonBrightnessDown"   "al/backlight* set -10")
+(al/define-key *top-map* "C-M-XF86MonBrightnessUp"   "al/backlight* set 30")
+(al/define-key *top-map* "C-M-XF86MonBrightnessDown" "al/backlight* set 10")
 
 
 ;;; Controlling sound

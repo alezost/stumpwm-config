@@ -493,6 +493,26 @@ program.")
 
 ;;; Interacting with other progs
 
+(defun al/run-program-read (program &rest args)
+  "Run PROGRAM with ARGS.
+Read Lisp expression from the program output and return it."
+  (let ((output (run-shell-command
+                 (format nil "~A ~{~A~^ ~}" program args)
+                 'output)))
+    (read-from-string output)))
+
+;; `osd-sound' and `osd-backlight' are shell scripts that I use to set
+;; and get the current sound/backlight values and to show these values
+;; in OSD:
+;; <https://github.com/alezost/guile-daemon-config/tree/master/scripts>.
+;; These scripts are simple wrappers to call Guile code that is
+;; evaluated in the running Guile-Daemon instance.
+
+(defun al/backlight (&rest args)
+  "Set backlight brightness according to ARGS and return it.
+ARGS should be arguments supported by `osd-backlight' shell command."
+  (apply #'al/run-program-read "osd-backlight" args))
+
 (defcommand al/xterm () ()
   "Start xterm unless it is already running, in which case focus it."
   (run-or-raise (al/herd-command "xterm")
@@ -505,55 +525,6 @@ program.")
 (defcommand al/toggle-unclutter () ()
   "Start/stop 'unclutter' on the current display."
   (al/toggle-shepherd-service "unclutter"))
-
-
-;;; Backlight brightness
-
-(defvar al/backlight-program
-  (and (al/executable-exists? "xbacklight")
-       "xbacklight")
-  "Executable to get/set display backlight.
-If nil, do not run any backlight code.")
-
-(al/defun-with-delay nil al/backlight ()
-  "Return backlight brightness.
-
-Return nil if backlight is not available.
-
-This function checks backlight only once and uses this value on
-successive calls.  If you wish to force the update, set
-`al/backlight-update' variable to t."
-  (and al/backlight-program
-       (let* ((output (run-shell-command
-                       (concat al/backlight-program " -get")
-                       t))
-              (strings (split-string output '(#\newline)))
-              (backlights (mapcar (lambda (str)
-                                    (and (not (string= "" str)) str))
-                                  strings))
-              (backlight (first (delete nil backlights)))
-              ;; Convert string to number.
-              (backlight (read-from-string backlight)))
-         ;; Round it and convert back to string.
-         (write-to-string (round backlight)))))
-
-(defun al/backlight-update-soon ()
-  "Update mode line after some delay."
-  (when (and al/backlight-program
-             (null al/backlight-update))
-    (al/run-after-sleep 2
-      (setf al/backlight-update t)
-      (update-all-mode-lines))))
-
-(defcommand al/set-backlight (&rest args) (:rest)
-  "Set backlight brightness of the current display.
-Pass ARGS as arguments to 'xbacklight' shell command."
-  ;; XXX For some reason, the following line works if 'al/set-backlight'
-  ;; is evaluated as a function but does not work if it is called as a
-  ;; command.
-  ;;(run-prog "osd-backlight" :args args :wait t :search t)
-  (run-shell-command (format nil "osd-backlight ~{~A~^ ~}" args))
-  (al/backlight-update-soon))
 
 
 ;;; Mode line
