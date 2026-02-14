@@ -182,17 +182,15 @@ additional key."
 
 ;;; Controlling sound
 
-(al/define-key *top-map* "XF86AudioMute"            "al/sound-set-current-scontrol toggle")
-(al/define-key *top-map* "M-XF86AudioMute"          "al/sound-next-scontrol")
-(al/define-key *top-map* "C-XF86AudioMute"          "exec tvtime-command TOGGLE_MUTE")
-(al/define-key *top-map* "XF86AudioRaiseVolume"     "al/sound-set-current-scontrol 3%+")
-(al/define-key *top-map* "XF86AudioLowerVolume"     "al/sound-set-current-scontrol 3%-")
-(al/define-key *top-map* "C-XF86AudioRaiseVolume"   "al/sound-set-current-scontrol 1%+")
-(al/define-key *top-map* "C-XF86AudioLowerVolume"   "al/sound-set-current-scontrol 1%-")
-(al/define-key *top-map* "M-XF86AudioRaiseVolume"   "al/sound-set-current-scontrol 10%+")
-(al/define-key *top-map* "M-XF86AudioLowerVolume"   "al/sound-set-current-scontrol 10%-")
-(al/define-key *top-map* "C-M-XF86AudioRaiseVolume" "al/sound-set-current-scontrol 60%")
-(al/define-key *top-map* "C-M-XF86AudioLowerVolume" "al/sound-set-current-scontrol 20%")
+(al/define-key *top-map* "XF86AudioMute"            "al/sound* toggle")
+(al/define-key *top-map* "XF86AudioRaiseVolume"     "al/sound* set +3")
+(al/define-key *top-map* "XF86AudioLowerVolume"     "al/sound* set -3")
+(al/define-key *top-map* "C-XF86AudioRaiseVolume"   "al/sound* set +1")
+(al/define-key *top-map* "C-XF86AudioLowerVolume"   "al/sound* set -1")
+(al/define-key *top-map* "M-XF86AudioRaiseVolume"   "al/sound* set +10")
+(al/define-key *top-map* "M-XF86AudioLowerVolume"   "al/sound* set -10")
+(al/define-key *top-map* "C-M-XF86AudioRaiseVolume" "al/sound* set 90")
+(al/define-key *top-map* "C-M-XF86AudioLowerVolume" "al/sound* set 50")
 
 
 ;;; Controlling EMMS

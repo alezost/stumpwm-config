@@ -508,6 +508,11 @@ Read Lisp expression from the program output and return it."
 ;; These scripts are simple wrappers to call Guile code that is
 ;; evaluated in the running Guile-Daemon instance.
 
+(defun al/sound (&rest args)
+  "Set sound value according to ARGS and return it.
+ARGS should be arguments supported by `osd-sound' shell command."
+  (apply #'al/run-program-read "osd-sound" args))
+
 (defun al/backlight (&rest args)
   "Set backlight brightness according to ARGS and return it.
 ARGS should be arguments supported by `osd-backlight' shell command."

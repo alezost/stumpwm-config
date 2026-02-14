@@ -10,7 +10,6 @@
    (:file "swank")
    (:file "utils")
    (:file "xkb")
-   (:file "sound")
    (:file "settings")
    (:file "ml")
    (:file "ml-cpu")

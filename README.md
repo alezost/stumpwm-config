@@ -31,12 +31,6 @@ between my default mode line and after clicking on some of its parts:
   it to switch keyboard layout and to get/set the state of CapsLock and
   NumLock keys.
 
-- `sound.lisp`: An interface for setting sound volume and showing it in
-  OSD.  I use [Guile-Daemon](https://github.com/alezost/guile-daemon) and
-  [Guile-XOSD](https://github.com/alezost/guile-xosd) to do this.  See
-  [my Guile-Daemon config](https://github.com/alezost/guile-daemon-config)
-  for details.
-
 - `utils.lisp`: Additional functions and commands used by the rest config.
 
 - `settings.lisp`: General stumpwm settings.

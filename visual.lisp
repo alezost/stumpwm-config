@@ -199,21 +199,27 @@
 ;;; mode-line sound
 
 (defun al/ml-sound-string (vol &optional (vol-on t))
-  (and (stringp vol)
-       (not (string= "" vol))
-       (al/ml-separate
-        (al/ml-title-string "Snd ")
-        (al/ml-string vol :fg (if vol-on "#50e050" "#fa3333")
-                      :click :al/ml-toggle-sound))))
+  (when vol
+    (al/ml-separate
+     (al/ml-title-string "Snd ")
+     (al/ml-string (princ-to-string vol)
+                   :fg (if vol-on "#50e050" "#fa3333")
+                   :click :al/ml-update-sound))))
 
-(defun al/ml-sound ()
-  (apply #'al/ml-sound-string (al/sound-volume)))
+(al/defun-with-delay nil al/ml-sound ()
+  (apply #'al/ml-sound-string (al/sound)))
 
-(defun al/ml-toggle-sound (&rest _)
+(defcommand al/sound* (&rest args) (:rest)
+  "Call `al/sound' and update sound value in the mode-line."
+  (apply #'al/sound args)
+  (setf al/ml-sound-update t)
+  (update-all-mode-lines))
+
+(defun al/ml-update-sound (&rest _)
   (declare (ignore _))
-  (al/sound-set-current-scontrol "toggle"))
+  (al/sound* "get"))
 
-(register-ml-on-click-id :al/ml-toggle-sound #'al/ml-toggle-sound)
+(register-ml-on-click-id :al/ml-update-sound #'al/ml-update-sound)
 
 
 ;;; mode-line keyboard
