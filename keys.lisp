@@ -357,23 +357,4 @@ additional key."
 (al/define-key al/mode-line-map "." "al/mode-line-top")
 (al/define-key al/mode-line-map "e" "al/mode-line-bottom")
 
-
-;;; Mana
-
-(defvar al/mana-map (make-sparse-keymap)
-  "Keymap for sending keys to Mana.")
-(al/define-key *top-map* "s-j" 'al/mana-map)
-(al/define-key al/mana-map "s-j" "mana-state")
-(al/define-key al/mana-map "a" "mana-attack")
-(al/define-key al/mana-map "A" "mana-quick-attack")
-(al/define-key al/mana-map "H" "mana-bat-quest-full")
-(al/define-key al/mana-map "h" "mana-bat-quest-cont")
-(al/define-key al/mana-map "l" "al/emacs-eval-show (find-file \"~/.local/share/mana/logs/server.themanaworld.org/\")")
-(al/define-key al/mana-map "m" "al/emacs-eval-show (find-file \"~/notes/tmw/monsters.org\")")
-(al/define-key al/mana-map "q" "al/emacs-eval-show (find-file \"~/notes/tmw/quests.org\")")
-(al/define-key al/mana-map "s" "al/emacs-eval-show (find-file \"~/notes/tmw/spells.org\")")
-(al/define-key al/mana-map "S" "al/emacs-eval-show (find-file \"~/src/tmw/tmwa-server-data/world/map/npc\")")
-(al/define-key al/mana-map "b" "mana-break")
-(al/define-key al/mana-map "k" "mana-kill")
-
 ;;; keys.lisp ends here
