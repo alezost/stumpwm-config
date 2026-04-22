@@ -421,27 +421,27 @@ beginning with ':') where a service is started."
   (run-or-raise (al/herd-command "emacs")
                 '(:class "Emacs")))
 
-(defcommand al/emacs-eval (arg &optional server-name) ((:shell "emacs-eval: "))
+(defcommand al/emacs-eval (arg &optional server-name)
+    ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
   (let ((args (list "--eval" arg)))
     (when server-name
       (setq args (append (list "--socket-name" server-name) args)))
     (run-prog "emacsclient" :args args :wait nil :search t)))
 
-(defcommand al/emacs-eval-show (arg) ((:shell "emacs-eval: "))
+(defcommand al/emacs-eval-show (arg &optional server-name)
+    ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient and raise emacs."
-  (al/emacs-eval arg)
-  (or (al/emacs-window-p) (al/emacs)))
+  (al/emacs-eval (concat "(progn (raise-frame) " arg ")")
+                 server-name))
 
-(defcommand al/emms-eval (arg &optional (server-name "server-emms"))
-    ((:shell "emms-eval: "))
-  "Evaluate ARG with emacsclient."
-  (al/emacs-eval arg server-name))
+(defcommand al/emms-eval (arg) ((:shell "emms-eval: "))
+  "Evaluate ARG with \"server-emms\" emacsclient."
+  (al/emacs-eval arg "server-emms"))
 
 (defcommand al/emms-eval-show (arg) ((:shell "emms-eval: "))
-  "Evaluate ARG with emacsclient and raise emacs."
-  (al/emms-eval arg)
-  (or (al/emacs-window-p) (al/emacs)))
+  "Evaluate ARG with \"server-emms\" emacsclient and raise emacs."
+  (al/emacs-eval-show arg "server-emms"))
 
 
 ;;; Interacting with browser
