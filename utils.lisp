@@ -234,6 +234,12 @@ If IGNORE-CURRENT is non-nil, skip current window even if it matches."
             (message "No window matching ~a" classes))
         win)))
 
+(defcommand al/focus-window-by-id (id) (:number)
+  "Focus window with X ID."
+  (if-let ((win (window-by-id id)))
+    (focus-all win)
+    (message "No window with ID ~a" id)))
+
 (defcommand al/hide-current-window () ()
   "Hide current window."
   (hide-window (current-window)))
