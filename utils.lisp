@@ -424,7 +424,7 @@ beginning with ':') where a service is started."
 
 (defcommand al/emacs () ()
   "Start emacs unless it is already running, in which case focus it."
-  (run-or-raise (al/herd-command "emacs")
+  (run-or-raise "emacs-emms"
                 '(:class "Emacs")))
 
 (defcommand al/emacs-eval (arg &optional server-name)
