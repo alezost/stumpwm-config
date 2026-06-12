@@ -267,6 +267,9 @@ additional key."
 ;; builtin command, and "sh -c" (which is called by "exec") does not
 ;; load my "~/.bashrc" where it is disabled.
 (al/define-key *top-map* "S-s-XF86Sleep"       "exec `which suspend`")
+(al/define-key *top-map* "C-H-F4"              "exec `which suspend`")
+(al/define-key *top-map* "S-H-F4"              "exec reboot")
+(al/define-key *top-map* "s-H-F4"              "exec shutdown")
 
 ;; root map
 (al/define-key *root-map* "V"   "version")
