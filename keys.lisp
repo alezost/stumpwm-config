@@ -239,6 +239,8 @@ additional key."
 (al/define-key *top-map* "s-d" "al/send-key-to-emacs XF86Spell")
 (al/define-key *top-map* "s-z" "al/emms-eval-show (call-interactively 'al/eshell)")
 (al/define-key *top-map* "H-z" "al/emms-eval-show (call-interactively 'al/emms-playlist-play)")
+(al/define-key *top-map* "M-H-m" "al/emms-eval (al/emms-playlist-play \"background\")")
+(al/define-key *top-map* "M-H-z" "al/emms-eval-show (al/emms-playlist-select t)")
 (al/define-key *top-map* "XF86Documents"    "al/emacs-eval-show (find-file \"~/notes/bookmarks.org\")")
 (al/define-key *top-map* "C-XF86Documents"  "al/emacs-eval-show (org-capture 1 \"n\")")
 (al/define-key *top-map* "M-XF86Documents"  "al/emacs-eval-show (find-file \"~/notes/tasks.org\")")
