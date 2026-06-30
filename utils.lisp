@@ -427,12 +427,11 @@ beginning with ':') where a service is started."
   (run-or-raise "emacs-emms"
                 '(:class "Emacs")))
 
-(defcommand al/emacs-eval (arg &optional server-name)
+(defcommand al/emacs-eval (arg &optional (server-name "main"))
     ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
-  (let ((args (list "--eval" arg)))
-    (when server-name
-      (setq args (append (list "--socket-name" server-name) args)))
+  (let ((args (list "--socket-name" server-name
+                    "--eval" arg)))
     (run-prog "emacsclient" :args args :wait nil :search t)))
 
 (defcommand al/emacs-eval-show (arg &optional server-name)
@@ -443,17 +442,18 @@ beginning with ':') where a service is started."
 
 (defcommand al/emms-eval (arg) ((:shell "emms-eval: "))
   "Evaluate ARG with \"server-emms\" emacsclient."
-  (al/emacs-eval arg "server-emms"))
+  (al/emacs-eval arg "emms"))
 
 (defcommand al/emms-eval-show (arg) ((:shell "emms-eval: "))
   "Evaluate ARG with \"server-emms\" emacsclient and raise emacs."
-  (al/emacs-eval-show arg "server-emms"))
+  (al/emacs-eval-show arg "emms"))
 
 
 ;;; Interacting with browser
 
 (defvar al/browsers
   '(("firefox" . "firefox")
+    ("nyxt" . "Nyxt")
     ("chromium" . "Chromium")
     ("torbrowser" . "Tor Browser")
     ("icecat" . "IceCat"))
