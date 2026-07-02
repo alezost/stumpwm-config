@@ -7,7 +7,6 @@
   :components
   ((:static-file "COPYING")
    (:file "keys")
-   (:file "swank")
    (:file "utils")
    (:file "xkb")
    (:file "settings")

@@ -694,4 +694,16 @@ If current group is floating, select next window."
   (sb-ext:gc :full t)
   (message "Garbage collected."))
 
+(defcommand al/start-swank (&optional (port swank::default-server-port))
+                           ((:number "port: "))
+  "Start swank server on PORT."
+  (let ((*executing-stumpwm-command* nil))
+    ;; Setting `*executing-stumpwm-command*' to nil is needed to show a
+    ;; message when `al/start-swank' is executed externally (using
+    ;; STUMPWM_COMMAND property of the root window).
+    (message "Starting swank on port ~A" port))
+  (swank:create-server
+   :dont-close t
+   :port port))
+
 ;;; utils.lisp ends here
