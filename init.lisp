@@ -34,13 +34,17 @@
 
 ;; My config depends on `swank' and `xkeyboard' CL packages (installed
 ;; with Quicklisp).  I compile stumpwm image with these packages.
-;; To do it, I add the following lines:
+;; I know 2 different ways to do it:
 ;;
-;;   (require 'swank)
-;;   (require 'xkeyboard)
+;; 1. By adding the following lines:
 ;;
-;; to "load-stumpwm.lisp.in" file (then, "./configure" and "make" will
-;; do it).
+;;    (require 'swank)
+;;    (require 'xkeyboard)
+;;
+;;    to "load-stumpwm.lisp.in" file.
+;;
+;; 2. By adding #:swank and #:xkeyboard dependencies to "stumpwm.asd"
+;;    file (to `:depends-on' list).
 
 ;;; Code:
 
