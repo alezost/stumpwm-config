@@ -51,10 +51,8 @@
 (in-package :stumpwm)
 
 (defvar *al/init-directory*
-  (directory-namestring
-   (truename (merge-pathnames (user-homedir-pathname)
-                              ".stumpwmrc")))
-  "Directory with stumpwm config files.")
+  (directory-namestring *load-truename*)
+  "Directory with StumpWM config files.")
 
 ;; Log StumpWM messages.
 (redirect-all-output (merge-pathnames "log" *al/init-directory*))
