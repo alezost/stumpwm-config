@@ -17,7 +17,7 @@ between my default mode line and after clicking on some of its parts:
 
 ## Files
 
-- `al-stumpwm-config.asd`: File providing ASDF system.  Used by
+- `al-stumpwm.asd`: File providing ASDF system.  Used by
   `init.lisp` to load the rest config files.
 
 - `init.lisp`: The main file for loading the rest config files

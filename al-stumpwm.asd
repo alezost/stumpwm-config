@@ -1,4 +1,4 @@
-(defsystem "al-stumpwm-config"
+(defsystem :al-stumpwm
   :author "Alex Kost"
   :description "StumpWM configuration"
   :license "GPL3"

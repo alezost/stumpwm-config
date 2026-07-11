@@ -29,7 +29,7 @@
 ;;         (load file)
 ;;         (format *error-output* "File '~a' doesn't exist." file))))
 ;;
-;; Nowadays, I use `asdf:load-system' to load "al-stumpwm-config.asd"
+;; Nowadays, I use `asdf:load-system' to load "al-stumpwm.asd"
 ;; which specifies the rest config files.
 
 ;; My config depends on `swank' and `xkeyboard' CL packages (installed
@@ -60,7 +60,7 @@
 
 ;; Load the rest config.
 (push *al/init-directory* asdf:*central-registry*)
-(asdf:load-system "al-stumpwm-config")
+(asdf:load-system :al-stumpwm)
 
 ;; This is needed to have SSH prompt (via GnuPG) in the current X session.
 ;; See "man gpg-agent" for details.
