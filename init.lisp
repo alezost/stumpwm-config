@@ -52,22 +52,16 @@
 
 ;;; Code:
 
-(in-package :stumpwm)
+(let ((conf-dir (directory-namestring *load-truename*)))
+  (push conf-dir asdf:*central-registry*)
+  ;; Log StumpWM messages.
+  (redirect-all-output (merge-pathnames "log" conf-dir)))
 
-(defvar *al/init-directory*
-  (directory-namestring *load-truename*)
-  "Directory with StumpWM config files.")
-
-;; Log StumpWM messages.
-(redirect-all-output (merge-pathnames "log" *al/init-directory*))
 (format t "~%~C~%~A~%~%" #\Page (time-format "%Y-%m-%d %H:%M:%S"))
-
-;; Load the rest config.
-(push *al/init-directory* asdf:*central-registry*)
 (asdf:load-system :al-stumpwm)
 
 ;; This is needed to have SSH prompt (via GnuPG) in the current X session.
 ;; See "man gpg-agent" for details.
-(run-shell-command "gpg-connect-agent updatestartuptty /bye")
+(stumpwm:run-shell-command "gpg-connect-agent updatestartuptty /bye")
 
 ;;; init.lisp ends here
