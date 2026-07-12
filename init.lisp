@@ -46,6 +46,11 @@
 ;; 2. By adding #:swank and #:xkeyboard dependencies to "stumpwm.asd"
 ;;    file (to `:depends-on' list).
 
+;; Also this config depends on my Lisp utils (`al' ASDF system):
+;; <https://github.com/alezost/lisp-config>.  They are symlinked by
+;; "~/.local/share/common-lisp/source/" sub-directory so ASDF finds them
+;; automatically.
+
 ;;; Code:
 
 (in-package :stumpwm)
