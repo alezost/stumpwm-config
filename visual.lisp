@@ -71,7 +71,7 @@
 (defun al/ml-toggle-cpu (&rest _)
   (declare (ignore _))
   (al/ml-cpu:ml-next-type)
-  (setf al/ml-cpu-update t)
+  (setf *al/ml-cpu-update* t)
   (update-all-mode-lines))
 
 (register-ml-on-click-id :al/ml-toggle-cpu #'al/ml-toggle-cpu)
@@ -96,7 +96,7 @@
 (defun al/ml-toggle-memory (&rest _)
   (declare (ignore _))
   (al/ml-memory:ml-next-type)
-  (setf al/ml-memory-update t)
+  (setf *al/ml-memory-update* t)
   (update-all-mode-lines))
 
 (register-ml-on-click-id :al/ml-show-memory #'al/ml-show-memory)
@@ -126,7 +126,7 @@
           (if (cdr al/current-thermal-zones)
               (list (car al/all-thermal-zones))
               al/all-thermal-zones)
-          al/ml-thermal-zones-update t)
+          *al/ml-thermal-zones-update* t)
     (update-all-mode-lines)))
 
 (register-ml-on-click-id :al/ml-toggle-thermal-zones
@@ -148,7 +148,7 @@
 (defun al/ml-toggle-net-device (&rest _)
   (declare (ignore _))
   (al/ml-net:next-device)
-  (setf al/ml-net-update t)
+  (setf *al/ml-net-update* t)
   (update-all-mode-lines))
 
 (register-ml-on-click-id :al/ml-toggle-net-device
@@ -186,7 +186,7 @@
 (defcommand al/backlight* (&rest args) (:rest)
   "Call `al/backlight' and update backlight value in the mode-line."
   (apply #'al/backlight args)
-  (setf al/ml-backlight-update t)
+  (setf *al/ml-backlight-update* t)
   (update-all-mode-lines))
 
 (defun al/ml-update-backlight (&rest _)
@@ -212,7 +212,7 @@
 (defcommand al/sound* (&rest args) (:rest)
   "Call `al/sound' and update sound value in the mode-line."
   (apply #'al/sound args)
-  (setf al/ml-sound-update t)
+  (setf *al/ml-sound-update* t)
   (update-all-mode-lines))
 
 (defun al/ml-update-sound (&rest _)
