@@ -591,24 +591,6 @@ POSITION can be one of the following symbols: `:left', `:center', `:right'."
 
 ;;; Misc
 
-(defun al/random-float (bot top &optional (state *random-state*))
-  "Return a random float between BOT and TOP bounds."
-  (+ bot (random (- top bot) state)))
-
-(defun al/get-random-obj (objs)
-  "Return a random object from alist OBJS.
-
-Each association is a pair of object and its probability (from 0 to
-1).  If the total probability is lower than 1, there is a chance to
-get nil."
-  (let ((rnd (random 1.0))
-        (prob 0))
-    (loop
-       for elm in objs
-       do (setq prob (+ prob (cdr elm)))
-       if (< rnd prob)
-       return (car elm))))
-
 (defun al/next-list-element (list element &optional (test #'equal))
   "Return an element from LIST which follows ELEMENT.
 If ELEMENT is the last element of the LIST, return the first one.
