@@ -3,7 +3,7 @@
   :description "StumpWM configuration"
   :license "GPL3"
   :version "0.1"
-  :depends-on ("stumpwm" "al" "swank" "xkeyboard")
+  :depends-on ("stumpwm" "al" "xkeyboard")
   :components
   ((:static-file "COPYING")
    (:file "keys")

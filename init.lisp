@@ -32,18 +32,17 @@
 ;; Nowadays, I use `asdf:load-system' to load "al-stumpwm.asd"
 ;; which specifies the rest config files.
 
-;; My config depends on `swank' and `xkeyboard' CL packages (installed
-;; with Quicklisp).  I compile stumpwm image with these packages.
+;; My config depends on `xkeyboard' CL package (installed with
+;; Quicklisp).  I compile StumpWM image with this package.
 ;; I know 2 different ways to do it:
 ;;
-;; 1. By adding the following lines:
+;; 1. By adding the following line:
 ;;
-;;    (require 'swank)
 ;;    (require 'xkeyboard)
 ;;
 ;;    to "load-stumpwm.lisp.in" file.
 ;;
-;; 2. By adding #:swank and #:xkeyboard dependencies to "stumpwm.asd"
+;; 2. By adding #:xkeyboard dependency to "stumpwm.asd"
 ;;    file (to `:depends-on' list).
 
 ;; Also this config depends on my Lisp utils (`al' ASDF system):
