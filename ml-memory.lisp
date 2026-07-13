@@ -64,7 +64,7 @@ Must be one of `*ml-types*'.")
 (defun ml-next-type ()
   "Set `*ml-type*' to the next available type."
   (setf *ml-type*
-        (al/next-list-element *ml-types* *ml-type*)))
+        (al:next-list-element *ml-types* *ml-type*)))
 
 (defun format-float (num)
   "Return formatted string from the floating number NUM."

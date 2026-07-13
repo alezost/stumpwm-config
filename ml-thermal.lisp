@@ -42,13 +42,13 @@
                       (let ((file (make-pathname
                                    :directory (pathname-directory dir)
                                    :name "temp")))
-                        (and (al/file-readable? file)
+                        (and (al:file-readable? file)
                              file))))
                   (list-directory #P"/sys/class/thermal/"))))
 
 (defun thermal-zone-temperature (zone)
   "Return temperature of a thermal ZONE file."
-  (round (/ (al/read-sys-file zone t)
+  (round (/ (al:read-line-from-file zone t)
             1000)))
 
 (defun ml-string (&rest zones)
@@ -62,7 +62,7 @@
                                   :ending "")))
         (al/ml-string
          (if (cdr zones)
-             (concat "°C: " (al/mapconcat #'temp zones " "))
+             (concat "°C: " (al:mapconcat #'temp zones " "))
              (concat (temp (car zones)) "°C"))
          :fg "7"))))
 

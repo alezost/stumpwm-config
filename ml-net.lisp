@@ -59,7 +59,7 @@
 (defcommand next-device () ()
   "Set `*device*' to the next net device."
   (setf *device*
-        (al/next-list-element *devices* *device*)))
+        (al:next-list-element *devices* *device*)))
 
 (defun device-file-name (&optional (device *device*))
   "Return sysfs file name of the DEVICE."
@@ -69,7 +69,7 @@
   "Return a line (string) from '/sys/class/net/DEVICE/FILE-NAME'.
 If TO-NUMBER is non-nil, convert this string into a number.
 Return nil in case of any error."
-  (al/read-sys-file
+  (al:read-line-from-file
    (concat (device-file-name device) "/" file-name)
    to-number))
 
@@ -91,7 +91,7 @@ If the interface is blocked, return `:hard' or `:soft'.
 Otherwise, return nil."
   (when-let ((dir (rfkill-dir device)))
     (flet ((blocked? (type)
-             (not (zerop (al/read-sys-file
+             (not (zerop (al:read-line-from-file
                           (merge-pathnames dir type) t)))))
       (or (and (blocked? "hard") :hard)
           (and (blocked? "soft") :soft)))))

@@ -93,7 +93,7 @@ Must be one of `*ml-types*'.")
 (defun ml-next-type ()
   "Set `*ml-type*' to the next available type."
   (setf *ml-type*
-        (al/next-list-element *ml-types* *ml-type* #'eq)))
+        (al:next-list-element *ml-types* *ml-type* #'eq)))
 
 (defun ml-string ()
   "Return a string with CPU info suitable for the mode-line."
