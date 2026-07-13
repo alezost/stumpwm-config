@@ -44,9 +44,8 @@
 If KEY is a functional key from `al/f-keys-alist', bind COMMAND to the
 additional key."
   (define-key map (kbd key) command)
-  (let ((add-key (cdr (assoc key al/f-keys-alist :test 'equal))))
-    (when add-key
-      (define-key map (kbd add-key) command))))
+  (when-let ((add-key (cdr (assoc key al/f-keys-alist :test 'equal))))
+    (define-key map (kbd add-key) command)))
 
 ;; Bind "H-<key>" to sending <key> to the current window
 ;; (<key> is a key from `al/f-keys-alist').
