@@ -29,6 +29,9 @@
 (defpackage #:al/ml-thermal
   (:use :common-lisp
         :stumpwm)
+  (:import-from :al/stumpwm
+                #:al/ml-string
+                #:al/ml-zone-string)
   (:export #:all-thermal-zones
            #:ml-string))
 

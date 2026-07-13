@@ -6,6 +6,7 @@
   :depends-on ("stumpwm" "al" "xkeyboard")
   :components
   ((:static-file "COPYING")
+   (:file "al-stumpwm")
    (:file "keys")
    (:file "utils")
    (:file "xkb")

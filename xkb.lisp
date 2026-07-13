@@ -36,7 +36,7 @@
 
 ;;; Code:
 
-(in-package :stumpwm)
+(in-package :al/stumpwm)
 
 
 ;;; Keyboard layouts

@@ -26,6 +26,9 @@
   (:use :common-lisp
         :alexandria
         :stumpwm)
+  (:import-from :al/stumpwm
+                #:al/ml-string
+                #:al/ml-zone-string)
   (:export #:ml-next-type
            #:ml-string))
 

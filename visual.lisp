@@ -17,7 +17,7 @@
 
 ;;; Code:
 
-(in-package :stumpwm)
+(in-package :al/stumpwm)
 
 
 ;;; Colors
@@ -62,7 +62,7 @@
 
 ;;; mode-line cpu
 
-(al:defun-with-delay 5 al/ml-cpu ()
+(defun-with-delay 5 al/ml-cpu ()
   (al/ml-separate
    (al/ml-title-string "CPU")
    (format-with-on-click-id (al/ml-cpu:ml-string)
@@ -79,7 +79,7 @@
 
 ;;; mode-line memory
 
-(al:defun-with-delay 8 al/ml-memory ()
+(defun-with-delay 8 al/ml-memory ()
   (al/ml-separate
    (format-with-on-click-id (al/ml-title-string "Mem")
                             :al/ml-show-memory)
@@ -112,7 +112,7 @@
   (and al/all-thermal-zones
        (list (car al/all-thermal-zones))))
 
-(al:defun-with-delay 6 al/ml-thermal-zones ()
+(defun-with-delay 6 al/ml-thermal-zones ()
   (al/ml-separate
    (format-with-on-click-id
     (apply #'al/ml-thermal:ml-string
@@ -140,7 +140,7 @@
 
 ;;; mode-line net
 
-(al:defun-with-delay 6 al/ml-net ()
+(defun-with-delay 6 al/ml-net ()
   (al/ml-separate
    (format-with-on-click-id (al/ml-net:ml-string)
                             :al/ml-toggle-net-device)))
@@ -159,7 +159,7 @@
 
 (defvar al/battery (car (al/ml-battery:all-batteries)))
 
-(al:defun-with-delay 60 al/ml-battery ()
+(defun-with-delay 60 al/ml-battery ()
   (al/ml-separate
    (al/ml-title-string "Bat ")
    (al/ml-battery:ml-string al/battery)))
@@ -180,7 +180,7 @@
                    :fg "#66bbff"
                    :click :al/ml-update-backlight))))
 
-(al:defun-with-delay nil al/ml-backlight ()
+(defun-with-delay nil al/ml-backlight ()
   (al/ml-backlight-string (al/backlight)))
 
 (defcommand al/backlight* (&rest args) (:rest)
@@ -206,7 +206,7 @@
                    :fg (if vol-on "#50e050" "#fa3333")
                    :click :al/ml-update-sound))))
 
-(al:defun-with-delay nil al/ml-sound ()
+(defun-with-delay nil al/ml-sound ()
   (apply #'al/ml-sound-string (al/sound)))
 
 (defcommand al/sound* (&rest args) (:rest)
@@ -320,7 +320,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
              (and class1 class2
                   (string= class1 class2))))
       (al/ml-separate
-       (al:mapconcat
+       (mapconcat
         (lambda (assoc)
           (destructuring-bind (class . num)
               assoc

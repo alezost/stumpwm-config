@@ -31,6 +31,9 @@
 (defpackage #:al/ml-battery
   (:use :common-lisp
         :stumpwm)
+  (:import-from :al/stumpwm
+                #:al/ml-string
+                #:al/ml-zone-string)
   (:export #:all-batteries
            #:ml-string))
 

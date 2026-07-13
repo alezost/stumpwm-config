@@ -17,7 +17,7 @@
 
 ;;; Code:
 
-(in-package :stumpwm)
+(in-package :al/stumpwm)
 
 ;; Symbols used by "ml-*.lisp" files.
 (export '(al/ml-string

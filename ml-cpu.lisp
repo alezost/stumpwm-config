@@ -30,6 +30,9 @@
 (defpackage #:al/ml-cpu
   (:use :common-lisp
         :stumpwm)
+  (:import-from :al/stumpwm
+                #:al/ml-string
+                #:al/ml-zone-string)
   (:export #:ml-next-type
            #:ml-string))
 

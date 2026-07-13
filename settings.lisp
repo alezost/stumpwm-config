@@ -17,7 +17,7 @@
 
 ;;; Code:
 
-(in-package :stumpwm)
+(in-package :al/stumpwm)
 
 
 ;;; Windows, frames and groups
