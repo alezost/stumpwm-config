@@ -3,6 +3,9 @@
   :description "StumpWM configuration"
   :license "GPL3"
   :version "0.1"
+  ;; Dependencies:
+  ;; <http://github.com/alezost/lisp-config>
+  ;; <http://github.com/filonenko-mikhail/clx-xkeyboard>
   :depends-on ("stumpwm" "al" "xkeyboard")
   :components
   ((:static-file "COPYING")
