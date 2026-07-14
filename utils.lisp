@@ -384,7 +384,7 @@ program.")
   (or al/current-browser
       (setf al/current-browser
             (or (find-if (lambda (assoc)
-                           (al:executable-exists? (car assoc)))
+                           (executable-exists? (car assoc)))
                          al/browsers)
                 (progn
                   (echo "No working browsers found among `al/browsers'")
@@ -581,6 +581,6 @@ If current group is floating, select next window."
     ;; message when `al/start-slynk' is executed externally (using
     ;; STUMPWM_COMMAND property of the root window).
     (message "Starting swank on port ~A" port))
-  (al:start-slynk port))
+  (start-slynk port))
 
 ;;; utils.lisp ends here

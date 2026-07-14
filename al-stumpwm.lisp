@@ -18,16 +18,8 @@
 ;;; Code:
 
 (defpackage :al/stumpwm
-  (:use :cl :stumpwm)
-  (:import-from :al
-   #:defun-with-delay
-   #:mapconcat
-   #:if-let
-   #:if-let1
-   #:if-letn
-   #:when-let
-   #:when-let1
-   #:when-letn))
+  (:use :cl :al :stumpwm)
+  (:shadowing-import-from :al :concat))
 
 (in-package :stumpwm)
 
