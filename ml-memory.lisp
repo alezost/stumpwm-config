@@ -23,9 +23,9 @@
 ;;; Code:
 
 (defpackage #:al/ml-memory
-  (:use :common-lisp
-        :alexandria
-        :stumpwm)
+  (:use :cl :al/hwinfo)
+  (:import-from :al
+                #:concat)
   (:import-from :al/stumpwm
                 #:al/ml-string
                 #:al/ml-zone-string)
@@ -33,26 +33,6 @@
            #:ml-string))
 
 (in-package #:al/ml-memory)
-
-(defun memory-info ()
-  "Return total and available memory values."
-  (with-open-file (stream #P"/proc/meminfo" :if-does-not-exist nil)
-    (when stream
-      (do ((line (read-line stream nil nil)
-                 (read-line stream nil nil))
-           (total nil)
-           (available nil))
-          ((or (and total available)
-               (null line))
-           (values total available))
-        (when-let* ((split (cl-ppcre:split "\\s*:\\s*" line))
-                    (key   (first split))
-                    (value (second split)))
-          (cond
-            ((string= key "MemTotal")
-             (setf total (read-from-string value)))
-            ((string= key "MemAvailable")
-             (setf available (read-from-string value)))))))))
 
 
 ;;; mode-line string

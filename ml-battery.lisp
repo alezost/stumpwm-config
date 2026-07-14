@@ -29,74 +29,15 @@
 ;;; Code:
 
 (defpackage #:al/ml-battery
-  (:use :common-lisp
-        :stumpwm)
+  (:use :cl :al/hwinfo)
+  (:import-from :al
+                #:concat)
   (:import-from :al/stumpwm
                 #:al/ml-string
                 #:al/ml-zone-string)
-  (:export #:all-batteries
-           #:ml-string))
+  (:export #:ml-string))
 
 (in-package #:al/ml-battery)
-
-(defun power-supply-parameter (path name &optional to-number)
-  "Return a line (string) from 'PATH/NAME' sysfs file.
-If TO-NUMBER is non-nil, convert this string into a number.
-Return nil in case of any error."
-  (al:read-line-from-file
-   (merge-pathnames (make-pathname :name name)
-                    path)
-   to-number))
-
-(defun all-batteries ()
-  "Return a list of files of all batteries."
-  (remove nil
-          (mapcar (lambda (path)
-                    (handler-case
-                        (when (string= "Battery"
-                                       (power-supply-parameter path "type"))
-                          path)
-                      (file-error () nil)))
-                  (list-directory #P"/sys/class/power_supply/"))))
-
-(defun battery-time-left (battery &optional (type :charging))
-  "Return estimated time left for BATTERY to become empty.
-Returned time is a floating number of hours.
-Return nil, if it is impossible to calculate.
-Calculation is performed depending on TYPE, which should be either
-`:charging' or `:discharging'."
-  (let ((consumed (power-supply-parameter battery "current_now" t)))
-    (if (zerop consumed)
-        0
-        (let ((left (power-supply-parameter battery "charge_now" t)))
-          (case type
-            (:discharging (/ left consumed))
-            (:charging
-             (let ((full (power-supply-parameter battery "charge_full" t)))
-               (/ (- full left) consumed))))))))
-
-(defun battery-state (battery)
-  "Return values for the current state of BATTERY.
-
-If the battery is charged, return `:charged percent' values.
-
-If the battery is charging or discharging, return
-`:(dis)charging percent time-left' values.
-
-Otherwise, return `:unknown'."
-  (if (zerop (power-supply-parameter battery "present" t))
-      :unknown
-      (let ((state   (power-supply-parameter battery "status"))
-            (percent (power-supply-parameter battery "capacity" t)))
-        (cond
-          ((string= state "Full") (values :charged percent))
-          ((string= state "Discharging")
-           (values :discharging percent
-                   (battery-time-left battery :discharging)))
-          ((string= state "Charging")
-           (values :charging percent
-                   (battery-time-left battery :charging)))
-          (t :unknown)))))
 
 (defun format-hours (time)
   "Return 'HH:MM' string from TIME.

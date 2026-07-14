@@ -27,32 +27,16 @@
 ;;; Code:
 
 (defpackage #:al/ml-thermal
-  (:use :common-lisp
-        :stumpwm)
+  (:use :cl :al/hwinfo)
+  (:import-from :al
+                #:concat
+                #:mapconcat)
   (:import-from :al/stumpwm
                 #:al/ml-string
                 #:al/ml-zone-string)
-  (:export #:all-thermal-zones
-           #:ml-string))
+  (:export #:ml-string))
 
 (in-package #:al/ml-thermal)
-
-(defun all-thermal-zones ()
-  "Return a list of files of all thermal zones."
-  (remove nil
-          (mapcar (lambda (dir)
-                    (when (ppcre:scan "thermal_zone" (namestring dir))
-                      (let ((file (make-pathname
-                                   :directory (pathname-directory dir)
-                                   :name "temp")))
-                        (and (al:file-readable? file)
-                             file))))
-                  (list-directory #P"/sys/class/thermal/"))))
-
-(defun thermal-zone-temperature (zone)
-  "Return temperature of a thermal ZONE file."
-  (round (/ (al:read-line-from-file zone t)
-            1000)))
 
 (defun ml-string (&rest zones)
   "Return a string with thermal ZONES info suitable for the mode-line."
@@ -65,7 +49,7 @@
                                   :ending "")))
         (al/ml-string
          (if (cdr zones)
-             (concat "°C: " (al:mapconcat #'temp zones " "))
+             (concat "°C: " (mapconcat #'temp zones " "))
              (concat (temp (car zones)) "°C"))
          :fg "7"))))
 

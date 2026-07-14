@@ -106,7 +106,7 @@
 ;;; mode-line thermal
 
 (defvar al/all-thermal-zones
-  (al/ml-thermal:all-thermal-zones))
+  (al/hwinfo:thermal-zones))
 
 (defvar al/current-thermal-zones
   (and al/all-thermal-zones
@@ -157,7 +157,7 @@
 
 ;;; mode-line battery
 
-(defvar al/battery (car (al/ml-battery:all-batteries)))
+(defvar al/battery (car (al/hwinfo:batteries)))
 
 (defun-with-delay 60 al/ml-battery ()
   (al/ml-separate

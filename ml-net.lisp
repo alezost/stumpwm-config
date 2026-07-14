@@ -31,9 +31,7 @@
 ;;; Code:
 
 (defpackage #:al/ml-net
-  (:use :common-lisp
-        :alexandria
-        :stumpwm)
+  (:use :cl :stumpwm :al/hwinfo)
   (:import-from :al/stumpwm
                 #:al/ml-string
                 #:al/ml-zone-string)
@@ -43,12 +41,7 @@
 (in-package #:al/ml-net)
 
 (defvar *devices*
-  (delete "lo"
-          (mapcar (lambda (dir)
-                    ;; Is there a better way to do this?
-                    (first (last (pathname-directory dir))))
-                  (uiop:subdirectories "/sys/class/net/"))
-          :test #'equal)
+  (delete "lo" (net-devices) :test #'equal)
   "List of available network devices (interfaces).")
 
 (defvar *device*
@@ -63,81 +56,6 @@
   "Set `*device*' to the next net device."
   (setf *device*
         (al:next-list-element *devices* *device*)))
-
-(defun device-file-name (&optional (device *device*))
-  "Return sysfs file name of the DEVICE."
-  (concat "/sys/class/net/" device))
-
-(defun device-parameter (file-name &key (device *device*) to-number)
-  "Return a line (string) from '/sys/class/net/DEVICE/FILE-NAME'.
-If TO-NUMBER is non-nil, convert this string into a number.
-Return nil in case of any error."
-  (al:read-line-from-file
-   (concat (device-file-name device) "/" file-name)
-   to-number))
-
-(defvar *rfkill-dirs* nil
-  "Alist of (DEVICE . RFKILL-DIR) pairs.")
-
-(defun rfkill-dir (device)
-  "Return the sysfs rfkill directory for the network DEVICE."
-  (if-let ((assoc (assoc device *rfkill-dirs*)))
-    (cdr assoc)
-    (let ((dir (car (directory (concat (device-file-name device)
-                                       "/phy*/rfkill*")))))
-      (push (cons device dir) *rfkill-dirs*)
-      dir)))
-
-(defun rfkill-state (&optional (device *device*))
-  "Return the current rfkill state of the network DEVICE.
-If the interface is blocked, return `:hard' or `:soft'.
-Otherwise, return nil."
-  (when-let ((dir (rfkill-dir device)))
-    (flet ((blocked? (type)
-             (not (zerop (al:read-line-from-file
-                          (merge-pathnames dir type) t)))))
-      (or (and (blocked? "hard") :hard)
-          (and (blocked? "soft") :soft)))))
-
-(defvar *last-rx* 0)
-(defvar *last-tx* 0)
-(defvar *last-time* 0)
-
-(defun net-state (&optional (device *device*))
-  "Return values for the current state of the network DEVICE.
-
-If the interface is 'rfkill'-ed, return `:soft' or `:hard'.
-
-If the interface is down, return `:down'.
-
-If the interface is up, return `:up download-speed upload-speed' values.
-
-Otherwise, return `:unknown' value."
-  (or (rfkill-state device)
-      (let ((state (device-parameter "operstate"
-                                     :device device)))
-        (cond
-          ((string= state "down")
-           :down)
-          ((string= state "up")
-           (let* ((now (/ (get-internal-real-time)
-                          internal-time-units-per-second))
-	          (rx (device-parameter "statistics/rx_bytes"
-                                        :device device
-                                        :to-number t))
-	          (tx (device-parameter "statistics/tx_bytes"
-                                        :device device
-                                        :to-number t))
-                  (dt (- now *last-time*))
-                  (drx (- rx *last-rx*))
-                  (dtx (- tx *last-tx*)))
-             (setq *last-rx* rx
-	           *last-tx* tx
-	           *last-time* now)
-             (values :up
-                     (round (/ drx dt))
-	             (round (/ dtx dt)))))
-          (t :unknown)))))
 
 (defun format-float (num)
   "Return formatted string from the floating number NUM."
