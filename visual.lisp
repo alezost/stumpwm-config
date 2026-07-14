@@ -63,14 +63,14 @@
 ;;; mode-line cpu
 
 (defun-with-delay 5 al/ml-cpu ()
-  (al/ml-separate
-   (al/ml-title-string "CPU")
-   (format-with-on-click-id (al/ml-cpu:ml-string)
+  (ml:separate
+   (ml:title-string "CPU")
+   (format-with-on-click-id (ml:cpu-string)
                             :al/ml-toggle-cpu)))
 
 (defun al/ml-toggle-cpu (&rest _)
   (declare (ignore _))
-  (al/ml-cpu:ml-next-type)
+  (ml:cpu-string-next-type)
   (setf *al/ml-cpu-update* t)
   (update-all-mode-lines))
 
@@ -80,10 +80,10 @@
 ;;; mode-line memory
 
 (defun-with-delay 8 al/ml-memory ()
-  (al/ml-separate
-   (format-with-on-click-id (al/ml-title-string "Mem")
+  (ml:separate
+   (format-with-on-click-id (ml:title-string "Mem")
                             :al/ml-show-memory)
-   (format-with-on-click-id (al/ml-memory:ml-string)
+   (format-with-on-click-id (ml:memory-string)
                             :al/ml-toggle-memory)))
 
 (defun al/ml-show-memory (&rest _)
@@ -95,7 +95,7 @@
 
 (defun al/ml-toggle-memory (&rest _)
   (declare (ignore _))
-  (al/ml-memory:ml-next-type)
+  (ml:memory-string-next-type)
   (setf *al/ml-memory-update* t)
   (update-all-mode-lines))
 
@@ -113,9 +113,9 @@
        (list (car al/all-thermal-zones))))
 
 (defun-with-delay 6 al/ml-thermal-zones ()
-  (al/ml-separate
+  (ml:separate
    (format-with-on-click-id
-    (apply #'al/ml-thermal:ml-string
+    (apply #'ml:thermal-string
            al/current-thermal-zones)
     :al/ml-toggle-thermal-zones)))
 
@@ -141,13 +141,13 @@
 ;;; mode-line net
 
 (defun-with-delay 6 al/ml-net ()
-  (al/ml-separate
-   (format-with-on-click-id (al/ml-net:ml-string)
+  (ml:separate
+   (format-with-on-click-id (ml:net-string)
                             :al/ml-toggle-net-device)))
 
 (defun al/ml-toggle-net-device (&rest _)
   (declare (ignore _))
-  (al/ml-net:next-device)
+  (ml:next-net-device)
   (setf *al/ml-net-update* t)
   (update-all-mode-lines))
 
@@ -160,9 +160,9 @@
 (defvar al/battery (car (al/hwinfo:batteries)))
 
 (defun-with-delay 60 al/ml-battery ()
-  (al/ml-separate
-   (al/ml-title-string "Bat ")
-   (al/ml-battery:ml-string al/battery)))
+  (ml:separate
+   (ml:title-string "Bat ")
+   (ml:battery-string al/battery)))
 
 (defun al/ml-battery-maybe ()
   (if al/battery
@@ -174,9 +174,9 @@
 
 (defun al/ml-backlight-string (bl)
   (when bl
-    (al/ml-separate
-     (al/ml-title-string "BL ")
-     (al/ml-string (princ-to-string bl)
+    (ml:separate
+     (ml:title-string "BL ")
+     (ml:ml-string (princ-to-string bl)
                    :fg "#66bbff"
                    :click :al/ml-update-backlight))))
 
@@ -200,9 +200,9 @@
 
 (defun al/ml-sound-string (vol &optional (vol-on t))
   (when vol
-    (al/ml-separate
-     (al/ml-title-string "Snd ")
-     (al/ml-string (princ-to-string vol)
+    (ml:separate
+     (ml:title-string "Snd ")
+     (ml:ml-string (princ-to-string vol)
                    :fg (if vol-on "#50e050" "#fa3333")
                    :click :al/ml-update-sound))))
 
@@ -230,11 +230,11 @@
     (flet ((color (lock)
              (if (al/mod-lock-on-p lock mods)
                  "^B^2" "")))
-      (al/ml-separate
-       (al/ml-string (concat (color +caps-lock+) "Caps")
+      (ml:separate
+       (ml:ml-string (concat (color +caps-lock+) "Caps")
                      :click :al/ml-toggle-caps-lock)
        " "
-       (al/ml-string (concat (color +num-lock+) "Num")
+       (ml:ml-string (concat (color +num-lock+) "Num")
                      :click :al/ml-toggle-num-lock)))))
 
 (defun al/ml-toggle-caps-lock (&rest _)
@@ -251,8 +251,8 @@
 (register-ml-on-click-id :al/ml-toggle-num-lock #'al/ml-toggle-num-lock)
 
 (defun al/ml-layout ()
-  (al/ml-separate
-   (al/ml-string (al/layout-string (al/current-layout))
+  (ml:separate
+   (ml:ml-string (al/layout-string (al/current-layout))
                  :fg "7"
                  :click :al/ml-toggle-layout)))
 
@@ -308,7 +308,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
 (defun al/ml-window-class (&optional (string "%c") (type 'current))
   "Window class color construct for mode-line and window list."
   (if-let ((assoc (assoc type al/ml-class-type-alist)))
-    (al/ml-string (concat " " string " ")
+    (ml:ml-string (concat " " string " ")
                   :fg (second assoc)
                   :bg (third assoc))
     string))
@@ -318,7 +318,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
     (flet ((window= (class1 class2)
              (and class1 class2
                   (string= class1 class2))))
-      (al/ml-separate
+      (ml:separate
        (mapconcat
         (lambda (assoc)
           (destructuring-bind (class . num)
@@ -332,7 +332,7 @@ CLASS is a window class; NUM is the number of windows of this class.")
                              'previous)))
                      :al/ml-toggle-window class)
                     (and num
-                         (al/ml-string (concat " " (write-to-string num) " ")
+                         (ml:ml-string (concat " " (write-to-string num) " ")
                                        :fg "7" :bg "#407777")))))
         al/window-alist
         " ")))))
@@ -376,9 +376,9 @@ CLASS is a window class; NUM is the number of windows of this class.")
  *time-modeline-string* "%k:%M"
  *mode-line-timeout* 5
  *screen-mode-line-format*
- `(,(al/ml-string "%d" :fg "5" :click :al/ml-show-time)
+ `(,(ml:ml-string "%d" :fg "5" :click :al/ml-show-time)
    " "
-   ,(al/ml-string "%n" :fg "2" :click :al/ml-next-group)
+   ,(ml:ml-string "%n" :fg "2" :click :al/ml-next-group)
    (:eval (al/ml-cpu))
    (:eval (al/ml-memory))
    (:eval (al/ml-thermal-zones-maybe))

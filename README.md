@@ -35,11 +35,6 @@ between my default mode line and after clicking on some of its parts:
 
 - `settings.lisp`: General stumpwm settings.
 
-- `ml-*.lisp`: Modules to get various info for the mode line.  I use
-  these files instead of
-  [contrib](https://github.com/stumpwm/stumpwm-contrib/blob/master/modeline/)
-  stumpwm modules.
-
 - `visual.lisp`: Visual settings: colors, mode-line and other visual
   appearance.
 

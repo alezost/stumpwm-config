@@ -17,19 +17,28 @@
 
 ;;; Code:
 
-(in-package :al/stumpwm)
+(defpackage :ml
+  (:use :cl :al :al/hwinfo)
+  (:export #:separate
+           #:ml-string
+           #:zone-string
+           #:title-string
+           #:cpu-string
+           #:cpu-string-next-type
+           #:memory-string
+           #:memory-string-next-type
+           #:net-string
+           #:next-net-device
+           #:battery-string
+           #:thermal-string))
 
-;; Symbols used by "ml-*.lisp" files.
-(export '(al/ml-string
-          al/ml-zone-string))
+(in-package :ml)
 
-(defvar al/ml-separator " | ")
+(defun separate (&rest strings)
+  "Concatenate mode-line STRINGS using separator."
+  (apply #'concat " | " strings))
 
-(defun al/ml-separate (&rest strings)
-  "Concatenate `al/ml-separator' and STRINGS."
-  (apply #'concat al/ml-separator strings))
-
-(defun al/ml-string (string &key fg bg (bright nil bright-set) reset click)
+(defun ml-string (string &key fg bg (bright nil bright-set) reset click)
   ;; For details on the color and mode-line machinery, see
   ;; (info "(stumpwm) Colors") and (info "(stumpwm) Mode-line Interaction").
   "Make STRING a mode-line string with FG and BG colors.
@@ -56,13 +65,13 @@ clickable."
                       (concat (and bright-set (if bright "^B" "^b"))
                               fc bc string))))
            (str (if click
-                    (apply #'format-with-on-click-id
+                    (apply #'stumpwm:format-with-on-click-id
                            str
                            (if (listp click) click (list click)))
                     str)))
       (concat "^[" str "^]"))))
 
-(defun al/ml-zone-string (number &key (colors '("^B^1*" "^B^5*" "^B"))
+(defun zone-string (number &key (colors '("^B^1*" "^B^5*" "^B"))
                                    (zones '(90 60 30)) reverse
                                    (format "~3D") (ending "%%"))
   ;; This is a replacement for `bar-zone-color'.
@@ -84,12 +93,220 @@ If REVERSE is non-nil, reverse the order of comparing ZONES and NUMBER."
       (when (funcall compare number (car zones))
         (setf color (car colors))))
     (concat (if color
-                (al/ml-string (concat color num-str))
+                (ml-string (concat color num-str))
                 num-str)
             ending)))
 
-(defun al/ml-title-string (string)
+(defun title-string (string)
   "Make STRING a title string."
-  (al/ml-string string :fg "#a0aa98"))
+  (ml-string string :fg "#a0aa98"))
+
+(defun format-hours (time)
+  "Return 'HH:MM' string from TIME.
+TIME is a floating number of hours."
+  (if (numberp time)
+      (multiple-value-bind (hours rem)
+          (truncate time)
+        (format nil "~D:~2,'0D" hours (floor (* rem 60))))
+      ""))
+
+
+;;; CPU
+
+(defvar *cpu-string-types* '(short long)
+  "Available types for `cpu-string'.")
+
+(defvar *cpu-string-type* (car *cpu-string-types*)
+  "Current mode line string type.
+Must be one of `*cpu-string-types*'.")
+
+(defun cpu-string-next-type ()
+  "Set `*cpu-string-type*' to the next available type."
+  (setf *cpu-string-type*
+        (next-list-element *cpu-string-types*
+                           *cpu-string-type*
+                           #'eq)))
+
+(defun cpu-string ()
+  "Return a string with CPU info suitable for the mode-line."
+  (multiple-value-bind (cpu user system io irq)
+      (cpu-usage)
+    (flet ((d (float)
+             (round (* 100 float))))
+      (let* ((cpu (d cpu))
+             (cpu-str (zone-string cpu)))
+        (ml-string
+         (case *cpu-string-type*
+           (short cpu-str)
+           (long
+            (let ((user   (d user))
+                  (system (d system))
+                  (io     (d io))
+                  (irq    (d irq)))
+              (concat cpu-str
+                      (ml-string "(" :reset t)
+                      (format nil "~2,'0D ~2,'0D ~D ~D"
+                              user system io irq)
+                      (ml-string ")" :reset t))))
+           (t ""))
+         :fg "7")))))
+
+
+;;; Memory
+
+(defvar *memory-string-types* '(short long)
+  "Available types for `memory-string'.")
+
+(defvar *memory-string-type* (car *memory-string-types*)
+  "Current mode line string type.
+Must be one of `*memory-string-types*'.")
+
+(defun memory-string-next-type ()
+  "Set `*memory-string-type*' to the next available type."
+  (setf *memory-string-type*
+        (next-list-element *memory-string-types*
+                           *memory-string-type*
+                           #'eq)))
+
+(defun memory-format-float (num)
+  "Return formatted string from the floating number NUM."
+  (cond
+    ((> 10 num)
+     (format nil "~3,1F" num))
+    (t
+     (format nil "~3D" (round num)))))
+
+(defun memory-format-kilo-bytes (kb &rest args)
+  "Return formatted string from the number of kilo-bytes KB.
+The rest ARGS are passed to `ml-string'."
+  (if (numberp kb)
+    (let ((gb (/ kb 1e6)))
+      (if (> gb 1)
+        (concat (apply #'ml-string (memory-format-float gb) args)
+                "G")
+        (concat (apply #'ml-string (memory-format-float (/ kb 1e3)) args)
+                "M")))
+    ""))
+
+(defun memory-string ()
+  "Return a string with memory info suitable for the mode-line.
+TYPE can be one of the following symbols: `short', `long', `next'."
+  (multiple-value-bind (total available)
+      (memory-info)
+    (let* ((used (- total available))
+           (used% (round (* 100 (/ used total))))
+           (used-str
+             (concat (memory-format-kilo-bytes used :fg "#e08880")
+                     (ml-string "(" :reset t)
+                     (zone-string used%
+                                  :zones '(90 70 50)
+                                  :format "~2,'0D")
+                     (ml-string ")" :reset t))))
+      (ml-string
+       (case *memory-string-type*
+         (short (concat " " used-str))
+         (long
+          (let (;;(stump-total (sb-ext:dynamic-space-size))
+                (stump-used (sb-kernel:dynamic-usage)))
+            (concat (memory-format-kilo-bytes (/ stump-used 1e3))
+                    " " used-str " "
+                    (memory-format-kilo-bytes available :fg "#78c078"))))
+         (t ""))
+       :fg "7"))))
+
+
+;;; Battery
+
+(defun battery-string (battery)
+  "Return a string with BATTERY info suitable for the mode-line."
+  (multiple-value-bind (state percent time)
+      (battery-state battery)
+    (ml-string
+     (ecase state
+       (:unknown "(no info)")
+       (:charged (concat (write-to-string percent) "%%"))
+       ((:charging :discharging)
+        (concat (zone-string percent :format "~2D" :reverse t)
+                (if (eq state :charging)
+                    (ml-string "+" :fg "2" :bright t)
+                    (ml-string "-" :fg "1" :bright t))
+                (format-hours time))))
+     :fg "7")))
+
+
+;;; Net
+
+(defvar *net-devices*
+  (delete "lo" (net-devices) :test #'equal)
+  "List of available network devices (interfaces).")
+
+(defvar *net-device*
+  ;; At first, search for "wlp*" (wlan), then for "enp*" (eth).
+  (or (find-if (lambda (name) (ppcre:scan "^w" name))
+               *net-devices*)
+      (find-if (lambda (name) (ppcre:scan "^e" name))
+               *net-devices*))
+  "Currently used network device.")
+
+(defun next-net-device ()
+  "Set `*net-device*' to the next net device."
+  (setf *net-device*
+        (next-list-element *net-devices* *net-device*)))
+
+(defun net-format-float (num)
+  "Return formatted string from the floating number NUM."
+  (cond
+    ((>= 10 num)
+     (format nil "~4,2F" num))
+    ((>= 100 num)
+     (format nil "~4,1F" num))
+    (t
+     (format nil "~4D" (round num)))))
+
+(defun net-format-bytes (bytes)
+  "Return formatted string from the number of BYTES."
+  (if (numberp bytes)
+    (let ((mb (/ bytes 1e6)))
+      (if (> mb 1)
+        (concat (net-format-float mb)
+                (ml-string "M" :fg "2"))
+        (concat (net-format-float (/ bytes 1e3))
+                (ml-string "k" :reset t))))
+    ""))
+
+(defun net-string ()
+  "Return a string with NET info suitable for the mode-line."
+  (multiple-value-bind (state down up)
+      (net-state *net-device*)
+    (let ((color (ecase state
+                   (:up      "^b^6*")
+                   (:down    "^B^5*")
+                   (:soft    "^b^7*")
+                   (:hard    "")
+                   (:unknown "^B^1*"))))
+      (concat
+       (ml-string (concat color *net-device*))
+       (and down up
+            (ml-string (concat " " (net-format-bytes down)
+                               " " (net-format-bytes up))
+                       :fg "7"))))))
+
+
+;;; Thermal zones
+
+(defun thermal-string (&rest zones)
+  "Return a string with thermal ZONES info suitable for the mode-line."
+  (if (null zones)
+    ""
+    (flet ((temp (zone)
+             (zone-string (thermal-zone-temperature zone)
+                          :zones '(70 60 50)
+                          :format "~2D"
+                          :ending "")))
+      (ml-string
+       (if (cdr zones)
+         (concat "°C: " (mapconcat #'temp zones " "))
+         (concat (temp (car zones)) "°C"))
+       :fg "7"))))
 
 ;;; ml.lisp ends here
