@@ -291,6 +291,7 @@ additional key."
 (al/define-key *menu-map* "s-g" 'menu-abort)
 
 ;; input map
+(al/define-key *input-map* "s-g" 'input-abort)
 (al/define-key *input-map* "C-p" 'input-delete-backward-char)
 (al/define-key *input-map* "M-p" 'input-backward-kill-word)
 (al/define-key *input-map* "C-," 'input-delete-forward-char)

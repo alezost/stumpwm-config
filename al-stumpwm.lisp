@@ -40,6 +40,7 @@
    *float-group-root-map*
    *help-map*
    *input-map*
+   input-abort
    input-line-string
    input-line-position
    input-submit
