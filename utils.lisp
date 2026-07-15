@@ -26,13 +26,7 @@
     (window-list &optional (window (group-current-window
                                     (current-group))))
   "Focus the next window in WINDOW-LIST after WINDOW."
-  (let* ((wins (cdr (member window window-list)))
-         (nw (if wins
-                 (car wins)
-                 ;; If the last window in the list is focused, then
-                 ;; focus the first one.
-                 (car window-list))))
-    (and nw (focus-window nw))))
+  (focus-window (next-list-element window-list window)))
 
 (defcommand (al/float-window-other float-group) () ()
   "Focus previously focused floating window."
