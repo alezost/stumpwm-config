@@ -5,8 +5,8 @@ separate my settings into several files instead of using a single
 `.stumpwmrc`.
 
 All symbols (commands, functions, macros, variables) in my config have
-`al/` prefix to make sure they will not conflict with symbols from
-`:stumpwm` module.
+`al/` or `ml/` prefixes to make sure they will not conflict with symbols
+from `:stumpwm` module.
 
 My mode line is clickable almost everywhere.  Here is the difference
 between my default mode line and after clicking on some of its parts:

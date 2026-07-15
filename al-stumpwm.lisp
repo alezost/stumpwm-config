@@ -18,7 +18,7 @@
 ;;; Code:
 
 (defpackage :al/stumpwm
-  (:use :cl :al :stumpwm)
+  (:use :cl :al :al/hwinfo :stumpwm)
   (:shadowing-import-from :al :concat))
 
 (in-package :stumpwm)
