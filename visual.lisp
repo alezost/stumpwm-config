@@ -324,11 +324,6 @@ TYPE can be one of the following symbols: `short', `long', `next'."
 (register-ml-on-click-id :ml/toggle-thermal-zones
                          #'ml/toggle-thermal-zones)
 
-(defun ml/thermal-zones-maybe ()
-  (if *ml/current-thermal-zones*
-      (ml/thermal-zones)
-      ""))
-
 
 ;;; mode-line net
 
@@ -426,11 +421,6 @@ TYPE can be one of the following symbols: `short', `long', `next'."
   (ml/separate
    (ml/title-string "Bat ")
    (ml/battery-string *ml/battery*)))
-
-(defun ml/battery-maybe ()
-  (if *ml/battery*
-      (ml/battery)
-      ""))
 
 
 ;;; mode-line backlight
@@ -644,9 +634,9 @@ CLASS is a window class; NUM is the number of windows of this class.")
    ,(ml/string "%n" :fg "2" :click :ml/next-group)
    (:eval (ml/cpu))
    (:eval (ml/memory))
-   (:eval (ml/thermal-zones-maybe))
+   ,(if *ml/current-thermal-zones* '(:eval (ml/thermal-zones)) "")
    (:eval (ml/net))
-   (:eval (ml/battery-maybe))
+   ,(if *ml/battery* '(:eval (ml/battery)) "")
    (:eval (ml/windows))
    "^>"
    (:eval (ml/sound))
