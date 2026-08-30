@@ -335,10 +335,10 @@ beginning with ':') where a service is started."
   (run-or-raise "emacs-emms"
                 '(:class "Emacs")))
 
-(defcommand al/emacs-eval (arg &optional (server-name "main"))
+(defcommand al/emacs-eval (arg &optional server-name)
     ((:shell "emacs-eval: "))
   "Evaluate ARG with emacsclient."
-  (let ((args (list "--socket-name" server-name
+  (let ((args (list "--socket-name" (or server-name "main")
                     "--eval" arg)))
     (run-prog "emacsclient" :args args :wait nil :search t)))
 
