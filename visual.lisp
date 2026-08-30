@@ -222,12 +222,12 @@ Must be one of `*ml/memory-string-types*'.")
   "Return formatted string from the number of kilo-bytes KB.
 The rest ARGS are passed to `ml/string'."
   (if (numberp kb)
-    (let ((gb (/ kb 1e6)))
-      (if (> gb 1)
-        (concat (apply #'ml/string (ml/memory-format-float gb) args)
-                "G")
-        (concat (apply #'ml/string (ml/memory-format-float (/ kb 1e3)) args)
-                "M")))
+    (if-let- ((gb (/ kb 1e6)
+                  (<= #'>1)))
+      (concat (apply #'ml/string (ml/memory-format-float gb) args)
+              "G")
+      (concat (apply #'ml/string (ml/memory-format-float (/ kb 1e3)) args)
+              "M"))
     ""))
 
 (defun ml/memory-string ()
@@ -299,7 +299,7 @@ TYPE can be one of the following symbols: `short', `long', `next'."
                              :format "~2D"
                              :ending "")))
       (ml/string
-       (if (cdr zones)
+       (if (>1 zones)
          (concat "°C: " (mapconcat #'temp zones " "))
          (concat (temp (car zones)) "°C"))
        :fg "7"))))
@@ -333,9 +333,9 @@ TYPE can be one of the following symbols: `short', `long', `next'."
 
 (defvar *ml/net-device*
   ;; At first, search for "wlp*" (wlan), then for "enp*" (eth).
-  (or (find-if (lambda (name) (ppcre:scan "^w" name))
+  (or (find-if (cut #'ppcre:scan "^w" <>)
                *ml/net-devices*)
-      (find-if (lambda (name) (ppcre:scan "^e" name))
+      (find-if (cut #'ppcre:scan "^e" <>)
                *ml/net-devices*))
   "Currently used network device.")
 
@@ -357,12 +357,12 @@ TYPE can be one of the following symbols: `short', `long', `next'."
 (defun ml/net-format-bytes (bytes)
   "Return formatted string from the number of BYTES."
   (if (numberp bytes)
-    (let ((mb (/ bytes 1e6)))
-      (if (> mb 1)
-        (concat (ml/net-format-float mb)
-                (ml/string "M" :fg "2"))
-        (concat (ml/net-format-float (/ bytes 1e3))
-                (ml/string "k" :reset t))))
+    (if-let- ((mb (/ bytes 1e6)
+                  (<= #'>1)))
+      (concat (ml/net-format-float mb)
+              (ml/string "M" :fg "2"))
+      (concat (ml/net-format-float (/ bytes 1e3))
+              (ml/string "k" :reset t)))
     ""))
 
 (defun ml/net-string ()

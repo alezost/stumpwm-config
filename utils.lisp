@@ -98,8 +98,7 @@ CLASSES can be a string (single class) or a list of strings (multiple classes)."
   (and win      ; (current-window) returns nil for the root window
        (let ((win-class (window-class win)))
          (if (listp classes)
-             (some (lambda (class)
-                     (string= class win-class))
+             (some (cut #'string= <> win-class)
                    classes)
              (string= classes win-class)))))
 
@@ -114,8 +113,7 @@ CLASSES can be a string (single class) or a list of strings (multiple classes)."
   ;; Originates from `find-matching-windows'.
   (let* ((all (screen-windows (current-screen)))
          ;; (all (mapcan #'group-windows groups))
-         (matching (remove-if-not (lambda (win)
-                                    (al/class-window-p classes win))
+         (matching (remove-if-not (cut #'al/class-window-p classes <>)
                                   all)))
     ;; Sort by `window-number'.  Otherwise, `al/focus-class-window' will
     ;; cycle between 2 latest windows because `screen-windows' returns
@@ -154,7 +152,7 @@ If IGNORE-CURRENT is non-nil, skip current window even if it matches."
 
 (defcommand al/gmove-to-other-group () ()
   "Move the current window to the other group and go to that group."
-  (if-let ((group (car (remove-if (lambda (g) (eq g (current-group)))
+  (if-let ((group (car (remove-if (cut #'eq <> (current-group))
                                   (screen-groups (current-screen))))))
     (progn (gmove group)
            (switch-to-group group))
